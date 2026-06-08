@@ -1,0 +1,88 @@
+import { Download, Loader2, CheckCircle, RotateCcw } from 'lucide-react'
+import { useExportStore } from '@/stores/exportStore'
+import { useExport } from '@/hooks/useExport'
+import { FFT_SIZES } from '@/lib/constants'
+import { cn } from '@/lib/utils'
+
+export function ExportBar() {
+  const { resolution, quality, frameRate, isExporting, progress, setResolution, setQuality, setFrameRate, reset } = useExportStore()
+  const { startExport } = useExport()
+
+  return (
+    <div className="glass rounded-2xl p-3 sm:p-4">
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <h3 className="text-sm font-semibold">Export Video</h3>
+          <p className="text-[10px] text-muted-foreground mt-0.5">Save your visualization as video</p>
+        </div>
+        {progress >= 100 && !isExporting && (
+          <button onClick={reset} className="text-[11px] text-primary hover:underline flex items-center gap-1">
+            <RotateCcw className="h-3 w-3" /> Reset
+          </button>
+        )}
+      </div>
+
+      {isExporting ? (
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <Loader2 className="h-4 w-4 text-primary animate-spin shrink-0" />
+            <span className="text-xs text-muted-foreground">Recording... don't close this tab</span>
+            <span className="ml-auto text-xs font-mono font-medium">{Math.round(progress)}%</span>
+          </div>
+          <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
+          </div>
+        </div>
+      ) : progress >= 100 ? (
+        <div className="flex items-center gap-2 py-1">
+          <CheckCircle className="h-4 w-4 text-emerald-400" />
+          <span className="text-xs font-medium">Export complete! File downloaded.</span>
+        </div>
+      ) : (
+        <div className="flex flex-wrap items-end gap-2 sm:gap-3">
+          {/* Resolution */}
+          <MiniSelect label="Resolution" value={resolution}
+            onChange={(v) => setResolution(v as '720p' | '1080p' | '1440p')}
+            options={[{ v: '720p', l: '720p' }, { v: '1080p', l: '1080p' }, { v: '1440p', l: '1440p' }]} />
+
+          {/* Quality */}
+          <MiniSelect label="Quality" value={quality}
+            onChange={(v) => setQuality(v as 'low' | 'medium' | 'high')}
+            options={[{ v: 'low', l: 'Low' }, { v: 'medium', l: 'Medium' }, { v: 'high', l: 'High' }]} />
+
+          {/* FPS */}
+          <MiniSelect label="FPS" value={String(frameRate)}
+            onChange={(v) => setFrameRate(Number(v) as 30 | 60)}
+            options={[{ v: '30', l: '30' }, { v: '60', l: '60' }]} />
+
+          {/* Export button */}
+          <button
+            onClick={startExport}
+            className="ml-auto h-9 px-4 rounded-xl bg-primary text-primary-foreground text-xs font-medium flex items-center gap-1.5 hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-[0.97] shrink-0"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Export
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function MiniSelect({ label, value, onChange, options }: {
+  label: string; value: string; onChange: (v: string) => void;
+  options: { v: string; l: string }[]
+}) {
+  return (
+    <div className="space-y-0.5 min-w-0">
+      <label className="text-[10px] text-muted-foreground/80 uppercase tracking-wider">{label}</label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="h-8 rounded-lg bg-white/5 border border-white/10 text-xs px-2 text-foreground focus:outline-none focus:border-primary/50 w-full"
+      >
+        {options.map((o) => <option key={o.v} value={o.v} className="bg-[#0a0a0f]">{o.l}</option>)}
+      </select>
+    </div>
+  )
+}
