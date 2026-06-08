@@ -128,14 +128,23 @@ export function AppLayout() {
       </div>
 
       {/* Footer */}
-      <footer className="shrink-0 px-6 sm:px-8 flex items-center justify-between border-t border-white/[0.05]" style={{ paddingTop: '14px', paddingBottom: '14px' }}>
-        <div className="flex items-center" style={{ gap: '8px' }}>
-          <div className="h-5 w-5 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-            <Music2 className="h-2.5 w-2.5 text-white" />
+      <footer className="shrink-0 border-t border-white/[0.06]" style={{ padding: '20px 24px' }}>
+        <div className="flex flex-col sm:flex-row items-center justify-between" style={{ gap: '12px' }}>
+          <div className="flex items-center" style={{ gap: '10px' }}>
+            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md shadow-indigo-500/20">
+              <Music2 className="h-3.5 w-3.5 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[12px] font-bold tracking-tight">SonicWave</span>
+              <span className="text-[10px] text-muted-foreground/50 leading-none">Audio Visualizer</span>
+            </div>
           </div>
-          <span className="text-[11px] font-semibold text-muted-foreground/80">SonicWave</span>
+          <div className="flex items-center" style={{ gap: '16px' }}>
+            <span className="text-[10px] text-muted-foreground/40">Built with React & Three.js</span>
+            <span className="text-[10px] text-muted-foreground/30">|</span>
+            <span className="text-[10px] text-muted-foreground/40">&copy; {new Date().getFullYear()} SonicWave</span>
+          </div>
         </div>
-        <p className="text-[10px] text-muted-foreground/40">&copy; {new Date().getFullYear()} SonicWave. All rights reserved.</p>
       </footer>
 
       <ToastContainer />
