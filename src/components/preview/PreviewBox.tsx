@@ -124,7 +124,7 @@ function PlayerBar() {
   return (
     <div className={cn(
       "rounded-2xl border border-white/[0.06]",
-      expanded ? "mx-4 mb-4 p-4" : "p-3.5 sm:p-4"
+      expanded ? "mx-4 mb-4 p-5" : "p-4 sm:p-5"
     )} style={{ background: 'rgba(8, 8, 12, 0.85)', backdropFilter: 'blur(24px) saturate(1.4)' }}>
 
       {/* Seek bar */}
