@@ -40,8 +40,7 @@ export function AppLayout() {
 
   return (
     <div
-      className="h-full w-full flex flex-col"
-      style={{ background: bg.gradient || bg.color }}
+      className="h-full w-full flex flex-col bg-background"
       onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
       onDragLeave={() => setIsDragging(false)}
       onDrop={handleDrop}
@@ -64,24 +63,16 @@ export function AppLayout() {
       </AnimatePresence>
 
       {/* Header */}
-      <header className="shrink-0 z-20 px-6 sm:px-8 py-5 flex items-center justify-between glass-light">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+      <header className="shrink-0 z-20 px-6 sm:px-8 flex items-center glass-light" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+        <div className="flex items-center" style={{ gap: '14px' }}>
+          <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
             <Music2 className="h-5 w-5 text-white" />
           </div>
-          <div>
-            <span className="text-base font-bold tracking-tight block leading-tight">SonicWave</span>
-            <span className="text-[10px] text-muted-foreground leading-none">Audio Visualizer</span>
+          <div className="flex flex-col">
+            <span className="text-lg font-bold tracking-tight leading-none">SonicWave</span>
+            <span className="text-[11px] text-muted-foreground mt-1 leading-none">Audio Visualizer</span>
           </div>
         </div>
-        <button
-          onClick={() => fileRef.current?.click()}
-          className="h-10 px-4 rounded-xl bg-primary/10 border border-primary/20 text-primary text-sm font-medium flex items-center gap-2 hover:bg-primary/20 transition-all"
-        >
-          <Upload className="h-4 w-4" />
-          <span className="hidden sm:inline">Upload Audio</span>
-          <span className="sm:hidden">Upload</span>
-        </button>
         <input
           ref={fileRef}
           type="file"
