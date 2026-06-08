@@ -83,7 +83,7 @@ export function AppLayout() {
       </header>
 
       {/* Main content - fills remaining height */}
-      <div className="flex-1 flex flex-col min-h-0 px-6 sm:px-8 pb-6 pt-4">
+      <div className="flex-1 flex flex-col min-h-0 px-6 sm:px-8" style={{ paddingTop: '24px', paddingBottom: '20px' }}>
 
         {/* ===== MOBILE LAYOUT (below lg) ===== */}
         <div className="flex-1 flex flex-col lg:hidden gap-5 overflow-y-auto min-h-0">
@@ -126,6 +126,17 @@ export function AppLayout() {
         </div>
 
       </div>
+
+      {/* Footer */}
+      <footer className="shrink-0 px-6 sm:px-8 flex items-center justify-between border-t border-white/[0.05]" style={{ paddingTop: '14px', paddingBottom: '14px' }}>
+        <div className="flex items-center" style={{ gap: '8px' }}>
+          <div className="h-5 w-5 rounded-md bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+            <Music2 className="h-2.5 w-2.5 text-white" />
+          </div>
+          <span className="text-[11px] font-semibold text-muted-foreground/80">SonicWave</span>
+        </div>
+        <p className="text-[10px] text-muted-foreground/40">&copy; {new Date().getFullYear()} SonicWave. All rights reserved.</p>
+      </footer>
 
       <ToastContainer />
     </div>
