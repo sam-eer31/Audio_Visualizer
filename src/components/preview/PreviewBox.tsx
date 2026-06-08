@@ -55,8 +55,8 @@ export function PreviewBox() {
         >
           {/* Preview container */}
           <div
-            className="relative flex-1 rounded-2xl overflow-hidden border border-white/8 min-h-0"
-            style={{ background: bg.gradient || bg.color }}
+            className="relative flex-1 rounded-2xl overflow-hidden min-h-0"
+            style={{ background: bg.gradient || bg.color, color: '#ffffff', borderColor: 'rgba(255,255,255,0.08)', borderWidth: '1px', borderStyle: 'solid' }}
           >
             {audioFile ? (
               <>
@@ -106,8 +106,8 @@ function EmptyUploadBox() {
         </div>
 
         {/* Text */}
-        <p className="text-[14px] font-semibold text-foreground/90 text-center leading-tight">Drop your audio file here</p>
-        <p className="text-[11px] text-muted-foreground/50 text-center mt-1.5">or click anywhere in this box to browse</p>
+        <p className="text-[14px] font-semibold text-center leading-tight" style={{ color: 'rgba(255,255,255,0.9)' }}>Drop your audio file here</p>
+        <p className="text-[11px] text-center mt-1.5" style={{ color: 'rgba(255,255,255,0.4)' }}>or click anywhere in this box to browse</p>
 
         {/* CTA Button */}
         <button
@@ -124,8 +124,8 @@ function EmptyUploadBox() {
           {['MP3', 'WAV', 'M4A', 'OGG', 'AAC'].map((f) => (
             <span
               key={f}
-              className="text-[9px] font-medium uppercase tracking-wider rounded-md bg-white/[0.04] text-muted-foreground/60 border border-white/[0.04]"
-              style={{ padding: '3px 7px' }}
+              className="text-[9px] font-medium uppercase tracking-wider rounded-md border"
+              style={{ padding: '3px 7px', background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)' }}
             >
               {f}
             </span>
