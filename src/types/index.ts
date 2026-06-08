@@ -44,6 +44,7 @@ export interface BackgroundPreset {
   name: string
   color: string
   gradient?: string
+  textColor?: string
 }
 
 export interface VisualizerSettings {

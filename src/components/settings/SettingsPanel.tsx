@@ -171,7 +171,7 @@ function BackgroundSection() {
             style={{ padding: '10px 12px', gap: '12px' }}
           >
             <div
-              className="h-8 w-12 rounded-lg shrink-0 ring-1 ring-white/[0.08]"
+              className="h-8 w-12 rounded-lg shrink-0 ring-1 ring-inset ring-black/[0.1] border border-white/[0.08]"
               style={{ background: p.gradient || p.color }}
             />
             <span className={cn(

@@ -43,7 +43,9 @@ export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   { id: 'midnight', name: 'Midnight', color: '#0d1117', gradient: 'linear-gradient(180deg, #0d1117 0%, #161b22 100%)' },
   { id: 'nebula', name: 'Nebula', color: '#0a0015', gradient: 'radial-gradient(ellipse at 30% 40%, #1a0040 0%, #0a0015 50%, #000000 100%)' },
   { id: 'obsidian', name: 'Obsidian', color: '#0c0c0c', gradient: 'linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #0c0c0c 100%)' },
-  { id: 'slate', name: 'Slate', color: '#0f172a', gradient: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)' },
+  { id: 'slate-dark', name: 'Slate Dark', color: '#0f172a', gradient: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)' },
+  { id: 'slate-light', name: 'Slate Light', color: '#ffffff', textColor: '#0f172a' },
+  { id: 'pure-white', name: 'Pure White', color: '#ffffff' },
 ]
 
 export const FFT_SIZES = [256, 512, 1024, 2048, 4096, 8192] as const

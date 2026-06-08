@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Expand, Shrink, Upload, Music2, Play, Pause, Square, Volume2, VolumeX, FileAudio } from 'lucide-react'
+import { Expand, Shrink, Upload, Play, Pause, Square, Volume2, VolumeX, FileAudio } from 'lucide-react'
 import { useUIStore } from '@/stores/uiStore'
 import { useAudioStore } from '@/stores/audioStore'
 import { useAudioControls } from '@/hooks/useAudioControls'
@@ -8,7 +8,7 @@ import { formatTime } from '@/utils/audioUtils'
 import { VisualizerCanvas } from '@/components/visualizers/VisualizerCanvas'
 import { BACKGROUND_PRESETS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { useRef, useMemo } from 'react'
+import { useRef } from 'react'
 
 function isColorDark(hex: string): boolean {
   const c = hex.replace('#', '')
@@ -24,6 +24,7 @@ export function PreviewBox() {
   const audioFile = useAudioStore((s) => s.audioFile)
   const backgroundPreset = useVisualizerStore((s) => s.backgroundPreset)
   const bg = BACKGROUND_PRESETS.find((b) => b.id === backgroundPreset) || BACKGROUND_PRESETS[0]
+  const darkBg = bg.textColor ? false : isColorDark(bg.color)
 
   return (
     <AnimatePresence>
@@ -42,7 +43,12 @@ export function PreviewBox() {
           </div>
           <button
             onClick={() => setExpanded(false)}
-            className="absolute top-3 right-3 z-20 h-9 w-9 rounded-xl glass flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 transition-all"
+            className={cn(
+              "absolute top-3 right-3 z-20 h-9 w-9 rounded-xl glass flex items-center justify-center transition-all",
+              darkBg
+                ? "text-white/70 hover:text-white hover:bg-white/10"
+                : "text-black/50 hover:text-black/80 hover:bg-black/10"
+            )}
           >
             <Shrink className="h-4 w-4" />
           </button>
@@ -56,7 +62,13 @@ export function PreviewBox() {
           {/* Preview container */}
           <div
             className="relative flex-1 rounded-2xl overflow-hidden min-h-0"
-            style={{ background: bg.gradient || bg.color, color: '#ffffff', borderColor: 'rgba(255,255,255,0.08)', borderWidth: '1px', borderStyle: 'solid' }}
+            style={{
+              background: bg.gradient || bg.color,
+              color: bg.textColor || (darkBg ? '#ffffff' : '#0f172a'),
+              borderColor: darkBg ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+            }}
           >
             {audioFile ? (
               <>
@@ -64,13 +76,18 @@ export function PreviewBox() {
                 {/* Expand button */}
                 <button
                   onClick={() => setExpanded(true)}
-                  className="absolute top-2 right-2 z-10 h-8 w-8 rounded-lg glass flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-all"
+                  className={cn(
+                    "absolute top-2 right-2 z-10 h-8 w-8 rounded-lg glass flex items-center justify-center transition-all",
+                    darkBg
+                      ? "text-white/60 hover:text-white hover:bg-white/10"
+                      : "text-black/40 hover:text-black/70 hover:bg-black/10"
+                  )}
                 >
                   <Expand className="h-3.5 w-3.5" />
                 </button>
               </>
             ) : (
-              <EmptyUploadBox />
+              <EmptyUploadBox dark={darkBg} />
             )}
           </div>
 
@@ -86,28 +103,36 @@ export function PreviewBox() {
   )
 }
 
-function EmptyUploadBox() {
+function EmptyUploadBox({ dark }: { dark: boolean }) {
   const { loadFile } = useAudioControls()
   const fileRef = useRef<HTMLInputElement>(null)
 
   return (
     <div className="h-full flex flex-col items-center justify-center" style={{ padding: '40px 32px' }}>
       <div
-        className="w-full max-w-[320px] flex flex-col items-center rounded-2xl border-2 border-dashed border-white/[0.08] hover:border-primary/30 transition-colors cursor-pointer"
+        className={cn(
+          "w-full max-w-[320px] flex flex-col items-center rounded-2xl border-2 border-dashed transition-colors cursor-pointer",
+          dark ? "border-white/[0.08] hover:border-primary/30" : "border-black/[0.12] hover:border-primary/40"
+        )}
         style={{ padding: '36px 28px' }}
         onClick={() => fileRef.current?.click()}
       >
         {/* Icon */}
         <div
-          className="rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/[0.08] flex items-center justify-center"
+          className={cn(
+            "rounded-2xl flex items-center justify-center",
+            dark
+              ? "bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/[0.08]"
+              : "bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/20"
+          )}
           style={{ width: '64px', height: '64px', marginBottom: '20px' }}
         >
-          <Upload className="h-7 w-7 text-indigo-400/60" />
+          <Upload className={cn("h-7 w-7", dark ? "text-indigo-400/60" : "text-indigo-500/70")} />
         </div>
 
         {/* Text */}
-        <p className="text-[14px] font-semibold text-center leading-tight" style={{ color: 'rgba(255,255,255,0.9)' }}>Drop your audio file here</p>
-        <p className="text-[11px] text-center mt-1.5" style={{ color: 'rgba(255,255,255,0.4)' }}>or click anywhere in this box to browse</p>
+        <p className="text-[14px] font-semibold text-center leading-tight" style={{ color: dark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)' }}>Drop your audio file here</p>
+        <p className="text-[11px] text-center mt-1.5" style={{ color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.45)' }}>or click anywhere in this box to browse</p>
 
         {/* CTA Button */}
         <button
@@ -125,7 +150,12 @@ function EmptyUploadBox() {
             <span
               key={f}
               className="text-[9px] font-medium uppercase tracking-wider rounded-md border"
-              style={{ padding: '3px 7px', background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)' }}
+              style={{
+                padding: '3px 7px',
+                background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+                borderColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)',
+                color: dark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.45)',
+              }}
             >
               {f}
             </span>
@@ -149,7 +179,7 @@ function PlayerBar() {
   const expanded = useUIStore((s) => s.expanded)
   const backgroundPreset = useVisualizerStore((s) => s.backgroundPreset)
   const bg = BACKGROUND_PRESETS.find((b) => b.id === backgroundPreset) || BACKGROUND_PRESETS[0]
-  const darkBg = isColorDark(bg.color)
+  const darkBg = bg.textColor ? false : isColorDark(bg.color)
 
   if (!audioFile) return null
 
