@@ -67,7 +67,7 @@ export function PreviewBox() {
 
           {/* Player controls below preview */}
           {audioFile && (
-            <div className="mt-2 shrink-0">
+            <div className="mt-3 shrink-0" style={{ paddingLeft: '2px', paddingRight: '2px' }}>
               <PlayerBar />
             </div>
           )}
