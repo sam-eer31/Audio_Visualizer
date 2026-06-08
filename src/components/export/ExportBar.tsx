@@ -1,15 +1,20 @@
 import { Download, Loader2, CheckCircle, RotateCcw } from 'lucide-react'
 import { useExportStore } from '@/stores/exportStore'
 import { useExport } from '@/hooks/useExport'
-import { FFT_SIZES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import { useUIStore } from '@/stores/uiStore'
 
 export function ExportBar() {
   const { resolution, quality, frameRate, isExporting, progress, setResolution, setQuality, setFrameRate, reset } = useExportStore()
   const { startExport } = useExport()
 
+  const theme = useUIStore((s) => s.theme)
+  const isLight = theme === 'light'
+
   return (
-    <div className="glass rounded-2xl p-4 sm:p-5">
+    <div className={cn(
+      "glass rounded-2xl p-4 sm:p-5",
+    )}>
       <div className="flex items-center justify-between mb-3">
         <div>
           <h3 className="text-[13px] font-semibold">Export Video</h3>
@@ -73,13 +78,17 @@ function MiniSelect({ label, value, onChange, options }: {
   label: string; value: string; onChange: (v: string) => void;
   options: { v: string; l: string }[]
 }) {
+  const isLight = useUIStore((s) => s.theme) === 'light'
   return (
     <div className="space-y-1 min-w-0">
       <label className="text-[10px] text-muted-foreground/60 uppercase tracking-wider font-medium">{label}</label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-9 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[11px] px-2.5 text-foreground focus:outline-none focus:border-primary/40 w-full transition-colors"
+        className={cn(
+          "h-9 rounded-lg border text-[11px] px-2.5 text-foreground focus:outline-none focus:border-primary/40 w-full transition-colors",
+          isLight ? "bg-black/[0.03] border-black/[0.08]" : "bg-white/[0.04] border-white/[0.08]"
+        )}
       >
         {options.map((o) => <option key={o.v} value={o.v} className="bg-[#0a0a0f]">{o.l}</option>)}
       </select>

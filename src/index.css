@@ -67,11 +67,12 @@ body {
 
 /* ===== LIGHT THEME ===== */
 .light {
-  --color-background: #f8f9fc;
-  --color-foreground: #1a1a2e;
-  --color-muted-foreground: #64748b;
+  --color-background: #f5f6fa;
+  --color-foreground: #111827;
+  --color-muted-foreground: #475569;
   --color-border: #e2e8f0;
   --color-muted: #f1f5f9;
+  --color-secondary: #e2e8f0;
 }
 
 .light body {
@@ -80,24 +81,66 @@ body {
 }
 
 .light .glass {
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
 }
 
 .light .glass-light {
-  background: rgba(255, 255, 255, 0.80);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-.light ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); }
-.light ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.18); }
+.light ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); }
+.light ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.2); }
 
 .light input[type="range"]::-webkit-slider-runnable-track {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.1);
 }
 .light input[type="range"]::-moz-range-track {
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Fix common light-mode readability issues */
+.light .text-muted-foreground\/40,
+.light .text-muted-foreground\/50 {
+  color: rgba(71, 85, 105, 0.7);
+}
+.light .text-muted-foreground\/60 {
+  color: rgba(71, 85, 105, 0.8);
+}
+.light .text-muted-foreground\/80 {
+  color: rgba(71, 85, 105, 0.9);
+}
+.light .text-foreground\/60 {
+  color: rgba(17, 24, 39, 0.7);
+}
+.light .text-foreground\/80 {
+  color: rgba(17, 24, 39, 0.85);
+}
+.light .border-white\/\[0\.06\],
+.light .border-white\/\[0\.08\] {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+.light .bg-white\/\[0\.02\],
+.light .bg-white\/\[0\.03\],
+.light .bg-white\/\[0\.04\] {
+  background: rgba(0, 0, 0, 0.03);
+}
+.light .bg-white\/\[0\.06\] {
+  background: rgba(0, 0, 0, 0.06);
+}
+.light .bg-white\/5 {
+  background: rgba(0, 0, 0, 0.04);
+}
+.light .border-white\/10,
+.light .border-white\/15 {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+.light .ring-white\/\[0\.08\],
+.light .ring-white\/10 {
+  --tw-ring-color: rgba(0, 0, 0, 0.08);
 }
 
 /* Range sliders */
