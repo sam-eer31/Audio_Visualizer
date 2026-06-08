@@ -8,20 +8,20 @@ export function SettingsPanel() {
   return (
     <div className="h-full flex flex-col w-full">
       {/* Header */}
-      <div className="shrink-0 px-2 pt-2" style={{ paddingBottom: '10px' }}>
+      <div className="shrink-0" style={{ paddingLeft: '8px', paddingRight: '8px', paddingTop: '8px', paddingBottom: '10px' }}>
         <h2 className="text-xl font-semibold">Customize</h2>
         <p className="text-xs text-muted-foreground mt-1">Style your visualization</p>
       </div>
 
       {/* Scrollable sections */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-2 pb-2">
-        <div style={{ marginBottom: '10px' }}>
+      <div className="flex-1 min-h-0 overflow-y-auto" style={{ paddingBottom: '8px' }}>
+        <div style={{ marginBottom: '10px', paddingLeft: '8px', paddingRight: '8px' }}>
           <CollapsibleSection icon={<Layers className="h-4 w-4" />} title="Visual Style" defaultOpen>
             <ModeGrid />
           </CollapsibleSection>
         </div>
 
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: '10px', paddingLeft: '8px', paddingRight: '8px' }}>
           <CollapsibleSection icon={<Palette className="h-4 w-4" />} title="Colors" defaultOpen>
             <ColorSection />
             <div style={{ marginTop: '10px' }}>
@@ -31,15 +31,17 @@ export function SettingsPanel() {
           </CollapsibleSection>
         </div>
 
-        <div style={{ marginBottom: '10px' }}>
+        <div style={{ marginBottom: '10px', paddingLeft: '8px', paddingRight: '8px' }}>
           <CollapsibleSection icon={<SlidersHorizontal className="h-4 w-4" />} title="Adjust" defaultOpen>
             <SlidersSection />
           </CollapsibleSection>
         </div>
 
-        <CollapsibleSection icon={<Music className="h-4 w-4" />} title="Audio" defaultOpen={false}>
-          <AudioSection />
-        </CollapsibleSection>
+        <div style={{ paddingLeft: '8px', paddingRight: '8px' }}>
+          <CollapsibleSection icon={<Music className="h-4 w-4" />} title="Audio" defaultOpen={false}>
+            <AudioSection />
+          </CollapsibleSection>
+        </div>
       </div>
     </div>
   )
