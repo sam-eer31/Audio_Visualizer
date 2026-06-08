@@ -115,89 +115,103 @@ function EmptyUploadBox() {
 
 function PlayerBar() {
   const { audioFile, playbackState, currentTime, duration, volume, play, pause, stop, seek, setVolume } = useAudioControls()
+  const expanded = useUIStore((s) => s.expanded)
 
   if (!audioFile) return null
 
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0
+
   return (
     <div className={cn(
-      "glass rounded-2xl px-3 pt-2 pb-2.5",
-      useUIStore.getState().expanded ? "mx-3 mb-3" : ""
-    )}>
-      {/* Seek */}
-      <div>
-        <input
-          type="range"
-          min={0}
-          max={duration || 1}
-          step={0.01}
-          value={currentTime}
-          onChange={(e) => seek(parseFloat(e.target.value))}
-          className="seek-slider w-full"
-        />
-        <div className="flex justify-between text-[10px] text-muted-foreground -mt-1 px-0.5">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
+      "rounded-2xl border border-white/[0.06]",
+      expanded ? "mx-4 mb-4 p-4" : "p-3.5 sm:p-4"
+    )} style={{ background: 'rgba(8, 8, 12, 0.85)', backdropFilter: 'blur(24px) saturate(1.4)' }}>
+
+      {/* Seek bar */}
+      <div className="mb-3">
+        <div className="relative w-full h-[4px] rounded-full bg-white/[0.06] overflow-hidden cursor-pointer group"
+          onClick={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect()
+            const pct = (e.clientX - rect.left) / rect.width
+            seek(pct * (duration || 0))
+          }}
+        >
+          <div
+            className="absolute inset-y-0 left-0 rounded-full bg-primary transition-all duration-100"
+            style={{ width: `${progress}%` }}
+          />
+          <div
+            className="absolute top-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-primary shadow-lg shadow-primary/40 opacity-0 group-hover:opacity-100 transition-opacity"
+            style={{ left: `${progress}%`, marginLeft: '-6px' }}
+          />
+        </div>
+        <div className="flex justify-between mt-1.5">
+          <span className="text-[10px] font-mono text-muted-foreground/60 tabular-nums">{formatTime(currentTime)}</span>
+          <span className="text-[10px] font-mono text-muted-foreground/40 tabular-nums">{formatTime(duration)}</span>
         </div>
       </div>
 
       {/* Controls row */}
-      <div className="flex items-center gap-2 mt-1">
+      <div className="flex items-center" style={{ gap: '12px' }}>
         {/* File info */}
-        <div className="flex items-center gap-2 min-w-0 flex-1">
-          <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-            <FileAudio className="h-3 w-3 text-primary" />
+        <div className="flex items-center min-w-0 flex-1" style={{ gap: '10px' }}>
+          <div className="h-9 w-9 rounded-xl bg-primary/[0.08] border border-primary/10 flex items-center justify-center shrink-0">
+            <FileAudio className="h-4 w-4 text-primary/80" />
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] font-medium truncate">{audioFile.name}</p>
-            <p className="text-[9px] text-muted-foreground">{audioFile.format}</p>
+            <p className="text-[12px] font-semibold truncate leading-tight">{audioFile.name}</p>
+            <p className="text-[10px] text-muted-foreground/50 leading-tight mt-0.5 uppercase tracking-wider">{audioFile.format}</p>
           </div>
         </div>
 
-        {/* Playback buttons */}
-        <div className="flex items-center gap-1">
+        {/* Playback controls */}
+        <div className="flex items-center" style={{ gap: '8px' }}>
           <button
             onClick={stop}
             disabled={playbackState === 'idle' || playbackState === 'stopped'}
-            className="h-7 w-7 rounded-lg flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all disabled:opacity-30"
+            className="h-8 w-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white/70 hover:bg-white/[0.06] transition-all disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-white/30"
           >
-            <Square className="h-3 w-3" />
+            <Square className="h-3.5 w-3.5" />
           </button>
           <button
             onClick={playbackState === 'playing' ? pause : play}
-            className="h-9 w-9 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all active:scale-95"
+            className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.03] transition-all active:scale-95"
           >
             <AnimatePresence mode="wait">
               {playbackState === 'playing' ? (
-                <motion.div key="pause" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                  <Pause className="h-3.5 w-3.5" />
+                <motion.div key="pause" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ duration: 0.15 }}>
+                  <Pause className="h-4.5 w-4.5" />
                 </motion.div>
               ) : (
-                <motion.div key="play" initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
-                  <Play className="h-3.5 w-3.5 ml-0.5" />
+                <motion.div key="play" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ duration: 0.15 }}>
+                  <Play className="h-4.5 w-4.5 ml-0.5" />
                 </motion.div>
               )}
             </AnimatePresence>
           </button>
-          <div className="w-7" />
+          <div className="w-8" />
         </div>
 
-        {/* Volume - only in expanded mode */}
-        <div className="hidden sm:flex items-center gap-1.5 flex-1 justify-end max-w-[120px]">
+        {/* Volume */}
+        <div className="hidden sm:flex items-center flex-1 justify-end max-w-[110px]" style={{ gap: '8px' }}>
           <button
             onClick={() => setVolume(volume > 0 ? 0 : 0.75)}
-            className="text-white/50 hover:text-white transition-colors shrink-0"
+            className="text-white/30 hover:text-white/60 transition-colors shrink-0"
           >
-            {volume === 0 ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
+            {volume === 0 ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
           </button>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.01}
-            value={volume}
-            onChange={(e) => setVolume(parseFloat(e.target.value))}
-            className="flex-1"
-          />
+          <div className="flex-1 relative h-[3px] rounded-full bg-white/[0.06] cursor-pointer"
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect()
+              const pct = (e.clientX - rect.left) / rect.width
+              setVolume(Math.max(0, Math.min(1, pct)))
+            }}
+          >
+            <div
+              className="absolute inset-y-0 left-0 rounded-full bg-white/30"
+              style={{ width: `${volume * 100}%` }}
+            />
+          </div>
         </div>
       </div>
     </div>
