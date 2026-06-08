@@ -67,7 +67,7 @@ export function PreviewBox() {
 
           {/* Player controls below preview */}
           {audioFile && (
-            <div className="mt-3 shrink-0" style={{ paddingLeft: '2px', paddingRight: '2px' }}>
+            <div className="mt-3 shrink-0">
               <PlayerBar />
             </div>
           )}
@@ -122,10 +122,15 @@ function PlayerBar() {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0
 
   return (
-    <div className={cn(
-      "rounded-2xl border border-white/[0.06]",
-      expanded ? "mx-4 mb-4 p-5" : "p-4 sm:p-5"
-    )} style={{ background: 'rgba(8, 8, 12, 0.85)', backdropFilter: 'blur(24px) saturate(1.4)' }}>
+    <div
+      className="rounded-2xl border border-white/[0.06]"
+      style={{
+        background: 'rgba(8, 8, 12, 0.85)',
+        backdropFilter: 'blur(24px) saturate(1.4)',
+        padding: expanded ? '20px' : '18px 22px',
+        ...(expanded ? { marginLeft: '16px', marginRight: '16px', marginBottom: '16px' } : {})
+      }}
+    >
 
       {/* Seek bar */}
       <div className="mb-3">
