@@ -84,7 +84,7 @@ function ModeGrid() {
             className={cn(
               'flex items-center rounded-xl border text-left transition-all duration-200 w-full',
               active
-                ? 'border-primary/50 bg-primary/[0.08] text-white ring-1 ring-primary/20'
+                ? 'border-primary/50 bg-primary/[0.08] text-foreground ring-1 ring-primary/20'
                 : 'border-white/[0.06] hover:border-white/[0.12] bg-white/[0.02] text-muted-foreground hover:text-foreground hover:bg-white/[0.04]'
             )}
             style={{ padding: '12px 14px', gap: '12px' }}
