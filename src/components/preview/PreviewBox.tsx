@@ -138,6 +138,8 @@ function EmptyUploadBox() {
 function PlayerBar() {
   const { audioFile, playbackState, currentTime, duration, volume, play, pause, stop, seek, setVolume } = useAudioControls()
   const expanded = useUIStore((s) => s.expanded)
+  const theme = useUIStore((s) => s.theme)
+  const isLight = theme === 'light'
 
   if (!audioFile) return null
 
@@ -145,9 +147,9 @@ function PlayerBar() {
 
   return (
     <div
-      className="rounded-2xl border border-white/[0.06]"
+      className={cn("rounded-2xl border", isLight ? "border-black/[0.06]" : "border-white/[0.06]")}
       style={{
-        background: 'rgba(8, 8, 12, 0.85)',
+        background: isLight ? 'rgba(255, 255, 255, 0.80)' : 'rgba(8, 8, 12, 0.85)',
         backdropFilter: 'blur(24px) saturate(1.4)',
         padding: expanded ? '20px' : '18px 22px',
         ...(expanded ? { marginLeft: '16px', marginRight: '16px', marginBottom: '16px' } : {})
@@ -156,7 +158,7 @@ function PlayerBar() {
 
       {/* Seek bar */}
       <div className="mb-3">
-        <div className="relative w-full h-[4px] rounded-full bg-white/[0.06] overflow-hidden cursor-pointer group"
+        <div className={cn("relative w-full h-[4px] rounded-full overflow-hidden cursor-pointer group", isLight ? "bg-black/[0.08]" : "bg-white/[0.06]")}
           onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect()
             const pct = (e.clientX - rect.left) / rect.width
@@ -196,7 +198,12 @@ function PlayerBar() {
           <button
             onClick={stop}
             disabled={playbackState === 'idle' || playbackState === 'stopped'}
-            className="h-8 w-8 rounded-lg flex items-center justify-center text-white/30 hover:text-white/70 hover:bg-white/[0.06] transition-all disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-white/30"
+            className={cn(
+              "h-8 w-8 rounded-lg flex items-center justify-center transition-all disabled:opacity-20",
+              isLight
+                ? "text-black/30 hover:text-black/60 hover:bg-black/[0.04] disabled:hover:bg-transparent disabled:hover:text-black/30"
+                : "text-white/30 hover:text-white/70 hover:bg-white/[0.06] disabled:hover:bg-transparent disabled:hover:text-white/30"
+            )}
           >
             <Square className="h-3.5 w-3.5" />
           </button>
@@ -223,11 +230,11 @@ function PlayerBar() {
         <div className="hidden sm:flex items-center flex-1 justify-end max-w-[110px]" style={{ gap: '8px' }}>
           <button
             onClick={() => setVolume(volume > 0 ? 0 : 0.75)}
-            className="text-white/30 hover:text-white/60 transition-colors shrink-0"
+            className={cn("transition-colors shrink-0", isLight ? "text-black/30 hover:text-black/50" : "text-white/30 hover:text-white/60")}
           >
             {volume === 0 ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
           </button>
-          <div className="flex-1 relative h-[3px] rounded-full bg-white/[0.06] cursor-pointer"
+          <div className={cn("flex-1 relative h-[3px] rounded-full cursor-pointer", isLight ? "bg-black/[0.06]" : "bg-white/[0.06]")}
             onClick={(e) => {
               const rect = e.currentTarget.getBoundingClientRect()
               const pct = (e.clientX - rect.left) / rect.width
@@ -235,7 +242,7 @@ function PlayerBar() {
             }}
           >
             <div
-              className="absolute inset-y-0 left-0 rounded-full bg-white/30"
+              className={cn("absolute inset-y-0 left-0 rounded-full", isLight ? "bg-black/25" : "bg-white/30")}
               style={{ width: `${volume * 100}%` }}
             />
           </div>

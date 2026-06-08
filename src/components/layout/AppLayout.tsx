@@ -1,6 +1,6 @@
 import { useCallback, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Music2, Upload } from 'lucide-react'
+import { Music2, Upload, Sun, Moon } from 'lucide-react'
 import { SettingsPanel } from '@/components/settings/SettingsPanel'
 import { PreviewBox } from '@/components/preview/PreviewBox'
 import { ExportBar } from '@/components/export/ExportBar'
@@ -10,10 +10,13 @@ import { useAudioControls } from '@/hooks/useAudioControls'
 import { useUIStore } from '@/stores/uiStore'
 import { useVisualizerStore } from '@/stores/visualizerStore'
 import { BACKGROUND_PRESETS } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
 export function AppLayout() {
   const audioFile = useAudioStore((s) => s.audioFile)
   const expanded = useUIStore((s) => s.expanded)
+  const theme = useUIStore((s) => s.theme)
+  const toggleTheme = useUIStore((s) => s.toggleTheme)
   const backgroundPreset = useVisualizerStore((s) => s.backgroundPreset)
   const { loadFile } = useAudioControls()
   const [isDragging, setIsDragging] = useState(false)
@@ -63,7 +66,7 @@ export function AppLayout() {
       </AnimatePresence>
 
       {/* Header */}
-      <header className="shrink-0 z-20 px-6 sm:px-8 flex items-center glass-light" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+      <header className="shrink-0 z-20 px-6 sm:px-8 flex items-center justify-between glass-light" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
         <div className="flex items-center" style={{ gap: '14px' }}>
           <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
             <Music2 className="h-5 w-5 text-white" />
@@ -73,6 +76,41 @@ export function AppLayout() {
             <span className="text-[11px] text-muted-foreground mt-1 leading-none">Audio Visualizer</span>
           </div>
         </div>
+
+        <div className="flex items-center" style={{ gap: '12px' }}>
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="relative h-9 w-9 rounded-xl border border-white/[0.08] flex items-center justify-center overflow-hidden transition-all hover:scale-[1.05] active:scale-95"
+            style={{ background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)' }}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            <AnimatePresence mode="wait">
+              {theme === 'dark' ? (
+                <motion.div
+                  key="moon"
+                  initial={{ rotate: -90, opacity: 0, scale: 0 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: 90, opacity: 0, scale: 0 }}
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                >
+                  <Moon className="h-4 w-4 text-indigo-300" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="sun"
+                  initial={{ rotate: 90, opacity: 0, scale: 0 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: -90, opacity: 0, scale: 0 }}
+                  transition={{ duration: 0.25, ease: 'easeInOut' }}
+                >
+                  <Sun className="h-4 w-4 text-amber-500" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
+
         <input
           ref={fileRef}
           type="file"
@@ -128,7 +166,7 @@ export function AppLayout() {
       </div>
 
       {/* Footer */}
-      <footer className="shrink-0 border-t border-white/[0.06]" style={{ padding: '20px 24px' }}>
+      <footer className={cn("shrink-0 border-t", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')} style={{ padding: '20px 24px' }}>
         <div className="flex flex-col sm:flex-row items-center justify-between" style={{ gap: '12px' }}>
           <div className="flex items-center" style={{ gap: '10px' }}>
             <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md shadow-indigo-500/20">

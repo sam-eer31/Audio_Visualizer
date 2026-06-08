@@ -65,6 +65,41 @@ body {
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
 
+/* ===== LIGHT THEME ===== */
+.light {
+  --color-background: #f8f9fc;
+  --color-foreground: #1a1a2e;
+  --color-muted-foreground: #64748b;
+  --color-border: #e2e8f0;
+  --color-muted: #f1f5f9;
+}
+
+.light body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.light .glass {
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.light .glass-light {
+  background: rgba(255, 255, 255, 0.80);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.light ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); }
+.light ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.18); }
+
+.light input[type="range"]::-webkit-slider-runnable-track {
+  background: rgba(0, 0, 0, 0.08);
+}
+.light input[type="range"]::-moz-range-track {
+  background: rgba(0, 0, 0, 0.08);
+}
+
 /* Range sliders */
 input[type="range"] {
   -webkit-appearance: none;
