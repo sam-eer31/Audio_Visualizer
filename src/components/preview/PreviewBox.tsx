@@ -8,7 +8,16 @@ import { formatTime } from '@/utils/audioUtils'
 import { VisualizerCanvas } from '@/components/visualizers/VisualizerCanvas'
 import { BACKGROUND_PRESETS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { useRef } from 'react'
+import { useRef, useMemo } from 'react'
+
+function isColorDark(hex: string): boolean {
+  const c = hex.replace('#', '')
+  const r = parseInt(c.substring(0, 2), 16)
+  const g = parseInt(c.substring(2, 4), 16)
+  const b = parseInt(c.substring(4, 6), 16)
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return luminance < 0.5
+}
 
 export function PreviewBox() {
   const { expanded, setExpanded } = useUIStore()
@@ -138,8 +147,9 @@ function EmptyUploadBox() {
 function PlayerBar() {
   const { audioFile, playbackState, currentTime, duration, volume, play, pause, stop, seek, setVolume } = useAudioControls()
   const expanded = useUIStore((s) => s.expanded)
-  const theme = useUIStore((s) => s.theme)
-  const isLight = theme === 'light'
+  const backgroundPreset = useVisualizerStore((s) => s.backgroundPreset)
+  const bg = BACKGROUND_PRESETS.find((b) => b.id === backgroundPreset) || BACKGROUND_PRESETS[0]
+  const darkBg = isColorDark(bg.color)
 
   if (!audioFile) return null
 
@@ -147,9 +157,9 @@ function PlayerBar() {
 
   return (
     <div
-      className={cn("rounded-2xl border", isLight ? "border-black/[0.06]" : "border-white/[0.06]")}
+      className={cn("rounded-2xl border", darkBg ? "border-white/[0.06]" : "border-black/[0.08]")}
       style={{
-        background: isLight ? 'rgba(255, 255, 255, 0.80)' : 'rgba(8, 8, 12, 0.85)',
+        background: darkBg ? 'rgba(8, 8, 12, 0.85)' : 'rgba(255, 255, 255, 0.85)',
         backdropFilter: 'blur(24px) saturate(1.4)',
         padding: expanded ? '20px' : '18px 22px',
         ...(expanded ? { marginLeft: '16px', marginRight: '16px', marginBottom: '16px' } : {})
@@ -158,7 +168,7 @@ function PlayerBar() {
 
       {/* Seek bar */}
       <div className="mb-3">
-        <div className={cn("relative w-full h-[4px] rounded-full overflow-hidden cursor-pointer group", isLight ? "bg-black/[0.08]" : "bg-white/[0.06]")}
+        <div className={cn("relative w-full h-[4px] rounded-full overflow-hidden cursor-pointer group", darkBg ? "bg-white/[0.06]" : "bg-black/[0.08]")}
           onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect()
             const pct = (e.clientX - rect.left) / rect.width
@@ -175,8 +185,8 @@ function PlayerBar() {
           />
         </div>
         <div className="flex justify-between mt-1.5">
-          <span className="text-[10px] font-mono text-muted-foreground/60 tabular-nums">{formatTime(currentTime)}</span>
-          <span className="text-[10px] font-mono text-muted-foreground/40 tabular-nums">{formatTime(duration)}</span>
+          <span className="text-[10px] font-mono tabular-nums" style={{ color: darkBg ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)' }}>{formatTime(currentTime)}</span>
+          <span className="text-[10px] font-mono tabular-nums" style={{ color: darkBg ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.35)' }}>{formatTime(duration)}</span>
         </div>
       </div>
 
@@ -188,8 +198,8 @@ function PlayerBar() {
             <FileAudio className="h-4 w-4 text-primary/80" />
           </div>
           <div className="min-w-0">
-            <p className="text-[12px] font-semibold truncate leading-tight">{audioFile.name}</p>
-            <p className="text-[10px] text-muted-foreground/50 leading-tight mt-0.5 uppercase tracking-wider">{audioFile.format}</p>
+            <p className="text-[12px] font-semibold truncate leading-tight" style={{ color: darkBg ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)' }}>{audioFile.name}</p>
+            <p className="text-[10px] leading-tight mt-0.5 uppercase tracking-wider" style={{ color: darkBg ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.4)' }}>{audioFile.format}</p>
           </div>
         </div>
 
@@ -200,9 +210,9 @@ function PlayerBar() {
             disabled={playbackState === 'idle' || playbackState === 'stopped'}
             className={cn(
               "h-8 w-8 rounded-lg flex items-center justify-center transition-all disabled:opacity-20",
-              isLight
-                ? "text-black/30 hover:text-black/60 hover:bg-black/[0.04] disabled:hover:bg-transparent disabled:hover:text-black/30"
-                : "text-white/30 hover:text-white/70 hover:bg-white/[0.06] disabled:hover:bg-transparent disabled:hover:text-white/30"
+              darkBg
+                ? "text-white/30 hover:text-white/70 hover:bg-white/[0.06] disabled:hover:bg-transparent disabled:hover:text-white/30"
+                : "text-black/30 hover:text-black/60 hover:bg-black/[0.04] disabled:hover:bg-transparent disabled:hover:text-black/30"
             )}
           >
             <Square className="h-3.5 w-3.5" />
@@ -230,11 +240,11 @@ function PlayerBar() {
         <div className="hidden sm:flex items-center flex-1 justify-end max-w-[110px]" style={{ gap: '8px' }}>
           <button
             onClick={() => setVolume(volume > 0 ? 0 : 0.75)}
-            className={cn("transition-colors shrink-0", isLight ? "text-black/30 hover:text-black/50" : "text-white/30 hover:text-white/60")}
+            className={cn("transition-colors shrink-0", darkBg ? "text-white/30 hover:text-white/60" : "text-black/30 hover:text-black/50")}
           >
             {volume === 0 ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
           </button>
-          <div className={cn("flex-1 relative h-[3px] rounded-full cursor-pointer", isLight ? "bg-black/[0.06]" : "bg-white/[0.06]")}
+          <div className={cn("flex-1 relative h-[3px] rounded-full cursor-pointer", darkBg ? "bg-white/[0.06]" : "bg-black/[0.06]")}
             onClick={(e) => {
               const rect = e.currentTarget.getBoundingClientRect()
               const pct = (e.clientX - rect.left) / rect.width
@@ -242,7 +252,7 @@ function PlayerBar() {
             }}
           >
             <div
-              className={cn("absolute inset-y-0 left-0 rounded-full", isLight ? "bg-black/25" : "bg-white/30")}
+              className={cn("absolute inset-y-0 left-0 rounded-full", darkBg ? "bg-white/30" : "bg-black/25")}
               style={{ width: `${volume * 100}%` }}
             />
           </div>
