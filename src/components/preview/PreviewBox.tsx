@@ -82,21 +82,48 @@ function EmptyUploadBox() {
   const fileRef = useRef<HTMLInputElement>(null)
 
   return (
-    <div className="h-full flex flex-col items-center justify-center gap-4 p-8">
-      <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/10 flex items-center justify-center">
-        <Music2 className="h-7 w-7 text-indigo-400/70" />
-      </div>
-      <div className="text-center">
-        <p className="text-sm font-medium text-muted-foreground">Upload audio to preview</p>
-        <p className="text-[11px] text-muted-foreground/50 mt-1">Drag & drop or choose a file</p>
-      </div>
-      <button
+    <div className="h-full flex flex-col items-center justify-center" style={{ padding: '40px 32px' }}>
+      <div
+        className="w-full max-w-[320px] flex flex-col items-center rounded-2xl border-2 border-dashed border-white/[0.08] hover:border-primary/30 transition-colors cursor-pointer"
+        style={{ padding: '36px 28px' }}
         onClick={() => fileRef.current?.click()}
-        className="h-10 px-6 rounded-xl bg-primary text-primary-foreground text-[12px] font-semibold flex items-center gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.97]"
       >
-        <Upload className="h-4 w-4" />
-        Choose File
-      </button>
+        {/* Icon */}
+        <div
+          className="rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/[0.08] flex items-center justify-center"
+          style={{ width: '64px', height: '64px', marginBottom: '20px' }}
+        >
+          <Upload className="h-7 w-7 text-indigo-400/60" />
+        </div>
+
+        {/* Text */}
+        <p className="text-[14px] font-semibold text-foreground/90 text-center leading-tight">Drop your audio file here</p>
+        <p className="text-[11px] text-muted-foreground/50 text-center mt-1.5">or click anywhere in this box to browse</p>
+
+        {/* CTA Button */}
+        <button
+          onClick={(e) => { e.stopPropagation(); fileRef.current?.click() }}
+          className="rounded-xl bg-primary text-primary-foreground text-[12px] font-semibold flex items-center shadow-lg shadow-primary/20 hover:shadow-primary/35 hover:scale-[1.02] transition-all active:scale-[0.97]"
+          style={{ padding: '10px 22px', gap: '8px', marginTop: '20px' }}
+        >
+          <Upload className="h-4 w-4" />
+          Choose File
+        </button>
+
+        {/* Supported formats */}
+        <div className="flex items-center" style={{ gap: '6px', marginTop: '18px' }}>
+          {['MP3', 'WAV', 'M4A', 'OGG', 'AAC'].map((f) => (
+            <span
+              key={f}
+              className="text-[9px] font-medium uppercase tracking-wider rounded-md bg-white/[0.04] text-muted-foreground/60 border border-white/[0.04]"
+              style={{ padding: '3px 7px' }}
+            >
+              {f}
+            </span>
+          ))}
+        </div>
+      </div>
+
       <input
         ref={fileRef}
         type="file"
@@ -104,11 +131,6 @@ function EmptyUploadBox() {
         className="hidden"
         onChange={(e) => { const f = e.target.files?.[0]; if (f) loadFile(f) }}
       />
-      <div className="flex gap-1 mt-1">
-        {['MP3', 'WAV', 'M4A', 'OGG'].map((f) => (
-          <span key={f} className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 text-muted-foreground">{f}</span>
-        ))}
-      </div>
     </div>
   )
 }
