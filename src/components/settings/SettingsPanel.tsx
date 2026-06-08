@@ -80,15 +80,23 @@ function ModeGrid() {
             key={m.id}
             onClick={() => setMode(m.id)}
             className={cn(
-              'flex items-center gap-3 rounded-xl border text-left transition-all duration-150 w-full',
+              'flex items-center rounded-xl border text-left transition-all duration-200 w-full',
               active
-                ? 'border-primary/40 bg-primary/10 text-white shadow-sm shadow-primary/10'
-                : 'border-white/[0.08] hover:border-white/15 bg-white/[0.02] text-muted-foreground hover:text-foreground hover:bg-white/[0.04]'
+                ? 'border-primary/50 bg-primary/[0.08] text-white ring-1 ring-primary/20'
+                : 'border-white/[0.06] hover:border-white/[0.12] bg-white/[0.02] text-muted-foreground hover:text-foreground hover:bg-white/[0.04]'
             )}
-            style={{ paddingTop: '8px', paddingBottom: '8px', paddingLeft: '14px', paddingRight: '14px' }}
+            style={{ padding: '12px 14px', gap: '12px' }}
           >
-            <Icon className={cn('h-5 w-5 shrink-0', active ? 'text-primary' : '')} />
-            <span className="text-sm font-semibold leading-tight">{m.name}</span>
+            <div className={cn(
+              'h-8 w-8 rounded-lg flex items-center justify-center shrink-0 transition-colors',
+              active ? 'bg-primary/15 text-primary' : 'bg-white/[0.04] text-muted-foreground'
+            )}>
+              <Icon className="h-4 w-4" />
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="text-[12px] font-semibold leading-tight truncate">{m.name}</span>
+              <span className="text-[10px] text-muted-foreground/60 leading-tight mt-0.5 truncate">{m.description}</span>
+            </div>
           </button>
         )
       })}
@@ -101,28 +109,39 @@ function ColorSection() {
   return (
     <div>
       <p className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-medium" style={{ marginBottom: '10px' }}>Theme</p>
-      <div className="grid grid-cols-3 gap-2.5">
+      <div className="grid grid-cols-2 gap-2.5">
         {COLOR_PRESETS.map((p) => {
           const active = colorPreset === p.id
+          const gradient = `linear-gradient(135deg, ${p.colors[0]} 0%, ${p.colors[1]} 50%, ${p.colors[2]} 100%)`
           return (
             <button
               key={p.id}
               onClick={() => setColorPreset(p.id)}
               className={cn(
-                'flex flex-col items-center gap-2.5 py-3.5 px-2 rounded-xl border transition-all w-full',
+                'flex items-center rounded-xl border transition-all duration-200 w-full text-left',
                 active
-                  ? 'border-primary/40 bg-primary/10 shadow-sm shadow-primary/10'
-                  : 'border-white/[0.08] hover:border-white/15 hover:bg-white/[0.03]'
+                  ? 'border-primary/50 ring-1 ring-primary/20'
+                  : 'border-white/[0.06] hover:border-white/[0.12]'
               )}
+              style={{ padding: '10px 12px', gap: '10px' }}
             >
-              <div className="flex -space-x-1">
-                {p.colors.slice(0, 3).map((c, i) => (
-                  <div key={i} className="h-4 w-4 rounded-full ring-1 ring-black/30" style={{ backgroundColor: c }} />
-                ))}
+              <div
+                className="h-7 w-7 rounded-lg shrink-0 ring-1 ring-white/[0.08]"
+                style={{ background: gradient }}
+              />
+              <div className="flex flex-col min-w-0">
+                <span className={cn(
+                  'text-[11px] font-semibold leading-tight truncate',
+                  active ? 'text-foreground' : 'text-muted-foreground'
+                )}>
+                  {p.name}
+                </span>
+                <div className="flex gap-0.5 mt-1">
+                  {p.colors.map((c, i) => (
+                    <div key={i} className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: c }} />
+                  ))}
+                </div>
               </div>
-              <span className={cn('text-[11px] font-semibold', active ? 'text-foreground' : 'text-muted-foreground')}>
-                {p.name}
-              </span>
             </button>
           )
         })}
@@ -134,7 +153,7 @@ function ColorSection() {
 function BackgroundSection() {
   const { backgroundPreset, setBackgroundPreset } = useVisualizerStore()
   return (
-    <div className="grid grid-cols-1 gap-2.5">
+    <div className="flex flex-col gap-2.5">
       {BACKGROUND_PRESETS.map((p) => {
         const active = backgroundPreset === p.id
         return (
@@ -142,17 +161,21 @@ function BackgroundSection() {
             key={p.id}
             onClick={() => setBackgroundPreset(p.id)}
             className={cn(
-              'flex items-center gap-3.5 px-4 py-3 rounded-xl border transition-all w-full text-left',
+              'flex items-center rounded-xl border transition-all duration-200 w-full text-left',
               active
-                ? 'border-primary/40 bg-primary/10 shadow-sm shadow-primary/10'
-                : 'border-white/[0.08] hover:border-white/15 hover:bg-white/[0.03]'
+                ? 'border-primary/50 ring-1 ring-primary/20'
+                : 'border-white/[0.06] hover:border-white/[0.12]'
             )}
+            style={{ padding: '10px 12px', gap: '12px' }}
           >
             <div
-              className="h-6 w-6 rounded-lg ring-1 ring-white/10 shrink-0"
+              className="h-8 w-12 rounded-lg shrink-0 ring-1 ring-white/[0.08]"
               style={{ background: p.gradient || p.color }}
             />
-            <span className={cn('text-sm font-semibold', active ? 'text-foreground' : 'text-muted-foreground')}>
+            <span className={cn(
+              'text-[12px] font-semibold',
+              active ? 'text-foreground' : 'text-muted-foreground'
+            )}>
               {p.name}
             </span>
           </button>
@@ -209,9 +232,9 @@ function SliderRow({ label, value, min, max, step, onChange, display }: {
 }) {
   return (
     <div>
-      <div className="flex justify-between text-sm mb-1.5">
-        <span className="text-muted-foreground">{label}</span>
-        <span className="font-mono text-xs text-foreground/80 tabular-nums">{display}</span>
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-[12px] text-muted-foreground font-medium">{label}</span>
+        <span className="text-[11px] font-mono text-foreground/60 tabular-nums bg-white/[0.04] px-2 py-0.5 rounded-md">{display}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))} className="w-full" />

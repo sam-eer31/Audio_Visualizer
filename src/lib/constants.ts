@@ -29,20 +29,21 @@ export const VISUALIZATION_MODES: {
 ]
 
 export const COLOR_PRESETS: ColorPreset[] = [
-  { id: 'neon-blue', name: 'Neon Blue', colors: ['#00d4ff', '#0099ff', '#0055ff'] },
-  { id: 'sunset', name: 'Sunset', colors: ['#ff6b35', '#ff2d87', '#c800ff'] },
-  { id: 'aurora', name: 'Aurora', colors: ['#00ff87', '#00d4ff', '#c800ff'] },
-  { id: 'fire', name: 'Fire', colors: ['#ff4500', '#ff8c00', '#ffd700'] },
-  { id: 'cyberpunk', name: 'Cyberpunk', colors: ['#ff00ff', '#00ffff', '#ff0080'] },
-  { id: 'ocean', name: 'Ocean', colors: ['#006994', '#00b4d8', '#90e0ef'] },
+  { id: 'electric', name: 'Electric', colors: ['#6366f1', '#8b5cf6', '#a78bfa'] },
+  { id: 'sunset-gold', name: 'Sunset', colors: ['#f97316', '#ef4444', '#ec4899'] },
+  { id: 'emerald', name: 'Emerald', colors: ['#10b981', '#06b6d4', '#3b82f6'] },
+  { id: 'rose', name: 'Rose', colors: ['#f43f5e', '#e879f9', '#c084fc'] },
+  { id: 'arctic', name: 'Arctic', colors: ['#38bdf8', '#818cf8', '#c4b5fd'] },
+  { id: 'platinum', name: 'Platinum', colors: ['#e2e8f0', '#94a3b8', '#64748b'] },
 ]
 
 export const BACKGROUND_PRESETS: BackgroundPreset[] = [
   { id: 'void', name: 'Void', color: '#000000' },
-  { id: 'deep-space', name: 'Deep Space', color: '#0a0a1a', gradient: 'radial-gradient(ellipse at center, #0a0a2e 0%, #000000 100%)' },
+  { id: 'deep-space', name: 'Deep Space', color: '#050510', gradient: 'radial-gradient(ellipse at 50% 50%, #0a0a2e 0%, #050510 60%, #000000 100%)' },
   { id: 'midnight', name: 'Midnight', color: '#0d1117', gradient: 'linear-gradient(180deg, #0d1117 0%, #161b22 100%)' },
-  { id: 'nebula', name: 'Nebula', color: '#0f0020', gradient: 'radial-gradient(ellipse at 30% 50%, #1a0033 0%, #0f0020 50%, #000000 100%)' },
-  { id: 'charcoal', name: 'Charcoal', color: '#1a1a2e', gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)' },
+  { id: 'nebula', name: 'Nebula', color: '#0a0015', gradient: 'radial-gradient(ellipse at 30% 40%, #1a0040 0%, #0a0015 50%, #000000 100%)' },
+  { id: 'obsidian', name: 'Obsidian', color: '#0c0c0c', gradient: 'linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #0c0c0c 100%)' },
+  { id: 'slate', name: 'Slate', color: '#0f172a', gradient: 'linear-gradient(160deg, #0f172a 0%, #1e293b 100%)' },
 ]
 
 export const FFT_SIZES = [256, 512, 1024, 2048, 4096, 8192] as const

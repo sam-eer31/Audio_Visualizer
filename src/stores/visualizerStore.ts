@@ -23,7 +23,7 @@ interface VisualizerStore {
 
 export const useVisualizerStore = create<VisualizerStore>((set) => ({
   mode: 'spectrum-bars',
-  colorPreset: 'neon-blue',
+  colorPreset: 'electric',
   backgroundPreset: 'deep-space',
   sensitivity: 1.5,
   fftSize: 2048,

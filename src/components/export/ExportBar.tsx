@@ -9,11 +9,11 @@ export function ExportBar() {
   const { startExport } = useExport()
 
   return (
-    <div className="glass rounded-2xl p-3 sm:p-4">
+    <div className="glass rounded-2xl p-4 sm:p-5">
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h3 className="text-sm font-semibold">Export Video</h3>
-          <p className="text-[10px] text-muted-foreground mt-0.5">Save your visualization as video</p>
+          <h3 className="text-[13px] font-semibold">Export Video</h3>
+          <p className="text-[10px] text-muted-foreground/60 mt-0.5">Save your visualization as video</p>
         </div>
         {progress >= 100 && !isExporting && (
           <button onClick={reset} className="text-[11px] text-primary hover:underline flex items-center gap-1">
@@ -58,9 +58,9 @@ export function ExportBar() {
           {/* Export button */}
           <button
             onClick={startExport}
-            className="ml-auto h-9 px-4 rounded-xl bg-primary text-primary-foreground text-xs font-medium flex items-center gap-1.5 hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all active:scale-[0.97] shrink-0"
+            className="ml-auto h-10 px-5 rounded-xl bg-primary text-primary-foreground text-[12px] font-semibold flex items-center gap-2 hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all active:scale-[0.97] shrink-0"
           >
-            <Download className="h-3.5 w-3.5" />
+            <Download className="h-4 w-4" />
             Export
           </button>
         </div>
@@ -74,12 +74,12 @@ function MiniSelect({ label, value, onChange, options }: {
   options: { v: string; l: string }[]
 }) {
   return (
-    <div className="space-y-0.5 min-w-0">
-      <label className="text-[10px] text-muted-foreground/80 uppercase tracking-wider">{label}</label>
+    <div className="space-y-1 min-w-0">
+      <label className="text-[10px] text-muted-foreground/60 uppercase tracking-wider font-medium">{label}</label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-8 rounded-lg bg-white/5 border border-white/10 text-xs px-2 text-foreground focus:outline-none focus:border-primary/50 w-full"
+        className="h-9 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[11px] px-2.5 text-foreground focus:outline-none focus:border-primary/40 w-full transition-colors"
       >
         {options.map((o) => <option key={o.v} value={o.v} className="bg-[#0a0a0f]">{o.l}</option>)}
       </select>

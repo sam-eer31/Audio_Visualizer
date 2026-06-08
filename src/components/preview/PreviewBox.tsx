@@ -82,16 +82,19 @@ function EmptyUploadBox() {
   const fileRef = useRef<HTMLInputElement>(null)
 
   return (
-    <div className="h-full flex flex-col items-center justify-center gap-3 p-6">
-      <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500/15 to-purple-600/15 border border-indigo-500/15 flex items-center justify-center">
-        <Music2 className="h-6 w-6 text-indigo-400/80" />
+    <div className="h-full flex flex-col items-center justify-center gap-4 p-8">
+      <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/10 flex items-center justify-center">
+        <Music2 className="h-7 w-7 text-indigo-400/70" />
       </div>
-      <p className="text-sm text-muted-foreground text-center">Upload audio to preview</p>
+      <div className="text-center">
+        <p className="text-sm font-medium text-muted-foreground">Upload audio to preview</p>
+        <p className="text-[11px] text-muted-foreground/50 mt-1">Drag & drop or choose a file</p>
+      </div>
       <button
         onClick={() => fileRef.current?.click()}
-        className="px-5 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-medium flex items-center gap-1.5 shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all active:scale-[0.97]"
+        className="h-10 px-6 rounded-xl bg-primary text-primary-foreground text-[12px] font-semibold flex items-center gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-[0.97]"
       >
-        <Upload className="h-3.5 w-3.5" />
+        <Upload className="h-4 w-4" />
         Choose File
       </button>
       <input
