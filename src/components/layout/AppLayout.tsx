@@ -92,7 +92,7 @@ export function AppLayout() {
             <PreviewBox />
           </div>
           {/* Settings */}
-          <div className="glass rounded-2xl p-5 shrink-0">
+          <div className="glass rounded-2xl shrink-0" style={{ padding: '20px' }}>
             <SettingsPanel />
           </div>
           {/* Export at the very bottom */}
@@ -108,7 +108,7 @@ export function AppLayout() {
           <div className="flex-1 flex flex-row gap-5 min-h-0">
             {/* Left: Settings */}
             <div className="w-[380px] xl:w-[420px] shrink-0 flex flex-col min-h-0">
-              <div className="glass rounded-2xl flex-1 flex flex-col min-h-0 p-5 overflow-hidden">
+              <div className="glass rounded-2xl flex-1 flex flex-col min-h-0 overflow-hidden" style={{ padding: '20px' }}>
                 <SettingsPanel />
               </div>
             </div>
