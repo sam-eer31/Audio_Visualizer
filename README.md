@@ -1,4 +1,20 @@
-# SonicWave - Professional Audio Visualizer
+# 🎵 SonicWave - Professional Audio Visualizer
+
+<div align="center">
+
+[![Live Demo](https://img.shields.io/badge/🚀_LIVE_DEMO-Click_Here-FF6B6B?style=for-the-badge&labelColor=1a1a2e)](https://audio-visualizer-teal-two.vercel.app)
+
+</div>
+
+---
+
+## ⚡ Try It Now - No Installation Required!
+
+### **👉 [VISIT SONICWAVE](https://audio-visualizer-teal-two.vercel.app) 👈**
+
+**Transform your audio into stunning 3D visualizations instantly. Upload audio, choose visualization, export video—all in your browser!**
+
+---
 
 <div align="center">
 
@@ -7,10 +23,6 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)
 ![Vite](https://img.shields.io/badge/Vite-8-purple?logo=vite)
 ![Three.js](https://img.shields.io/badge/Three.js-r184-black?logo=three.js)
-
-**Transform your audio into stunning 3D visualizations. Create, customize, and export professional-grade video content—entirely in your browser.**
-
-[🚀 Live Demo](https://audio-visualizer-teal-two.vercel.app) • [📖 Documentation](#documentation) • [🎯 Features](#features) • [💾 Installation](#installation)
 
 </div>
 
@@ -76,46 +88,31 @@ SonicWave offers **8 immersive, real-time 3D visualizations** that react dynamic
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start (30 Seconds)
 
-### Prerequisites
+### Option 1: Use Online (Easiest - No Installation!)
+👉 **[Open SonicWave in Browser](https://audio-visualizer-teal-two.vercel.app)** ← Click Here!
 
-- **Node.js** 18 or higher
-- **npm** 9+ or **yarn** 4+
-- Modern web browser with WebGL support
+1. Upload your audio file
+2. Select a visualization mode
+3. Customize colors and effects
+4. Export as video
 
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/sam-eer31/Audio_Visualizer.git
-   cd Audio_Visualizer
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start development server**
-   ```bash
-   npm run dev
-   ```
-   The application will open at `http://localhost:5173`
-
-### Build for Production
+### Option 2: Run Locally
 
 ```bash
-npm run build
+# Clone the repository
+git clone https://github.com/sam-eer31/Audio_Visualizer.git
+cd Audio_Visualizer
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-Generated files will be in the `dist/` directory, ready for deployment.
-
-### Preview Production Build Locally
-
-```bash
-npm run preview
-```
+The application will open at `http://localhost:5173`
 
 ---
 
@@ -319,6 +316,8 @@ MIT License – See [LICENSE](LICENSE) file for details.
 ---
 
 <div align="center">
+
+### 👉 **[START CREATING NOW](https://audio-visualizer-teal-two.vercel.app)** 👈
 
 **Made with ❤️ by [sam-eer31](https://github.com/sam-eer31)**
 
