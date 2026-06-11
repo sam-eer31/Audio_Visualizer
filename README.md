@@ -1,16 +1,16 @@
-# 🎵 SonicWave - Professional Audio Visualizer
-
 <div align="center">
+  <img src="public/logo.png" alt="Audrix Logo" width="160" />
 
-[![Live App](https://img.shields.io/badge/🚀_OPEN_APP-Start_Creating-FF6B6B?style=for-the-badge&labelColor=1a1a2e)](https://audio-visualizer-teal-two.vercel.app)
+  # 🎵 Audrix - Professional Audio Visualizer
 
+  [![Live App](https://img.shields.io/badge/🚀_OPEN_APP-Start_Creating-FF6B6B?style=for-the-badge&labelColor=1a1a2e)](https://audio-visualizer-teal-two.vercel.app)
 </div>
 
 ---
 
 ## ⚡ Start Creating Now - No Installation Required!
 
-### **👉 [OPEN SONICWAVE](https://audio-visualizer-teal-two.vercel.app) 👈**
+### **👉 [OPEN AUDRIX](https://audio-visualizer-teal-two.vercel.app) 👈**
 
 **Transform your audio into stunning 3D visualizations. Upload audio, choose visualization, customize effects, and export professional videos—all in your browser!**
 
@@ -30,7 +30,7 @@
 
 ## Overview
 
-**SonicWave** is a production-ready audio visualization platform designed for content creators, music producers, DJs, and developers. Create captivating audio-reactive visualizations without requiring any backend infrastructure, subscriptions, or complex setup.
+**Audrix** is a production-ready audio visualization platform designed for content creators, music producers, DJs, and developers. Create captivating audio-reactive visualizations without requiring any backend infrastructure, subscriptions, or complex setup.
 
 **Key Benefits:**
 - ✅ **No Server Required** – 100% client-side processing
@@ -91,7 +91,7 @@ Choose from 8 immersive, real-time 3D visualizations that react dynamically to y
 ## 🚀 Getting Started
 
 ### Option 1: Use Online (Instant - No Installation)
-👉 **[Open SonicWave](https://audio-visualizer-teal-two.vercel.app)** ← Click to Start Creating!
+👉 **[Open Audrix](https://audio-visualizer-teal-two.vercel.app)** ← Click to Start Creating!
 
 1. Upload your audio file
 2. Select a visualization mode
