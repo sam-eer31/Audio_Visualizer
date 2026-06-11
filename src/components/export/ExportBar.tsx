@@ -13,9 +13,9 @@ export function ExportBar() {
 
   return (
     <div className={cn(
-      "glass rounded-2xl p-4 sm:p-5",
+      "glass rounded-2xl p-5 sm:p-6",
     )}>
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-[13px] font-semibold">Export Video</h3>
           <p className="text-[10px] text-muted-foreground/60 mt-0.5">Save your visualization as video</p>
@@ -44,26 +44,29 @@ export function ExportBar() {
           <span className="text-xs font-medium">Export complete! File downloaded.</span>
         </div>
       ) : (
-        <div className="flex flex-wrap items-end gap-2 sm:gap-3">
-          {/* Resolution */}
-          <MiniSelect label="Resolution" value={resolution}
-            onChange={(v) => setResolution(v as '720p' | '1080p' | '1440p')}
-            options={[{ v: '720p', l: '720p' }, { v: '1080p', l: '1080p' }, { v: '1440p', l: '1440p' }]} />
+        <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+          {/* Selectors Group */}
+          <div className="grid grid-cols-3 gap-2 sm:flex sm:items-end sm:gap-3 flex-1 min-w-0">
+            {/* Resolution */}
+            <MiniSelect label="Resolution" value={resolution}
+              onChange={(v) => setResolution(v as '720p' | '1080p' | '1440p')}
+              options={[{ v: '720p', l: '720p' }, { v: '1080p', l: '1080p' }, { v: '1440p', l: '1440p' }]} />
 
-          {/* Quality */}
-          <MiniSelect label="Quality" value={quality}
-            onChange={(v) => setQuality(v as 'low' | 'medium' | 'high')}
-            options={[{ v: 'low', l: 'Low' }, { v: 'medium', l: 'Medium' }, { v: 'high', l: 'High' }]} />
+            {/* Quality */}
+            <MiniSelect label="Quality" value={quality}
+              onChange={(v) => setQuality(v as 'low' | 'medium' | 'high')}
+              options={[{ v: 'low', l: 'Low' }, { v: 'medium', l: 'Medium' }, { v: 'high', l: 'High' }]} />
 
-          {/* FPS */}
-          <MiniSelect label="FPS" value={String(frameRate)}
-            onChange={(v) => setFrameRate(Number(v) as 30 | 60)}
-            options={[{ v: '30', l: '30' }, { v: '60', l: '60' }]} />
+            {/* FPS */}
+            <MiniSelect label="FPS" value={String(frameRate)}
+              onChange={(v) => setFrameRate(Number(v) as 30 | 60)}
+              options={[{ v: '30', l: '30' }, { v: '60', l: '60' }]} />
+          </div>
 
           {/* Export button */}
           <button
             onClick={startExport}
-            className="ml-auto h-10 px-5 rounded-xl bg-primary text-primary-foreground text-[12px] font-semibold flex items-center gap-2 hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all active:scale-[0.97] shrink-0"
+            className="w-full sm:w-auto h-10 px-5 rounded-xl bg-primary text-primary-foreground text-[12px] font-semibold flex items-center justify-center gap-2 hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all active:scale-[0.97] shrink-0"
           >
             <Download className="h-4 w-4" />
             Export
@@ -80,7 +83,7 @@ function MiniSelect({ label, value, onChange, options }: {
 }) {
   const isLight = useUIStore((s) => s.theme) === 'light'
   return (
-    <div className="space-y-1 min-w-0">
+    <div className="space-y-1 min-w-0 sm:w-28">
       <label className="text-[10px] text-muted-foreground/60 uppercase tracking-wider font-medium">{label}</label>
       <select
         value={value}
