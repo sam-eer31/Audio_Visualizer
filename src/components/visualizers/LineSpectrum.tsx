@@ -6,6 +6,7 @@ import { useVisualizerStore } from '@/stores/visualizerStore'
 import { COLOR_PRESETS } from '@/lib/constants'
 
 const POINTS = 64
+const HALF_POINTS = POINTS / 2
 const SEGMENT_COUNT = POINTS - 1
 
 export function LineSpectrum() {
@@ -21,33 +22,41 @@ export function LineSpectrum() {
 
   const dummy = useMemo(() => new THREE.Object3D(), [])
 
-  // Keep smoothed values for frequency data
-  const smoothedFreq = useRef<Float32Array>(new Float32Array(POINTS))
+  // Keep smoothed values for frequency data of the half-spectrum
+  const smoothedFreq = useRef<Float32Array>(new Float32Array(HALF_POINTS))
 
   useFrame((state, delta) => {
     if (!meshRef.current) return
     const analysis = getAnalysis()
     const freq = analysis.frequencyData
     const usableBins = Math.floor(freq.length * 0.6)
-    const step = Math.max(1, Math.floor(usableBins / POINTS))
+    // Step size to map the usable frequencies to the half-spectrum
+    const step = Math.max(1, Math.floor(usableBins / HALF_POINTS))
 
-    // Update smoothed frequency data
-    for (let i = 0; i < POINTS; i++) {
+    // Update smoothed frequency data (half-spectrum)
+    for (let i = 0; i < HALF_POINTS; i++) {
       const rawVal = (freq[i * step] || 0) / 255
-      // Fast response, slow decay for clean spectrum physics
-      const targetVal = rawVal * 5
+      const targetVal = rawVal * 5.5 // Slightly more amplitude for visual energy
       const currentVal = smoothedFreq.current[i]
-      const rate = targetVal > currentVal ? 0.3 : 0.15
+      const rate = targetVal > currentVal ? 0.35 : 0.18 // Fast response, smooth decay
       smoothedFreq.current[i] += (targetVal - currentVal) * rate * (delta * 60)
     }
 
-    // Connect the points with cylinder segments
+    // Connect the points with cylinder segments (mirrored center-out)
     for (let i = 0; i < SEGMENT_COUNT; i++) {
+      // Calculate positions
       const x1 = (i - POINTS / 2) * 0.25
       const x2 = ((i + 1) - POINTS / 2) * 0.25
 
-      const y1 = Math.max(smoothedFreq.current[i], 0.05)
-      const y2 = Math.max(smoothedFreq.current[i + 1], 0.05)
+      // Get distance from center (0 to HALF_POINTS) for mirroring
+      const dist1 = Math.abs(i - POINTS / 2)
+      const dist2 = Math.abs((i + 1) - POINTS / 2)
+
+      const idx1 = Math.min(Math.floor(dist1), HALF_POINTS - 1)
+      const idx2 = Math.min(Math.floor(dist2), HALF_POINTS - 1)
+
+      const y1 = Math.max(smoothedFreq.current[idx1], 0.05)
+      const y2 = Math.max(smoothedFreq.current[idx2], 0.05)
 
       const p1 = new THREE.Vector3(x1, y1, 0)
       const p2 = new THREE.Vector3(x2, y2, 0)
@@ -61,18 +70,20 @@ export function LineSpectrum() {
       dummy.rotateX(Math.PI / 2)
 
       // Clean visible line thickness
-      const thickness = 0.06
+      const thickness = 0.065
       dummy.scale.set(thickness, length, thickness)
       dummy.updateMatrix()
       meshRef.current.setMatrixAt(i, dummy.matrix)
 
-      // Match the gradient look of SpectrumBars from left to right
-      const t = i / POINTS
+      // Symmetric color gradient: starts at colors[0] in the center and blends to colors[2] at the edges
+      const centerDist = (dist1 + dist2) / 2
+      const t = Math.min(centerDist / HALF_POINTS, 1)
       const color = colors[0].clone().lerp(colors[2], t)
 
-      // Add extra glow brightness on peaks
-      if (smoothedFreq.current[i] > 2.5) {
-        color.lerp(new THREE.Color(1, 1, 1), (smoothedFreq.current[i] - 2.5) * 0.3)
+      // Add extra brightness/glow on peak volumes
+      const avgY = (y1 + y2) / 2
+      if (avgY > 2.5) {
+        color.lerp(new THREE.Color(1, 1, 1), Math.min((avgY - 2.5) * 0.35, 1))
       }
 
       meshRef.current.setColorAt(i, color)
