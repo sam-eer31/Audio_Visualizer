@@ -11,7 +11,6 @@ export function Starfield() {
   const pointsRef = useRef<THREE.Points>(null)
   const { getAnalysis } = useAudioAnalyzer()
   const colorPreset = useVisualizerStore((s) => s.colorPreset)
-  const glowIntensity = useVisualizerStore((s) => s.glowIntensity)
 
   const colors = useMemo(() => {
     const preset = COLOR_PRESETS.find((p) => p.id === colorPreset) || COLOR_PRESETS[0]

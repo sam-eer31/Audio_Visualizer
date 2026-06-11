@@ -58,7 +58,6 @@ export interface VisualizerSettings {
   sensitivity: number
   fftSize: number
   particleCount: number
-  glowIntensity: number
   rotationSpeed: number
 }
 
