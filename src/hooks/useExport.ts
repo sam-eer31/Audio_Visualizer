@@ -59,7 +59,7 @@ function drawImageContain(ctx: CanvasRenderingContext2D, img: HTMLCanvasElement,
 }
 
 export function useExport() {
-  const { resolution, quality, frameRate, setIsExporting, setProgress, setError, setCancelExport } = useExportStore()
+  const { resolution, quality, frameRate, setIsExporting, setProgress, setError, setCancelExport, setExportSnapshot } = useExportStore()
   const { audioElement, audioDestination, audioFile, audioContext, analyserNode } = useAudioStore()
   const addToast = useUIStore((s) => s.addToast)
 
@@ -86,6 +86,16 @@ export function useExport() {
     }
 
     try {
+      const glCanvasEl = document.querySelector('canvas')
+      if (glCanvasEl) {
+        try {
+          const snapshot = glCanvasEl.toDataURL('image/png')
+          setExportSnapshot(snapshot)
+        } catch (e) {
+          console.warn('Failed to take canvas snapshot:', e)
+        }
+      }
+
       setIsExporting(true)
       setProgress(0)
       setError(null)
@@ -229,6 +239,7 @@ export function useExport() {
         cleanupTickers()
         useExportStore.getState().setOnFrame(null)
         setCancelExport(null)
+        setExportSnapshot(null)
         audioElement.pause()
         await audioReader.cancel().catch(() => {})
 
@@ -253,12 +264,14 @@ export function useExport() {
 
           setIsExporting(false)
           setProgress(100)
+          setExportSnapshot(null)
           addToast('Export complete!', 'success')
         } catch (e: any) {
           console.error('Finalize error:', e)
           setError(e.message)
           addToast('Export failed: ' + e.message, 'error')
           setIsExporting(false)
+          setExportSnapshot(null)
         }
       }
 
@@ -268,6 +281,7 @@ export function useExport() {
         cleanupTickers()
         useExportStore.getState().setOnFrame(null)
         setCancelExport(null)
+        setExportSnapshot(null)
         audioElement.pause()
         await audioReader.cancel().catch(() => {})
 
@@ -282,6 +296,7 @@ export function useExport() {
 
         setIsExporting(false)
         setProgress(0)
+        setExportSnapshot(null)
         addToast('Export cancelled', 'info')
       }
 
@@ -326,6 +341,7 @@ export function useExport() {
       console.error('Export error:', err)
       useExportStore.getState().setOnFrame(null)
       setCancelExport(null)
+      setExportSnapshot(null)
       setIsExporting(false)
       setError(err.message)
       addToast('Export failed: ' + err.message, 'error')
@@ -339,7 +355,7 @@ export function useExport() {
         }
       }
     }
-  }, [resolution, quality, frameRate, audioElement, audioFile, audioDestination, audioContext, analyserNode, setIsExporting, setProgress, setError, setCancelExport, addToast])
+  }, [resolution, quality, frameRate, audioElement, audioFile, audioDestination, audioContext, analyserNode, setIsExporting, setProgress, setError, setCancelExport, setExportSnapshot, addToast])
 
   return { startExport }
 }

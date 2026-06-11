@@ -9,6 +9,7 @@ import { VisualizerCanvas } from '@/components/visualizers/VisualizerCanvas'
 import { BACKGROUND_PRESETS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { useRef } from 'react'
+import { useExportStore } from '@/stores/exportStore'
 
 function isColorDark(hex: string): boolean {
   const c = hex.replace('#', '')
@@ -27,6 +28,9 @@ export function PreviewBox() {
   const darkBg = bg.textColor ? false : isColorDark(bg.color)
   const isLoading = useAudioStore((s) => s.isLoading)
 
+  const isExporting = useExportStore((s) => s.isExporting)
+  const exportSnapshot = useExportStore((s) => s.exportSnapshot)
+
   return (
     <AnimatePresence>
       {expanded ? (
@@ -38,7 +42,20 @@ export function PreviewBox() {
           className="fixed inset-0 z-50"
           style={{ background: bg.gradient || bg.color }}
         >
-          {audioFile && <VisualizerCanvas />}
+          {audioFile && (
+            <>
+              <div className={cn("w-full h-full transition-opacity duration-300", isExporting && "opacity-0 pointer-events-none")}>
+                <VisualizerCanvas />
+              </div>
+              {isExporting && exportSnapshot && (
+                <img 
+                  src={exportSnapshot} 
+                  alt="Export Preview Snapshot" 
+                  className="absolute inset-0 w-full h-full object-cover z-20 pointer-events-none"
+                />
+              )}
+            </>
+          )}
           <div className="absolute inset-x-0 bottom-0 z-10">
             <PlayerBar />
           </div>
@@ -79,19 +96,30 @@ export function PreviewBox() {
           >
             {audioFile ? (
               <>
-                <VisualizerCanvas />
+                <div className={cn("w-full h-full transition-opacity duration-300", isExporting && "opacity-0 pointer-events-none")}>
+                  <VisualizerCanvas />
+                </div>
+                {isExporting && exportSnapshot && (
+                  <img 
+                    src={exportSnapshot} 
+                    alt="Export Preview Snapshot" 
+                    className="absolute inset-0 w-full h-full object-cover z-20 pointer-events-none"
+                  />
+                )}
                 {/* Expand button */}
-                <button
-                  onClick={() => setExpanded(true)}
-                  className={cn(
-                    "absolute top-2 right-2 z-10 h-8 w-8 rounded-lg glass flex items-center justify-center transition-all",
-                    darkBg
-                      ? "text-white/60 hover:text-white hover:bg-white/10"
-                      : "text-black/40 hover:text-black/70 hover:bg-black/10"
-                  )}
-                >
-                  <Expand className="h-3.5 w-3.5" />
-                </button>
+                {!isExporting && (
+                  <button
+                    onClick={() => setExpanded(true)}
+                    className={cn(
+                      "absolute top-2 right-2 z-10 h-8 w-8 rounded-lg glass flex items-center justify-center transition-all",
+                      darkBg
+                        ? "text-white/60 hover:text-white hover:bg-white/10"
+                        : "text-black/40 hover:text-black/70 hover:bg-black/10"
+                    )}
+                  >
+                    <Expand className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </>
             ) : (
               <EmptyUploadBox dark={darkBg} />

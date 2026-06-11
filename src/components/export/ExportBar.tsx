@@ -27,18 +27,7 @@ export function ExportBar() {
         )}
       </div>
 
-      {isExporting ? (
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <Loader2 className="h-4 w-4 text-primary animate-spin shrink-0" />
-            <span className="text-xs text-muted-foreground">Recording... don't close this tab</span>
-            <span className="ml-auto text-xs font-mono font-medium">{Math.round(progress)}%</span>
-          </div>
-          <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
-            <div className="h-full bg-primary rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
-          </div>
-        </div>
-      ) : progress >= 100 ? (
+      {progress >= 100 && !isExporting ? (
         <div className="flex items-center gap-2 py-1">
           <CheckCircle className="h-4 w-4 text-emerald-400" />
           <span className="text-xs font-medium">Export complete! File downloaded.</span>

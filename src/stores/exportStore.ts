@@ -10,6 +10,7 @@ interface ExportStore {
   error: string | null
   onFrame: ((canvas: HTMLCanvasElement) => void) | null
   cancelExport: (() => void) | null
+  exportSnapshot: string | null
   setResolution: (res: ExportResolution) => void
   setQuality: (q: ExportQuality) => void
   setFrameRate: (fps: ExportFrameRate) => void
@@ -18,6 +19,7 @@ interface ExportStore {
   setError: (err: string | null) => void
   setOnFrame: (callback: ((canvas: HTMLCanvasElement) => void) | null) => void
   setCancelExport: (cb: (() => void) | null) => void
+  setExportSnapshot: (url: string | null) => void
   reset: () => void
 }
 
@@ -30,6 +32,7 @@ export const useExportStore = create<ExportStore>((set) => ({
   error: null,
   onFrame: null,
   cancelExport: null,
+  exportSnapshot: null,
   setResolution: (res) => set({ resolution: res }),
   setQuality: (q) => set({ quality: q }),
   setFrameRate: (fps) => set({ frameRate: fps }),
@@ -38,5 +41,6 @@ export const useExportStore = create<ExportStore>((set) => ({
   setError: (err) => set({ error: err }),
   setOnFrame: (callback) => set({ onFrame: callback }),
   setCancelExport: (cb) => set({ cancelExport: cb }),
-  reset: () => set({ isExporting: false, progress: 0, error: null, onFrame: null, cancelExport: null }),
+  setExportSnapshot: (url) => set({ exportSnapshot: url }),
+  reset: () => set({ isExporting: false, progress: 0, error: null, onFrame: null, cancelExport: null, exportSnapshot: null }),
 }))
