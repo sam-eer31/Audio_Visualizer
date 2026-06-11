@@ -36,13 +36,13 @@ export function LineSpectrum() {
     // Update smoothed frequency data (half-spectrum)
     for (let i = 0; i < HALF_POINTS; i++) {
       const rawVal = (freq[i * step] || 0) / 255
-      const targetVal = rawVal * 5.5 // Slightly more amplitude for visual energy
+      const targetVal = rawVal * 4.5 // Balanced peak height
       const currentVal = smoothedFreq.current[i]
       const rate = targetVal > currentVal ? 0.35 : 0.18 // Fast response, smooth decay
       smoothedFreq.current[i] += (targetVal - currentVal) * rate * (delta * 60)
     }
 
-    // Connect the points with cylinder segments (mirrored center-out)
+    // Connect the points with cylinder segments (mirrored center-out with alternating up/down peaks)
     for (let i = 0; i < SEGMENT_COUNT; i++) {
       // Calculate positions
       const x1 = (i - POINTS / 2) * 0.25
@@ -55,8 +55,12 @@ export function LineSpectrum() {
       const idx1 = Math.min(Math.floor(dist1), HALF_POINTS - 1)
       const idx2 = Math.min(Math.floor(dist2), HALF_POINTS - 1)
 
-      const y1 = Math.max(smoothedFreq.current[idx1], 0.05)
-      const y2 = Math.max(smoothedFreq.current[idx2], 0.05)
+      // Alternate positive and negative peaks to create a heartbeat EKG outline around y = 0
+      const sign1 = i % 2 === 0 ? 1 : -1
+      const sign2 = (i + 1) % 2 === 0 ? 1 : -1
+
+      const y1 = smoothedFreq.current[idx1] * sign1
+      const y2 = smoothedFreq.current[idx2] * sign2
 
       const p1 = new THREE.Vector3(x1, y1, 0)
       const p2 = new THREE.Vector3(x2, y2, 0)
@@ -81,9 +85,9 @@ export function LineSpectrum() {
       const color = colors[0].clone().lerp(colors[2], t)
 
       // Add extra brightness/glow on peak volumes
-      const avgY = (y1 + y2) / 2
-      if (avgY > 2.5) {
-        color.lerp(new THREE.Color(1, 1, 1), Math.min((avgY - 2.5) * 0.35, 1))
+      const avgY = (Math.abs(y1) + Math.abs(y2)) / 2
+      if (avgY > 2.0) {
+        color.lerp(new THREE.Color(1, 1, 1), Math.min((avgY - 2.0) * 0.35, 1))
       }
 
       meshRef.current.setColorAt(i, color)
