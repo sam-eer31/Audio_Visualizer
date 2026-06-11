@@ -191,17 +191,17 @@ export function VisualizerCanvas() {
               setIsRotated(false)
             }}
             className={cn(
-              "absolute z-20 h-8 w-8 rounded-lg flex items-center justify-center backdrop-blur-md transition-all shadow-md",
+              "absolute z-20 flex items-center justify-center backdrop-blur-md transition-all shadow-md",
               expanded 
-                ? "bottom-20 sm:bottom-28 left-4 sm:left-6" 
-                : "bottom-3 left-3",
+                ? "top-3 left-3 h-9 w-9 rounded-xl" 
+                : "bottom-3 left-3 h-8 w-8 rounded-lg",
               darkBg
                 ? "bg-black/20 hover:bg-black/40 text-white/70 hover:text-white border border-white/10"
                 : "bg-white/70 hover:bg-white/90 text-black/60 hover:text-black border border-black/10"
             )}
             title="Reset 3D Rotation"
           >
-            <RotateCcw className="h-3.5 w-3.5" />
+            <RotateCcw className={cn("transition-all", expanded ? "h-4 w-4" : "h-3.5 w-3.5")} />
           </motion.button>
         )}
       </AnimatePresence>
