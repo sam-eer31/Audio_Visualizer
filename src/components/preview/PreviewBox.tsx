@@ -80,7 +80,6 @@ export function PreviewBox() {
       ) : (
         <motion.div
           key="box"
-          layout
           className="h-full w-full flex flex-col"
         >
           {/* Preview container */}
