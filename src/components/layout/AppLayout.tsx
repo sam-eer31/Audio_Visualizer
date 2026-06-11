@@ -1,6 +1,7 @@
-import { useCallback, useState, useRef } from 'react'
+import { useCallback, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Music2, Upload, Sun, Moon } from 'lucide-react'
+import { Music2, Upload, Sun, Moon, Loader2 } from 'lucide-react'
+import { useExportStore } from '@/stores/exportStore'
 import { SettingsPanel } from '@/components/settings/SettingsPanel'
 import { PreviewBox, PlayerBar } from '@/components/preview/PreviewBox'
 import { ExportBar } from '@/components/export/ExportBar'
@@ -22,14 +23,31 @@ export function AppLayout() {
   const [isDragging, setIsDragging] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
+  const isExporting = useExportStore((s) => s.isExporting)
+  const progress = useExportStore((s) => s.progress)
+  const cancelExport = useExportStore((s) => s.cancelExport)
+
+  // Lock body scroll during export
+  useEffect(() => {
+    if (isExporting) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isExporting])
+
   const bg = BACKGROUND_PRESETS.find((b) => b.id === backgroundPreset) || BACKGROUND_PRESETS[0]
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     setIsDragging(false)
+    if (isExporting) return
     const file = e.dataTransfer.files[0]
     if (file) loadFile(file)
-  }, [loadFile])
+  }, [loadFile, isExporting])
 
   // Expanded mode = fullscreen preview
   if (expanded && audioFile) {
@@ -44,7 +62,11 @@ export function AppLayout() {
   return (
     <div
       className="h-full w-full flex flex-col bg-background"
-      onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
+      onDragOver={(e) => {
+        if (isExporting) return
+        e.preventDefault()
+        setIsDragging(true)
+      }}
       onDragLeave={() => setIsDragging(false)}
       onDrop={handleDrop}
     >
@@ -75,9 +97,15 @@ export function AppLayout() {
           {audioFile && (
             <button
               onClick={() => fileRef.current?.click()}
-              className="relative h-9 px-3 sm:px-3.5 rounded-xl border border-white/[0.08] flex items-center justify-center gap-1.5 overflow-hidden transition-all hover:scale-[1.03] active:scale-95 text-[11px] font-semibold"
+              disabled={isExporting}
+              className={cn(
+                "relative h-9 px-3 sm:px-3.5 rounded-xl border border-white/[0.08] flex items-center justify-center gap-1.5 overflow-hidden transition-all text-[11px] font-semibold",
+                isExporting 
+                  ? "opacity-40 cursor-not-allowed pointer-events-none" 
+                  : "hover:scale-[1.03] active:scale-95"
+              )}
               style={{ background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)' }}
-              title="Upload other song"
+              title={isExporting ? "Disabled during export" : "Upload other song"}
             >
               <Upload className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground" />
               <span className="hidden sm:inline">Change Song</span>
@@ -127,71 +155,118 @@ export function AppLayout() {
       </header>
 
       {/* Main content - fills remaining height */}
-      <div className="flex-1 flex flex-col min-h-0 app-layout-padding pt-3 sm:pt-6 pb-5">
-
-        {/* ===== MOBILE LAYOUT (below lg) ===== */}
-        <div className="flex-1 flex flex-col lg:hidden gap-3.5 overflow-y-auto min-h-0 relative">
-          {/* Preview first - Sticky on mobile */}
-          <div className="shrink-0 sticky top-0 z-30 bg-background pt-1 pb-3 -mt-1 -mb-3">
-            <div className="min-h-[200px] h-[30vh] max-h-[300px]">
-              <PreviewBox />
-            </div>
-          </div>
-
-          {/* Audio Controller - Scrollable on mobile */}
-          {audioFile && (
-            <div className="shrink-0">
-              <PlayerBar />
-            </div>
-          )}
-
-          {/* Settings */}
-          <div className="glass rounded-2xl shrink-0 p-4 sm:p-5">
-            <SettingsPanel />
-          </div>
-          {/* Export at the very bottom */}
-          {audioFile && (
-            <div className="shrink-0">
-              <ExportBar />
-            </div>
-          )}
-
-          {/* Mobile Footer (scrollable, hidden on desktop because parent is lg:hidden) */}
-          <footer className={cn("shrink-0 border-t mt-4 pt-5 pb-2", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')}>
-            <div className="flex flex-col items-center justify-between gap-3 text-center">
-              <div className="flex items-center justify-center">
-                <img src="/logo.png" alt="Audrix Logo" className="h-8 w-auto object-contain" />
-              </div>
-              <div className="flex flex-col gap-1.5 items-center">
-                <span className="text-[10px] text-muted-foreground/40 font-medium">Built with React & Three.js</span>
-                <span className="text-[10px] text-muted-foreground/40 font-medium">&copy; {new Date().getFullYear()} Audrix</span>
+      <div className="flex-1 flex flex-col min-h-0 relative">
+        {/* Main Content Area - blurred when exporting */}
+        <div className={cn(
+          "flex-1 flex flex-col min-h-0 app-layout-padding pt-3 sm:pt-6 pb-5",
+          isExporting && "blur-md pointer-events-none select-none overflow-hidden"
+        )}>
+          {/* ===== MOBILE LAYOUT (below lg) ===== */}
+          <div className={cn(
+            "flex-1 flex flex-col lg:hidden gap-3.5 min-h-0 relative",
+            isExporting ? "overflow-hidden" : "overflow-y-auto"
+          )}>
+            {/* Preview first - Sticky on mobile */}
+            <div className="shrink-0 sticky top-0 z-30 bg-background pt-1 pb-3 -mt-1 -mb-3">
+              <div className="min-h-[200px] h-[30vh] max-h-[300px]">
+                <PreviewBox />
               </div>
             </div>
-          </footer>
+
+            {/* Audio Controller - Scrollable on mobile */}
+            {audioFile && (
+              <div className="shrink-0">
+                <PlayerBar />
+              </div>
+            )}
+
+            {/* Settings */}
+            <div className="glass rounded-2xl shrink-0 p-4 sm:p-5">
+              <SettingsPanel />
+            </div>
+            {/* Export at the very bottom */}
+            {audioFile && (
+              <div className="shrink-0">
+                <ExportBar />
+              </div>
+            )}
+
+            {/* Mobile Footer (scrollable, hidden on desktop because parent is lg:hidden) */}
+            <footer className={cn("shrink-0 border-t mt-4 pt-5 pb-2", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')}>
+              <div className="flex flex-col items-center justify-between gap-3 text-center">
+                <div className="flex items-center justify-center">
+                  <img src="/logo.png" alt="Audrix Logo" className="h-8 w-auto object-contain" />
+                </div>
+                <div className="flex flex-col gap-1.5 items-center">
+                  <span className="text-[10px] text-muted-foreground/40 font-medium">Built with React & Three.js</span>
+                  <span className="text-[10px] text-muted-foreground/40 font-medium">&copy; {new Date().getFullYear()} Audrix</span>
+                </div>
+              </div>
+            </footer>
+          </div>
+
+          {/* ===== DESKTOP LAYOUT (lg+) ===== */}
+          <div className="hidden lg:flex flex-1 flex-col gap-5 min-h-0">
+            <div className="flex-1 flex flex-row gap-5 min-h-0">
+              {/* Left: Settings */}
+              <div className="w-[380px] xl:w-[420px] shrink-0 flex flex-col min-h-0">
+                <div className="glass rounded-2xl flex-1 flex flex-col min-h-0 overflow-hidden p-5">
+                  <SettingsPanel />
+                </div>
+              </div>
+              {/* Right: Preview */}
+              <div className="flex-1 min-w-0 flex flex-col min-h-0">
+                <PreviewBox />
+              </div>
+            </div>
+            {/* Export below both columns */}
+            {audioFile && (
+              <div className="shrink-0">
+                <ExportBar />
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* ===== DESKTOP LAYOUT (lg+) ===== */}
-        <div className="hidden lg:flex flex-1 flex-col gap-5 min-h-0">
-          <div className="flex-1 flex flex-row gap-5 min-h-0">
-            {/* Left: Settings */}
-            <div className="w-[380px] xl:w-[420px] shrink-0 flex flex-col min-h-0">
-              <div className="glass rounded-2xl flex-1 flex flex-col min-h-0 overflow-hidden p-5">
-                <SettingsPanel />
+        {/* Modal Overlay */}
+        {isExporting && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/10 backdrop-blur-[2px] p-4">
+            <div className="glass rounded-2xl p-6 sm:p-8 max-w-sm w-full mx-auto flex flex-col items-center text-center shadow-2xl border border-white/10 animate-in fade-in zoom-in-95 duration-200">
+              <div className="relative flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-4">
+                <Loader2 className="h-6 w-6 text-primary animate-spin" />
               </div>
-            </div>
-            {/* Right: Preview */}
-            <div className="flex-1 min-w-0 flex flex-col min-h-0">
-              <PreviewBox />
+              
+              <h3 className="text-sm sm:text-base font-semibold text-foreground">Exporting Video</h3>
+              <p className="text-[11px] sm:text-xs text-muted-foreground/60 mt-1 max-w-[280px]">
+                Audrix is rendering and exporting your visualization. Please keep this browser tab active.
+              </p>
+
+              {/* Progress bar */}
+              <div className="w-full mt-5">
+                <div className="flex justify-between items-center text-[10px] font-semibold mb-1">
+                  <span className="text-muted-foreground">Progress</span>
+                  <span className="text-foreground font-mono">{Math.round(progress)}%</span>
+                </div>
+                <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+                  <div 
+                    className="h-full bg-primary rounded-full transition-all duration-300 ease-out" 
+                    style={{ width: `${progress}%` }} 
+                  />
+                </div>
+              </div>
+
+              {/* Cancel button */}
+              {cancelExport && (
+                <button
+                  onClick={cancelExport}
+                  className="mt-6 w-full py-2 sm:py-2.5 rounded-xl border border-red-500/20 bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold transition-all hover:scale-[1.02] active:scale-95 text-[11px]"
+                >
+                  Cancel Export
+                </button>
+              )}
             </div>
           </div>
-          {/* Export below both columns */}
-          {audioFile && (
-            <div className="shrink-0">
-              <ExportBar />
-            </div>
-          )}
-        </div>
-
+        )}
       </div>
 
       {/* Footer */}

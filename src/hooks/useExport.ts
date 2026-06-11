@@ -59,8 +59,8 @@ function drawImageContain(ctx: CanvasRenderingContext2D, img: HTMLCanvasElement,
 }
 
 export function useExport() {
-  const { resolution, quality, frameRate, setIsExporting, setProgress, setError } = useExportStore()
-  const { audioElement, audioDestination, audioFile } = useAudioStore()
+  const { resolution, quality, frameRate, setIsExporting, setProgress, setError, setCancelExport } = useExportStore()
+  const { audioElement, audioDestination, audioFile, audioContext, analyserNode } = useAudioStore()
   const addToast = useUIStore((s) => s.addToast)
 
   const startExport = useCallback(async () => {
@@ -72,6 +72,17 @@ export function useExport() {
     if (!audioElement || !audioFile || !audioDestination) {
       addToast('Please load audio first', 'error')
       return
+    }
+
+    const unmuteSpeakers = () => {
+      if (analyserNode && audioContext) {
+        try {
+          analyserNode.disconnect()
+          analyserNode.connect(audioContext.destination)
+        } catch (e) {
+          console.warn('Failed to reconnect analyser to destination:', e)
+        }
+      }
     }
 
     try {
@@ -137,9 +148,6 @@ export function useExport() {
       videoEncoder.configure(videoCfg)
 
       // ─── Audio ──────────────────────────────────────────────
-      // We MUST use the main audioDestination from the store!
-      // The visualizer particles are driven by the main AnalyserNode. If we use a separate audio element,
-      // the visualizer receives 0 frequency data and draws nothing!
       const audioTrack = audioDestination.stream.getAudioTracks()[0]
       const audioEncoder = new (window as any).AudioEncoder({
         output: (chunk: any, meta: any) => muxer.addAudioChunk(chunk, meta),
@@ -154,6 +162,13 @@ export function useExport() {
       let firstAudioTimestampUs: number | null = null
       let firstAudioTimeMs = 0
       let stopped = false
+      let ticker: any = null
+      let safetyTimeout: any = null
+
+      const cleanupTickers = () => {
+        if (ticker) clearInterval(ticker)
+        if (safetyTimeout) clearTimeout(safetyTimeout)
+      }
 
       function pumpAudio() {
         audioReader.read().then(({ done, value }: any) => {
@@ -211,9 +226,13 @@ export function useExport() {
       const stopExport = async () => {
         if (stopped) return
         stopped = true
+        cleanupTickers()
         useExportStore.getState().setOnFrame(null)
+        setCancelExport(null)
         audioElement.pause()
         await audioReader.cancel().catch(() => {})
+
+        unmuteSpeakers()
 
         try {
           if (frameCount === 0) throw new Error('No video frames captured — WebGL canvas could not be read.')
@@ -243,36 +262,84 @@ export function useExport() {
         }
       }
 
+      const cancelExport = async () => {
+        if (stopped) return
+        stopped = true
+        cleanupTickers()
+        useExportStore.getState().setOnFrame(null)
+        setCancelExport(null)
+        audioElement.pause()
+        await audioReader.cancel().catch(() => {})
+
+        unmuteSpeakers()
+
+        try {
+          videoEncoder.close()
+          audioEncoder.close()
+        } catch (e) {
+          console.warn('Error closing encoders:', e)
+        }
+
+        setIsExporting(false)
+        setProgress(0)
+        addToast('Export cancelled', 'info')
+      }
+
+      setCancelExport(cancelExport)
+
+      // Mute speakers during export
+      if (analyserNode && audioContext) {
+        try {
+          analyserNode.disconnect(audioContext.destination)
+        } catch (e) {
+          try {
+            analyserNode.disconnect()
+          } catch (err) {
+            console.warn('Failed to disconnect analyserNode:', err)
+          }
+        }
+      }
+
       // Start everything
       pumpAudio()
       audioElement.currentTime = 0
       await audioElement.play()
 
       // Progress ticker
-      const ticker = setInterval(() => {
+      ticker = setInterval(() => {
         if (stopped) { clearInterval(ticker); return }
         const elapsed = (Date.now() - startTime) / 1000
         setProgress(Math.min((elapsed / duration) * 100, 99))
       }, 300)
 
       audioElement.addEventListener('ended', () => {
-        clearInterval(ticker)
+        cleanupTickers()
         stopExport()
       }, { once: true })
 
       // Safety timeout
-      setTimeout(() => {
-        if (!stopped) { clearInterval(ticker); stopExport() }
+      safetyTimeout = setTimeout(() => {
+        if (!stopped) { cleanupTickers(); stopExport() }
       }, (duration + 3) * 1000)
 
     } catch (err: any) {
       console.error('Export error:', err)
       useExportStore.getState().setOnFrame(null)
+      setCancelExport(null)
       setIsExporting(false)
       setError(err.message)
       addToast('Export failed: ' + err.message, 'error')
+
+      if (analyserNode && audioContext) {
+        try {
+          analyserNode.disconnect()
+          analyserNode.connect(audioContext.destination)
+        } catch (e) {
+          console.warn('Failed to reconnect analyser to destination:', e)
+        }
+      }
     }
-  }, [resolution, quality, frameRate, audioElement, audioFile, audioDestination, setIsExporting, setProgress, setError, addToast])
+  }, [resolution, quality, frameRate, audioElement, audioFile, audioDestination, audioContext, analyserNode, setIsExporting, setProgress, setError, setCancelExport, addToast])
 
   return { startExport }
 }
