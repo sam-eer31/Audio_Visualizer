@@ -135,6 +135,19 @@ export function AppLayout() {
               <ExportBar />
             </div>
           )}
+
+          {/* Mobile Footer (scrollable, hidden on desktop because parent is lg:hidden) */}
+          <footer className={cn("shrink-0 border-t mt-4 pt-5 pb-2", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')}>
+            <div className="flex flex-col items-center justify-between gap-3 text-center">
+              <div className="flex items-center justify-center">
+                <img src="/logo.png" alt="Audrix Logo" className="h-8 w-auto object-contain" />
+              </div>
+              <div className="flex flex-col gap-1.5 items-center">
+                <span className="text-[10px] text-muted-foreground/40 font-medium">Built with React & Three.js</span>
+                <span className="text-[10px] text-muted-foreground/40 font-medium">&copy; {new Date().getFullYear()} Audrix</span>
+              </div>
+            </div>
+          </footer>
         </div>
 
         {/* ===== DESKTOP LAYOUT (lg+) ===== */}
@@ -162,15 +175,15 @@ export function AppLayout() {
       </div>
 
       {/* Footer */}
-      <footer className={cn("shrink-0 border-t app-layout-padding", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')} style={{ paddingTop: '20px', paddingBottom: '20px' }}>
+      <footer className={cn("hidden lg:block shrink-0 border-t app-layout-padding", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')} style={{ paddingTop: '20px', paddingBottom: '20px' }}>
         <div className="flex flex-col sm:flex-row items-center justify-between" style={{ gap: '12px' }}>
           <div className="flex items-center">
-            <img src="/logo.png" alt="SonicWave Logo" className="h-8 sm:h-10 w-auto object-contain" />
+            <img src="/logo.png" alt="Audrix Logo" className="h-8 sm:h-10 w-auto object-contain" />
           </div>
           <div className="flex items-center" style={{ gap: '16px' }}>
             <span className="text-[10px] text-muted-foreground/40">Built with React & Three.js</span>
             <span className="text-[10px] text-muted-foreground/30">|</span>
-            <span className="text-[10px] text-muted-foreground/40">&copy; {new Date().getFullYear()} SonicWave</span>
+            <span className="text-[10px] text-muted-foreground/40">&copy; {new Date().getFullYear()} Audrix</span>
           </div>
         </div>
       </footer>

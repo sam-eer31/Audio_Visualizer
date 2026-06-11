@@ -194,17 +194,22 @@ function PlayerBar() {
 
   return (
     <div
-      className={cn("rounded-2xl border", darkBg ? "border-white/[0.06]" : "border-black/[0.08]")}
       style={{
         background: darkBg ? 'rgba(8, 8, 12, 0.85)' : 'rgba(255, 255, 255, 0.85)',
         backdropFilter: 'blur(24px) saturate(1.4)',
-        padding: expanded ? '20px' : '18px 22px',
         ...(expanded ? { marginLeft: '16px', marginRight: '16px', marginBottom: '16px' } : {})
       }}
+      className={cn(
+        "rounded-2xl border",
+        expanded 
+          ? "p-3.5 sm:p-5" 
+          : "py-2.5 px-3.5 sm:py-[18px] sm:px-[22px]",
+        darkBg ? "border-white/[0.06]" : "border-black/[0.08]"
+      )}
     >
 
       {/* Seek bar */}
-      <div className="mb-3">
+      <div className="mb-2 sm:mb-3">
         <div className={cn("relative w-full h-[4px] rounded-full overflow-hidden cursor-pointer group", darkBg ? "bg-white/[0.06]" : "bg-black/[0.08]")}
           onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect()
@@ -221,56 +226,56 @@ function PlayerBar() {
             style={{ left: `${progress}%`, marginLeft: '-6px' }}
           />
         </div>
-        <div className="flex justify-between mt-1.5">
+        <div className="flex justify-between mt-1 sm:mt-1.5">
           <span className="text-[10px] font-mono tabular-nums" style={{ color: darkBg ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)' }}>{formatTime(currentTime)}</span>
           <span className="text-[10px] font-mono tabular-nums" style={{ color: darkBg ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.35)' }}>{formatTime(duration)}</span>
         </div>
       </div>
 
       {/* Controls row */}
-      <div className="flex items-center" style={{ gap: '12px' }}>
+      <div className="flex items-center gap-2 sm:gap-3">
         {/* File info */}
-        <div className="flex items-center min-w-0 flex-1" style={{ gap: '10px' }}>
-          <div className="h-9 w-9 rounded-xl bg-primary/[0.08] border border-primary/10 flex items-center justify-center shrink-0">
-            <FileAudio className="h-4 w-4 text-primary/80" />
+        <div className="flex items-center min-w-0 flex-1 gap-2 sm:gap-2.5">
+          <div className="h-7 w-7 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl bg-primary/[0.08] border border-primary/10 flex items-center justify-center shrink-0">
+            <FileAudio className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary/80" />
           </div>
           <div className="min-w-0">
-            <p className="text-[12px] font-semibold truncate leading-tight" style={{ color: darkBg ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)' }}>{audioFile.name}</p>
-            <p className="text-[10px] leading-tight mt-0.5 uppercase tracking-wider" style={{ color: darkBg ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.4)' }}>{audioFile.format}</p>
+            <p className="text-[11px] sm:text-[12px] font-semibold truncate leading-tight" style={{ color: darkBg ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)' }}>{audioFile.name}</p>
+            <p className="text-[9px] sm:text-[10px] leading-tight mt-0.5 uppercase tracking-wider" style={{ color: darkBg ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.4)' }}>{audioFile.format}</p>
           </div>
         </div>
 
         {/* Playback controls */}
-        <div className="flex items-center" style={{ gap: '8px' }}>
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={stop}
             disabled={playbackState === 'idle' || playbackState === 'stopped'}
             className={cn(
-              "h-8 w-8 rounded-lg flex items-center justify-center transition-all disabled:opacity-20",
+              "h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center transition-all disabled:opacity-20",
               darkBg
                 ? "text-white/30 hover:text-white/70 hover:bg-white/[0.06] disabled:hover:bg-transparent disabled:hover:text-white/30"
                 : "text-black/30 hover:text-black/60 hover:bg-black/[0.04] disabled:hover:bg-transparent disabled:hover:text-black/30"
             )}
           >
-            <Square className="h-3.5 w-3.5" />
+            <Square className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
           </button>
           <button
             onClick={playbackState === 'playing' ? pause : play}
-            className="h-11 w-11 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.03] transition-all active:scale-95"
+            className="h-8.5 w-8.5 sm:h-11 sm:w-11 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.03] transition-all active:scale-95 shrink-0"
           >
             <AnimatePresence mode="wait">
               {playbackState === 'playing' ? (
-                <motion.div key="pause" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ duration: 0.15 }}>
-                  <Pause className="h-4.5 w-4.5" />
+                <motion.div key="pause" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ duration: 0.15 }} className="flex items-center justify-center">
+                  <Pause className="h-3.5 w-3.5 sm:h-4.5 sm:w-4.5" />
                 </motion.div>
               ) : (
-                <motion.div key="play" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ duration: 0.15 }}>
-                  <Play className="h-4.5 w-4.5 ml-0.5" />
+                <motion.div key="play" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }} transition={{ duration: 0.15 }} className="flex items-center justify-center">
+                  <Play className="h-3.5 w-3.5 sm:h-4.5 sm:w-4.5 ml-0.5" />
                 </motion.div>
               )}
             </AnimatePresence>
           </button>
-          <div className="w-8" />
+          <div className="w-2 sm:w-8" />
         </div>
 
         {/* Volume */}
