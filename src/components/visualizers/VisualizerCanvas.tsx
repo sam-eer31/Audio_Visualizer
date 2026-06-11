@@ -18,6 +18,7 @@ function isColorDark(hex: string): boolean {
   return luminance < 0.5
 }
 
+const LineSpectrum = lazy(() => import('./LineSpectrum').then((m) => ({ default: m.LineSpectrum })))
 const SpectrumBars = lazy(() => import('./SpectrumBars').then((m) => ({ default: m.SpectrumBars })))
 const CircularSpectrum = lazy(() => import('./CircularSpectrum').then((m) => ({ default: m.CircularSpectrum })))
 const ParticleGalaxy = lazy(() => import('./ParticleGalaxy').then((m) => ({ default: m.ParticleGalaxy })))
@@ -32,6 +33,7 @@ const AudioTerrain = lazy(() => import('./AudioTerrain').then((m) => ({ default:
 const HeartbeatLine = lazy(() => import('./HeartbeatLine').then((m) => ({ default: m.HeartbeatLine })))
 
 const VISUALIZER_MAP = {
+  'line-spectrum': LineSpectrum,
   'spectrum-bars': SpectrumBars,
   'circular-spectrum': CircularSpectrum,
   'particle-galaxy': ParticleGalaxy,

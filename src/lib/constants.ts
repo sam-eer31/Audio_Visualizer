@@ -1,5 +1,6 @@
 import type { VisualizationMode, ColorPreset, BackgroundPreset } from '@/types'
 import {
+  LineChart,
   BarChart3,
   Circle,
   Sparkles,
@@ -22,6 +23,7 @@ export const VISUALIZATION_MODES: {
   description: string
   icon: ComponentType<LucideProps>
 }[] = [
+  { id: 'line-spectrum', name: 'Line Spectrum', description: 'Glowing frequency wave', icon: LineChart },
   { id: 'spectrum-bars', name: 'Spectrum Bars', description: 'Modern glowing bars', icon: BarChart3 },
   { id: 'circular-spectrum', name: 'Circular Spectrum', description: 'Radial visualizer', icon: Circle },
   { id: 'particle-galaxy', name: 'Particle Galaxy', description: 'Reactive particles', icon: Sparkles },

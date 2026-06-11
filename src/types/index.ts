@@ -1,4 +1,5 @@
 export type VisualizationMode =
+  | 'line-spectrum'
   | 'spectrum-bars'
   | 'circular-spectrum'
   | 'particle-galaxy'
