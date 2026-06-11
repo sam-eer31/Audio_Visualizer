@@ -52,7 +52,7 @@ export function CyberGrid() {
   const meshRef = useRef<THREE.Mesh>(null)
   const { getAnalysis } = useAudioAnalyzer()
   const colorPreset = useVisualizerStore((s) => s.colorPreset)
-  const glowIntensity = 0.8
+  const glowIntensity = 0.2
 
   const colors = useMemo(() => {
     const preset = COLOR_PRESETS.find((p) => p.id === colorPreset) || COLOR_PRESETS[0]
