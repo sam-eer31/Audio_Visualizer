@@ -25,6 +25,17 @@ export function LineSpectrum() {
   // Keep smoothed values for frequency data of the half-spectrum
   const smoothedFreq = useRef<Float32Array>(new Float32Array(HALF_POINTS))
 
+  // Symmetrical irregular spike multipliers generated once
+  const spikeMultipliers = useMemo(() => {
+    const arr = new Float32Array(HALF_POINTS)
+    for (let i = 0; i < HALF_POINTS; i++) {
+      // Alternating high and low random multipliers to make peaks highly irregular
+      const randomFactor = Math.random()
+      arr[i] = 0.35 + randomFactor * 2.0 // Wild variations from 0.35x to 2.35x height
+    }
+    return arr
+  }, [])
+
   useFrame((state, delta) => {
     if (!meshRef.current) return
     const analysis = getAnalysis()
@@ -33,16 +44,21 @@ export function LineSpectrum() {
     // Step size to map the usable frequencies to the half-spectrum
     const step = Math.max(1, Math.floor(usableBins / HALF_POINTS))
 
+    // Smooth bass beat response
+    const bass = analysis.bass
+    // The irregular spikes activate and grow proportionally with bass energy (beats)
+    const spikeIntensity = Math.max(0, bass - 0.25) * 1.4
+
     // Update smoothed frequency data (half-spectrum)
     for (let i = 0; i < HALF_POINTS; i++) {
       const rawVal = (freq[i * step] || 0) / 255
-      const targetVal = rawVal * 4.5 // Balanced peak height
+      const targetVal = rawVal * 4.2 // Base height
       const currentVal = smoothedFreq.current[i]
-      const rate = targetVal > currentVal ? 0.35 : 0.18 // Fast response, smooth decay
+      const rate = targetVal > currentVal ? 0.4 : 0.18 // Quick response on beat hits
       smoothedFreq.current[i] += (targetVal - currentVal) * rate * (delta * 60)
     }
 
-    // Connect the points with cylinder segments (mirrored center-out with alternating up/down peaks)
+    // Connect the points with cylinder segments (mirrored center-out with alternating spiky peaks)
     for (let i = 0; i < SEGMENT_COUNT; i++) {
       // Calculate positions
       const x1 = (i - POINTS / 2) * 0.25
@@ -55,12 +71,16 @@ export function LineSpectrum() {
       const idx1 = Math.min(Math.floor(dist1), HALF_POINTS - 1)
       const idx2 = Math.min(Math.floor(dist2), HALF_POINTS - 1)
 
+      // Apply the dynamic spiky beat multipliers
+      const mult1 = 1.0 + (spikeMultipliers[idx1] - 1.0) * spikeIntensity
+      const mult2 = 1.0 + (spikeMultipliers[idx2] - 1.0) * spikeIntensity
+
       // Alternate positive and negative peaks to create a heartbeat EKG outline around y = 0
       const sign1 = i % 2 === 0 ? 1 : -1
       const sign2 = (i + 1) % 2 === 0 ? 1 : -1
 
-      const y1 = smoothedFreq.current[idx1] * sign1
-      const y2 = smoothedFreq.current[idx2] * sign2
+      const y1 = smoothedFreq.current[idx1] * mult1 * sign1
+      const y2 = smoothedFreq.current[idx2] * mult2 * sign2
 
       const p1 = new THREE.Vector3(x1, y1, 0)
       const p2 = new THREE.Vector3(x2, y2, 0)
