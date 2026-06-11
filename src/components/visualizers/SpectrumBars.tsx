@@ -27,12 +27,14 @@ export function SpectrumBars() {
     const usableBins = Math.floor(freq.length * 0.6)
     const step = Math.max(1, Math.floor(usableBins / BAR_COUNT))
 
+    const BASELINE = -1.25 // Shift base downwards so overall visualizer is centered in viewport
+
     for (let i = 0; i < BAR_COUNT; i++) {
       const value = (freq[i * step] || 0) / 255
       const height = Math.max(value * 5, 0.05)
 
       const x = (i - BAR_COUNT / 2) * 0.25
-      dummy.position.set(x, height / 2, 0)
+      dummy.position.set(x, BASELINE + height / 2, 0)
       dummy.scale.set(0.18, height, 0.01)
       dummy.updateMatrix()
       meshRef.current.setMatrixAt(i, dummy.matrix)

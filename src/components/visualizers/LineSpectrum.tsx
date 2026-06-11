@@ -52,7 +52,7 @@ export function LineSpectrum() {
     // Update smoothed frequency data (half-spectrum)
     for (let i = 0; i < HALF_POINTS; i++) {
       const rawVal = (freq[i * step] || 0) / 255
-      const targetVal = rawVal * 4.2 // Base height
+      const targetVal = rawVal * 1.8 // Base height (reduced from 4.2 to fit viewport cleanly)
       const currentVal = smoothedFreq.current[i]
       const rate = targetVal > currentVal ? 0.4 : 0.18 // Quick response on beat hits
       smoothedFreq.current[i] += (targetVal - currentVal) * rate * (delta * 60)
@@ -106,8 +106,8 @@ export function LineSpectrum() {
 
       // Add extra brightness/glow on peak volumes
       const avgY = (Math.abs(y1) + Math.abs(y2)) / 2
-      if (avgY > 2.0) {
-        color.lerp(new THREE.Color(1, 1, 1), Math.min((avgY - 2.0) * 0.35, 1))
+      if (avgY > 0.85) {
+        color.lerp(new THREE.Color(1, 1, 1), Math.min((avgY - 0.85) * 0.8, 1))
       }
 
       meshRef.current.setColorAt(i, color)
