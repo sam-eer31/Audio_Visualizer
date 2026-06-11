@@ -94,7 +94,7 @@ export function LineSpectrum() {
       dummy.rotateX(Math.PI / 2)
 
       // Clean visible line thickness
-      const thickness = 0.065
+      const thickness = 0.015
       dummy.scale.set(thickness, length, thickness)
       dummy.updateMatrix()
       meshRef.current.setMatrixAt(i, dummy.matrix)
