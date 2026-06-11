@@ -66,14 +66,11 @@ export function AudioPortal() {
     const treble = analysis.treble
     const time = state.clock.elapsedTime
 
-    // Event Horizon core pulse: scale with bass
-    const coreScale = 1.0 + bass * 0.22
-    coreRef.current.scale.setScalar(coreScale)
-
-    // Outer accretion boundary rings pulse
-    const ringScale = 1.08 + bass * 0.28
-    horizontalRingRef.current.scale.setScalar(ringScale)
-    verticalRingRef.current.scale.setScalar(ringScale)
+    // Synchronize core and ring pulses to prevent gap widening
+    const scale = 1.0 + bass * 0.22
+    coreRef.current.scale.setScalar(scale)
+    horizontalRingRef.current.scale.setScalar(scale)
+    verticalRingRef.current.scale.setScalar(scale)
 
     const hRingMat = horizontalRingRef.current.material as THREE.MeshStandardMaterial
     const vRingMat = verticalRingRef.current.material as THREE.MeshStandardMaterial
@@ -92,6 +89,8 @@ export function AudioPortal() {
     const rotationMult = 1.0 + bass * 1.5 + mid * 0.8
     const pullSpeedMult = 1.0 + mid * 1.5
 
+    const activeHorizon = EVENT_HORIZON_RADIUS * scale
+
     particles.forEach((p, i) => {
       // Rotate around the center
       p.angle += p.orbitSpeed * rotationMult * delta
@@ -100,7 +99,7 @@ export function AudioPortal() {
       p.radius -= 0.15 * pullSpeedMult * delta
 
       // Swallowed by black hole: reset to the outer boundary
-      if (p.radius <= EVENT_HORIZON_RADIUS) {
+      if (p.radius <= activeHorizon) {
         p.radius = 5.5 + Math.random() * 1.5
         p.angle = Math.random() * Math.PI * 2
       }
@@ -136,8 +135,8 @@ export function AudioPortal() {
       posArr[i3 + 1] = y
       posArr[i3 + 2] = z
 
-      // Color mapping: hotter/brighter near center
-      const proximity = Math.max(0, Math.min((p.radius - EVENT_HORIZON_RADIUS) / 5.0, 1))
+      // Color mapping: hotter/brighter near center (relative to active horizon)
+      const proximity = Math.max(0, Math.min((p.radius - activeHorizon) / 5.0, 1))
       // Base particle color from preset
       const baseColor = colors[p.colorIndex].clone()
       // Hot white glow blend for inner disk particles
@@ -164,9 +163,9 @@ export function AudioPortal() {
         <meshBasicMaterial color="#020205" />
       </mesh>
 
-      {/* Horizontal Accretion Boundary Glowing Ring (X-Z plane) */}
+      {/* Horizontal Accretion Boundary Glowing Ring (X-Z plane) - overlapping sphere for seamless edge contact */}
       <mesh ref={horizontalRingRef} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[EVENT_HORIZON_RADIUS + 0.05, 0.03, 8, 64]} />
+        <torusGeometry args={[EVENT_HORIZON_RADIUS + 0.015, 0.03, 8, 64]} />
         <meshStandardMaterial
           color={colors[0]}
           emissive={colors[0]}
@@ -177,9 +176,9 @@ export function AudioPortal() {
         />
       </mesh>
 
-      {/* Vertical Lensed Accretion Boundary Glowing Ring (X-Y plane) */}
+      {/* Vertical Lensed Accretion Boundary Glowing Ring (X-Y plane) - overlapping sphere for seamless edge contact */}
       <mesh ref={verticalRingRef} rotation={[0, 0, 0]}>
-        <torusGeometry args={[EVENT_HORIZON_RADIUS + 0.05, 0.03, 8, 64]} />
+        <torusGeometry args={[EVENT_HORIZON_RADIUS + 0.015, 0.03, 8, 64]} />
         <meshStandardMaterial
           color={colors[0]}
           emissive={colors[0]}
