@@ -14,7 +14,7 @@
 
 ### **👉 [OPEN AUDRIX](https://audrix.vercel.app) 👈**
 
-**Transform your audio into stunning 3D visualizations. Upload audio, choose visualization, customize effects, and export professional videos—all in your browser!**
+**Transform your audio into stunning 3D visualizations. Upload audio, choose a visualization, customize effects, and export professional videos — all in your browser!**
 </div>
 
 ---
@@ -37,7 +37,7 @@
 
 **Key Benefits:**
 - ✅ **No Server Required** – 100% client-side processing
-- ✅ **Instant Access** – Start creating immediately
+- ✅ **Instant Access** – Start creating immediately with built-in sample audio
 - ✅ **Professional Output** – Export up to 1440p @ 60 FPS
 - ✅ **Open Source** – MIT licensed, fully customizable
 - ✅ **Privacy-First** – Your audio never leaves your device
@@ -46,23 +46,27 @@
 
 ## 🎨 Features
 
-### 12 Visualization Modes
-Choose from 12 immersive, real-time 3D visualizations that react dynamically to your audio:
+### 16 Visualization Modes
+Choose from 16 immersive, real-time 3D visualizations that react dynamically to your audio:
 
 | Visualization | Description |
 |---|---|
-| **Spectrum Bars** | Classic frequency-responsive bars with dynamic color mapping |
+| **Line Spectrum** | Glowing neon frequency wave mirrored symmetrically from the center — erupts into chaotic spikes on bass hits |
+| **Spectrum Bars** | Classic frequency-responsive equalizer bars with dynamic color mapping and equal spacing |
 | **Circular Spectrum** | 360° frequency visualization radiating from center |
 | **Particle Galaxy** | Audio-driven particle system creating an astronomical effect |
 | **Audio Sphere** | Morphing 3D sphere responding to bass, mid, and treble frequencies |
 | **Wave Tunnel** | Immersive tunnel effect with frequency-responsive waves |
 | **Neon Rings** | Concentric rings pulsing with audio intensity |
-| **Futuristic Orb** | Advanced sphere with multi-layer frequency analysis |
+| **Futuristic Orb** | Advanced sphere with 3D axis warping, gyroscope-precessing rings, and a 600-particle cosmic storm |
 | **Cyber Grid** | Grid-based visualization with cyberpunk aesthetics |
 | **DNA Helix** | Reactive double helix strand spinning to audio |
 | **Starfield** | Hyperspeed star particle movement reacting to audio intensity |
 | **Audio Terrain** | 3D landscape mesh distorted by frequency bands |
 | **Heartbeat Line** | Reactive heartbeat oscilloscope wave |
+| **Möbius Ribbon** | Circular glowing ribbon that deforms into radial frequency waves and twists in 3D |
+| **Laser Web** | Floating 3D nodes that form connecting neon laser segments when in proximity — a pulsing neural network |
+| **Audio Portal** | Swirling gravitational black hole with lensed particle arches, accretion disk, and Einstein-ring edge |
 
 ### Advanced Audio Analysis
 - **FFT Analysis** – Real-time Fast Fourier Transform with configurable resolution
@@ -70,27 +74,38 @@ Choose from 12 immersive, real-time 3D visualizations that react dynamically to 
 - **Beat Detection** – Automatic rhythm recognition for synchronized animations
 - **Audio Normalization** – Intelligent level adjustment for consistent output
 
-### Customization & Control
-- **Color Presets** – Pre-designed palettes for quick styling
-- **Background Themes** – Multiple background options for visual variety
-- **Fine-tune Parameters** – Adjust sensitivity, rotation, and particle count
+### Player Controls
+- **Play / Pause / Stop** – Standard transport controls
+- **Seek Scrubbing** – Click or touch-drag the progress bar to jump anywhere in the track
+- **Loop Toggle** – Repeat mode that seamlessly loops audio; automatically disabled during video export
+- **Volume Control** – Inline volume slider
+- **Sample Audio** – Built-in sample track for instant preview without uploading a file
+
+### Visualization Controls
+- **Expand / Collapse Preview** – One-click fullscreen visualization mode with the player bar overlaid at the bottom
+- **Reset 3D Rotation** – Appears only after you drag-rotate the scene; instantly snaps the camera back to default. Positioned symmetrically to the expand button (bottom-left collapsed, top-left expanded)
+- **3D Camera Orbit** – Drag to rotate, scroll to zoom into any visualization
+- **Color Presets** – 6 pre-designed palettes for quick styling
+- **Background Themes** – 8 background options (dark, light, gradient, void)
+- **Fine-tune Parameters** – Adjust sensitivity, rotation speed, and particle count
 - **Real-time Preview** – See changes instantly as you adjust settings
 - **Keyboard Shortcuts** – Full keyboard control for seamless workflow
-- **Mobile-first Responsive Design** – Visualizer preview stays sticky while setting panels scroll comfortably, adjusted with thinner controls for mobile viewports
+- **Mobile-first Responsive Design** – Sticky visualizer preview while settings panels scroll; touch-optimized progress bar scrubbing
 
 ### Professional Video Export
 - **Multiple Resolutions** – 720p, 1080p, or 1440p output
 - **Frame Rate Options** – 30 FPS or 60 FPS rendering
-- **Hardware Acceleration** – WebCodecs hardware accelerated encoding for fast exports
-- **Silent rendering** – Automatically mutes physical speakers during export while preserving capture stream
-- **Interactive Cancellation Overlay** – A center glassmorphic progress modal overlay with a cancel option that halts tickers and safely disposes of encoder resources
-- **Frozen Preview** – Blurs main controls and freezes canvas output visually during export to look clean and professional while recording
+- **Hardware Acceleration** – WebCodecs hardware-accelerated encoding for fast exports
+- **Silent Rendering** – Automatically mutes physical speakers during export while preserving the capture stream
+- **Interactive Cancellation Overlay** – Glassmorphic progress modal with cancel option; safely disposes encoder resources
+- **Frozen Preview** – Blurs main controls and freezes canvas output visually during export for a clean UI
+- **Loop-safe Export** – Loop mode is temporarily bypassed during export so the recording halts naturally at track end
 
 ### Supported Audio Formats
 **MP3 • WAV • M4A • OGG • AAC**
 
 ### Browser Compatibility
-- Chrome/Chromium 90+
+- Chrome/Chromium 90+ *(recommended for best export performance)*
 - Firefox 88+
 - Safari 14+
 - Edge 90+
@@ -102,7 +117,7 @@ Choose from 12 immersive, real-time 3D visualizations that react dynamically to 
 ### Option 1: Use Online (Instant - No Installation)
 👉 **[Open Audrix](https://audrix.vercel.app)** ← Click to Start Creating!
 
-1. Upload your audio file
+1. Upload your audio file — or click **Use Sample Audio** to start instantly
 2. Select a visualization mode
 3. Customize colors and effects
 4. Export as video
@@ -131,20 +146,24 @@ The application will open at `http://localhost:5173`
 
 1. **Upload Audio File**
    - Click the upload button or drag-and-drop your audio file
+   - Or click **Use Sample Audio** for an instant demo
    - Supported formats: MP3, WAV, M4A, OGG, AAC
 
 2. **Choose Visualization**
-   - Select from 8 unique visualization modes
+   - Select from 16 unique visualization modes in the Customize panel
    - Preview updates in real-time as you explore
 
 3. **Customize & Refine**
    - Adjust colors, sensitivity, and backgrounds
-   - Fine-tune particle effects, rotation speed, and glow intensity
+   - Fine-tune particle effects and rotation speed
    - See changes instantly in the preview
 
 4. **Play & Control**
    - Use player controls or keyboard shortcuts
-   - Monitor real-time audio statistics and frequency data
+   - Drag the progress bar to scrub through the track
+   - Toggle **Loop** to repeat the track automatically
+   - Click **Expand** (bottom-right of preview) for fullscreen visualization
+   - Drag to orbit the 3D scene; click **Reset Rotation** (bottom-left) to snap back
 
 5. **Export Video**
    - Select desired resolution (720p, 1080p, 1440p)
@@ -170,15 +189,23 @@ The application will open at `http://localhost:5173`
 src/
 ├── components/
 │   ├── ui/                    # Reusable UI components
-│   ├── audio/                 # Audio controls & upload
-│   ├── visualizers/           # 8 visualization implementations
+│   ├── visualizers/           # 16 visualization implementations
+│   ├── preview/               # PreviewBox, PlayerBar & controls
 │   ├── export/                # Video export functionality
-│   └── layout/                # App layout & panels
+│   ├── settings/              # Settings & customization panels
+│   └── layout/                # App layout & AppLayout
 ├── hooks/                     # Custom React hooks
+│   ├── useAudioAnalyzer.ts    # FFT & frequency band analysis
+│   ├── useAudioControls.ts    # Playback, loop & volume control
+│   ├── useExport.ts           # WebCodecs video export pipeline
+│   └── useKeyboardShortcuts.ts
 ├── stores/                    # Zustand state management
+│   ├── audioStore.ts          # Audio file, playback & loop state
+│   ├── visualizerStore.ts     # Mode, color & background state
+│   ├── exportStore.ts         # Export progress & snapshot state
+│   └── uiStore.ts             # Expanded/collapsed UI state
 ├── lib/                       # Utility functions & constants
 ├── types/                     # TypeScript definitions
-├── utils/                     # Helper functions
 ├── App.tsx                    # Root component
 └── main.tsx                   # Entry point
 ```
@@ -197,7 +224,7 @@ src/
 
 **Styling & Animation:**
 - Tailwind CSS v4 – Utility-first CSS framework
-- Framer Motion – Smooth animations
+- Framer Motion – Smooth animations and transitions
 
 **State Management:**
 - Zustand – Lightweight, fast state management
@@ -296,8 +323,7 @@ We welcome contributions! Here's how:
 **Solution:**
 - Ensure audio file is in a supported format (MP3, WAV, M4A, OGG, AAC)
 - Check browser console for errors (F12)
-- Verify speaker/headphone volume
-- Try uploading a different audio file
+- Try uploading a different audio file or use the built-in sample
 
 ### Poor performance or stuttering
 **Solution:**
@@ -305,14 +331,14 @@ We welcome contributions! Here's how:
 - Lower FFT size to decrease CPU usage
 - Close other browser tabs and applications
 - Update graphics drivers
-- Ensure GPU acceleration is enabled
+- Ensure GPU acceleration is enabled in browser settings
 
 ### Export fails or is very slow
 **Solution:**
 - Reduce export resolution (start with 720p)
 - Close other applications to free up system memory
 - Ensure sufficient disk space (~500MB for 1080p video)
-- Try a different browser
+- Use Chrome for best WebCodecs hardware acceleration support
 - Clear browser cache
 
 ### "WebGL not supported" error
@@ -324,7 +350,7 @@ We welcome contributions! Here's how:
 
 ### Audio upload fails
 **Solution:**
-- Verify file is in supported format
+- Verify file is in supported format (MP3, WAV, M4A, OGG, AAC)
 - Check file size is under 500MB
 - Remove special characters from filename
 - Try re-encoding the audio file
