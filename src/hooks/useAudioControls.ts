@@ -92,6 +92,7 @@ export function useAudioControls() {
       }
 
       try {
+        useAudioStore.getState().setIsLoading(true)
         cancelAnimationFrame(animFrameRef.current)
 
         // Fully tear down previous audio setup
@@ -138,6 +139,8 @@ export function useAudioControls() {
         addToast(`Loaded: ${file.name}`, 'success')
       } catch (err) {
         addToast(err instanceof Error ? err.message : 'Failed to load audio file', 'error')
+      } finally {
+        useAudioStore.getState().setIsLoading(false)
       }
     },
     [teardownAudio, createAudioGraph, addToast, setAudioFile, setAudioElement, setDuration, setCurrentTime, setPlaybackState]

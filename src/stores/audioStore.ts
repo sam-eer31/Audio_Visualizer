@@ -13,6 +13,7 @@ interface AudioStore {
   gainNode: GainNode | null
   audioElement: HTMLAudioElement | null
   audioDestination: MediaStreamAudioDestinationNode | null
+  isLoading: boolean
   setAudioFile: (file: AudioFile | null) => void
   setPlaybackState: (state: PlaybackState) => void
   setCurrentTime: (time: number) => void
@@ -24,6 +25,7 @@ interface AudioStore {
   setGainNode: (node: GainNode | null) => void
   setAudioElement: (el: HTMLAudioElement | null) => void
   setAudioDestination: (dest: MediaStreamAudioDestinationNode | null) => void
+  setIsLoading: (val: boolean) => void
   reset: () => void
 }
 
@@ -39,6 +41,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   gainNode: null,
   audioElement: null,
   audioDestination: null,
+  isLoading: false,
   setAudioFile: (file) => set({ audioFile: file }),
   setPlaybackState: (state) => set({ playbackState: state }),
   setCurrentTime: (time) => set({ currentTime: time }),
@@ -50,11 +53,13 @@ export const useAudioStore = create<AudioStore>((set) => ({
   setGainNode: (node) => set({ gainNode: node }),
   setAudioElement: (el) => set({ audioElement: el }),
   setAudioDestination: (dest) => set({ audioDestination: dest }),
+  setIsLoading: (val) => set({ isLoading: val }),
   reset: () =>
     set({
       audioFile: null,
       playbackState: 'idle',
       currentTime: 0,
       duration: 0,
+      isLoading: false,
     }),
 }))

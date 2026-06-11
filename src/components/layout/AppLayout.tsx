@@ -71,6 +71,19 @@ export function AppLayout() {
         </div>
 
         <div className="flex items-center" style={{ gap: '12px' }}>
+          {/* Upload Song Button */}
+          {audioFile && (
+            <button
+              onClick={() => fileRef.current?.click()}
+              className="relative h-9 px-3 sm:px-3.5 rounded-xl border border-white/[0.08] flex items-center justify-center gap-1.5 overflow-hidden transition-all hover:scale-[1.03] active:scale-95 text-[11px] font-semibold"
+              style={{ background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)' }}
+              title="Upload other song"
+            >
+              <Upload className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground" />
+              <span className="hidden sm:inline">Change Song</span>
+            </button>
+          )}
+
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}

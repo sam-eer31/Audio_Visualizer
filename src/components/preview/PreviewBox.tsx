@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Expand, Shrink, Upload, Play, Pause, Square, Volume2, VolumeX, FileAudio } from 'lucide-react'
+import { Expand, Shrink, Upload, Play, Pause, Square, Volume2, VolumeX, FileAudio, Loader2 } from 'lucide-react'
 import { useUIStore } from '@/stores/uiStore'
 import { useAudioStore } from '@/stores/audioStore'
 import { useAudioControls } from '@/hooks/useAudioControls'
@@ -25,6 +25,7 @@ export function PreviewBox() {
   const backgroundPreset = useVisualizerStore((s) => s.backgroundPreset)
   const bg = BACKGROUND_PRESETS.find((b) => b.id === backgroundPreset) || BACKGROUND_PRESETS[0]
   const darkBg = bg.textColor ? false : isColorDark(bg.color)
+  const isLoading = useAudioStore((s) => s.isLoading)
 
   return (
     <AnimatePresence>
@@ -52,6 +53,12 @@ export function PreviewBox() {
           >
             <Shrink className="h-4 w-4" />
           </button>
+          {isLoading && (
+            <div className="absolute inset-0 bg-black/75 backdrop-blur-[4px] z-40 flex flex-col items-center justify-center gap-3">
+              <Loader2 className="h-7 w-7 text-primary animate-spin" />
+              <p className="text-xs font-semibold text-white/90 uppercase tracking-wider">Loading audio...</p>
+            </div>
+          )}
         </motion.div>
       ) : (
         <motion.div
@@ -88,6 +95,13 @@ export function PreviewBox() {
               </>
             ) : (
               <EmptyUploadBox dark={darkBg} />
+            )}
+
+            {isLoading && (
+              <div className="absolute inset-0 bg-black/75 backdrop-blur-[4px] z-30 flex flex-col items-center justify-center gap-3">
+                <Loader2 className="h-7 w-7 text-primary animate-spin" />
+                <p className="text-xs font-semibold text-white/90 uppercase tracking-wider">Loading audio...</p>
+              </div>
             )}
           </div>
 
