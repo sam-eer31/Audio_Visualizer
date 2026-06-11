@@ -12,6 +12,9 @@ export type VisualizationMode =
   | 'starfield'
   | 'audio-terrain'
   | 'heartbeat-line'
+  | 'mobius-ribbon'
+  | 'laser-web'
+  | 'audio-portal'
 
 export type PlaybackState = 'idle' | 'playing' | 'paused' | 'stopped'
 

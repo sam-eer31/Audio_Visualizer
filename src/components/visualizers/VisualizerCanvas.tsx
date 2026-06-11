@@ -31,6 +31,9 @@ const DNAHelix = lazy(() => import('./DNAHelix').then((m) => ({ default: m.DNAHe
 const Starfield = lazy(() => import('./Starfield').then((m) => ({ default: m.Starfield })))
 const AudioTerrain = lazy(() => import('./AudioTerrain').then((m) => ({ default: m.AudioTerrain })))
 const HeartbeatLine = lazy(() => import('./HeartbeatLine').then((m) => ({ default: m.HeartbeatLine })))
+const MobiusRibbon = lazy(() => import('./MobiusRibbon').then((m) => ({ default: m.MobiusRibbon })))
+const LaserWeb = lazy(() => import('./LaserWeb').then((m) => ({ default: m.LaserWeb })))
+const AudioPortal = lazy(() => import('./AudioPortal').then((m) => ({ default: m.AudioPortal })))
 
 const VISUALIZER_MAP = {
   'line-spectrum': LineSpectrum,
@@ -46,6 +49,9 @@ const VISUALIZER_MAP = {
   'starfield': Starfield,
   'audio-terrain': AudioTerrain,
   'heartbeat-line': HeartbeatLine,
+  'mobius-ribbon': MobiusRibbon,
+  'laser-web': LaserWeb,
+  'audio-portal': AudioPortal,
 } as const
 
 function ExportFrameCapturer() {

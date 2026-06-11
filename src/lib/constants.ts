@@ -13,6 +13,9 @@ import {
   Star,
   Mountain,
   Activity,
+  Infinity,
+  Network,
+  Orbit,
 } from 'lucide-react'
 import type { ComponentType } from 'react'
 import type { LucideProps } from 'lucide-react'
@@ -36,6 +39,9 @@ export const VISUALIZATION_MODES: {
   { id: 'starfield', name: 'Starfield', description: 'Hyperspeed stars', icon: Star },
   { id: 'audio-terrain', name: 'Audio Terrain', description: '3D landscape', icon: Mountain },
   { id: 'heartbeat-line', name: 'Heartbeat Line', description: 'Live oscilloscope', icon: Activity },
+  { id: 'mobius-ribbon', name: 'Möbius Ribbon', description: 'Circular twisting wave', icon: Infinity },
+  { id: 'laser-web', name: 'Laser Web', description: 'Dynamic proximity web', icon: Network },
+  { id: 'audio-portal', name: 'Audio Portal', description: 'Swirling black hole', icon: Orbit },
 ]
 
 export const COLOR_PRESETS: ColorPreset[] = [
