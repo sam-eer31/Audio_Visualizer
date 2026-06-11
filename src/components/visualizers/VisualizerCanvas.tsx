@@ -1,7 +1,10 @@
-import { Suspense, lazy } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Suspense, lazy, useRef, useEffect, useState } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { useVisualizerStore } from '@/stores/visualizerStore'
+import { useExportStore } from '@/stores/exportStore'
+import { RESOLUTION_MAP } from '@/types'
+import { RotateCcw } from 'lucide-react'
 
 const SpectrumBars = lazy(() => import('./SpectrumBars').then((m) => ({ default: m.SpectrumBars })))
 const CircularSpectrum = lazy(() => import('./CircularSpectrum').then((m) => ({ default: m.CircularSpectrum })))
@@ -11,6 +14,10 @@ const WaveTunnel = lazy(() => import('./WaveTunnel').then((m) => ({ default: m.W
 const NeonRings = lazy(() => import('./NeonRings').then((m) => ({ default: m.NeonRings })))
 const FuturisticOrb = lazy(() => import('./FuturisticOrb').then((m) => ({ default: m.FuturisticOrb })))
 const CyberGrid = lazy(() => import('./CyberGrid').then((m) => ({ default: m.CyberGrid })))
+const DNAHelix = lazy(() => import('./DNAHelix').then((m) => ({ default: m.DNAHelix })))
+const Starfield = lazy(() => import('./Starfield').then((m) => ({ default: m.Starfield })))
+const AudioTerrain = lazy(() => import('./AudioTerrain').then((m) => ({ default: m.AudioTerrain })))
+const HeartbeatLine = lazy(() => import('./HeartbeatLine').then((m) => ({ default: m.HeartbeatLine })))
 
 const VISUALIZER_MAP = {
   'spectrum-bars': SpectrumBars,
@@ -21,31 +28,93 @@ const VISUALIZER_MAP = {
   'neon-rings': NeonRings,
   'futuristic-orb': FuturisticOrb,
   'cyber-grid': CyberGrid,
+  'dna-helix': DNAHelix,
+  'starfield': Starfield,
+  'audio-terrain': AudioTerrain,
+  'heartbeat-line': HeartbeatLine,
 } as const
+
+function ExportFrameCapturer() {
+  const onFrame = useExportStore((s) => s.onFrame)
+
+  useFrame((state) => {
+    if (onFrame) {
+      state.gl.render(state.scene, state.camera)
+      onFrame(state.gl.domElement)
+    }
+  }, 1)
+
+  return null
+}
 
 export function VisualizerCanvas() {
   const mode = useVisualizerStore((s) => s.mode)
+  const isExporting = useExportStore((s) => s.isExporting)
+  const resolution = useExportStore((s) => s.resolution)
+  
   const VisualizerComponent = VISUALIZER_MAP[mode]
+  const controlsRef = useRef<any>(null)
+  const [dpr, setDpr] = useState<number | [number, number]>([1, 2])
+
+  // Reset 3D rotation whenever the visualizer mode changes
+  useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.reset()
+    }
+  }, [mode])
+
+  // Totally different technique: Inflate the WebGL internal resolution multipliers (DPR) 
+  // during export instead of using CSS transforms. This guarantees crisp 1080p/1440p 
+  // without breaking the hardware compositor on PC!
+  useEffect(() => {
+    if (isExporting) {
+      const canvas = document.querySelector('canvas')
+      if (canvas) {
+        const rect = canvas.getBoundingClientRect()
+        const targetRes = RESOLUTION_MAP[resolution]
+        if (rect.width > 0 && rect.height > 0) {
+          // Calculate exact pixel multiplier needed to hit target resolution
+          const requiredDpr = Math.max(targetRes.width / rect.width, targetRes.height / rect.height)
+          setDpr(requiredDpr)
+        }
+      }
+    } else {
+      setDpr([1, 2])
+    }
+  }, [isExporting, resolution])
 
   return (
-    <Canvas
-      camera={{ position: [0, 0, 8], fov: 60 }}
-      gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
-      dpr={[1, 2]}
-      style={{ background: 'transparent' }}
-    >
-      <ambientLight intensity={0.3} />
-      <pointLight position={[10, 10, 10]} intensity={0.8} />
-      <pointLight position={[-10, -10, -10]} intensity={0.3} />
-      <Suspense fallback={null}>
-        <VisualizerComponent />
-      </Suspense>
-      <OrbitControls
-        enableZoom={true}
-        enablePan={false}
-        maxDistance={20}
-        minDistance={3}
-      />
-    </Canvas>
+    <div className="relative w-full h-full">
+      <Canvas
+        camera={{ position: [0, 0, 8], fov: 60 }}
+        gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: true }}
+        dpr={dpr}
+        style={{ background: 'transparent' }}
+      >
+        <ambientLight intensity={0.3} />
+        <pointLight position={[10, 10, 10]} intensity={0.8} />
+        <pointLight position={[-10, -10, -10]} intensity={0.3} />
+        <Suspense fallback={null}>
+          <VisualizerComponent />
+        </Suspense>
+        <OrbitControls
+          ref={controlsRef}
+          enableZoom={true}
+          enablePan={false}
+          maxDistance={20}
+          minDistance={3}
+        />
+        {isExporting && <ExportFrameCapturer />}
+      </Canvas>
+
+      {/* Reset Rotation Button */}
+      <button
+        onClick={() => controlsRef.current?.reset()}
+        className="absolute top-3 left-3 z-20 h-8 w-8 rounded-lg bg-black/20 hover:bg-black/40 text-white/70 hover:text-white flex items-center justify-center backdrop-blur-md transition-all border border-white/10 shadow-lg"
+        title="Reset 3D Rotation"
+      >
+        <RotateCcw className="h-3.5 w-3.5" />
+      </button>
+    </div>
   )
 }

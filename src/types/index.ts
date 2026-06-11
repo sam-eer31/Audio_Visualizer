@@ -7,6 +7,10 @@ export type VisualizationMode =
   | 'neon-rings'
   | 'futuristic-orb'
   | 'cyber-grid'
+  | 'dna-helix'
+  | 'starfield'
+  | 'audio-terrain'
+  | 'heartbeat-line'
 
 export type PlaybackState = 'idle' | 'playing' | 'paused' | 'stopped'
 

@@ -8,12 +8,14 @@ interface ExportStore {
   isExporting: boolean
   progress: number
   error: string | null
+  onFrame: ((canvas: HTMLCanvasElement) => void) | null
   setResolution: (res: ExportResolution) => void
   setQuality: (q: ExportQuality) => void
   setFrameRate: (fps: ExportFrameRate) => void
   setIsExporting: (val: boolean) => void
   setProgress: (val: number) => void
   setError: (err: string | null) => void
+  setOnFrame: (callback: ((canvas: HTMLCanvasElement) => void) | null) => void
   reset: () => void
 }
 
@@ -24,11 +26,13 @@ export const useExportStore = create<ExportStore>((set) => ({
   isExporting: false,
   progress: 0,
   error: null,
+  onFrame: null,
   setResolution: (res) => set({ resolution: res }),
   setQuality: (q) => set({ quality: q }),
   setFrameRate: (fps) => set({ frameRate: fps }),
   setIsExporting: (val) => set({ isExporting: val }),
   setProgress: (val) => set({ progress: val }),
   setError: (err) => set({ error: err }),
-  reset: () => set({ isExporting: false, progress: 0, error: null }),
+  setOnFrame: (callback) => set({ onFrame: callback }),
+  reset: () => set({ isExporting: false, progress: 0, error: null, onFrame: null }),
 }))

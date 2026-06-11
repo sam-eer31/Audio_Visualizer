@@ -8,6 +8,10 @@ import {
   Disc3,
   Atom,
   Grid3x3,
+  Dna,
+  Star,
+  Mountain,
+  Activity,
 } from 'lucide-react'
 import type { ComponentType } from 'react'
 import type { LucideProps } from 'lucide-react'
@@ -26,10 +30,14 @@ export const VISUALIZATION_MODES: {
   { id: 'neon-rings', name: 'Neon Rings', description: 'Pulsing rings', icon: Disc3 },
   { id: 'futuristic-orb', name: 'Futuristic Orb', description: 'Reactive orb', icon: Atom },
   { id: 'cyber-grid', name: 'Cyber Grid', description: 'Grid distortion', icon: Grid3x3 },
+  { id: 'dna-helix', name: 'DNA Helix', description: 'Double helix strand', icon: Dna },
+  { id: 'starfield', name: 'Starfield', description: 'Hyperspeed stars', icon: Star },
+  { id: 'audio-terrain', name: 'Audio Terrain', description: '3D landscape', icon: Mountain },
+  { id: 'heartbeat-line', name: 'Heartbeat Line', description: 'Live oscilloscope', icon: Activity },
 ]
 
 export const COLOR_PRESETS: ColorPreset[] = [
-  { id: 'electric', name: 'Electric', colors: ['#6366f1', '#8b5cf6', '#a78bfa'] },
+  { id: 'electric', name: 'Electric', colors: ['#FF1F5A', '#FF4D7D', '#FF7DA0'] },
   { id: 'sunset-gold', name: 'Sunset', colors: ['#f97316', '#ef4444', '#ec4899'] },
   { id: 'emerald', name: 'Emerald', colors: ['#10b981', '#06b6d4', '#3b82f6'] },
   { id: 'rose', name: 'Rose', colors: ['#f43f5e', '#e879f9', '#c084fc'] },

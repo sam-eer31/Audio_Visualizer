@@ -24,11 +24,11 @@ export function SpectrumBars() {
     if (!meshRef.current) return
     const analysis = getAnalysis()
     const freq = analysis.frequencyData
-    const binCount = freq.length
-    const step = Math.floor(binCount / BAR_COUNT)
+    const usableBins = Math.floor(freq.length * 0.6)
+    const step = Math.max(1, Math.floor(usableBins / BAR_COUNT))
 
     for (let i = 0; i < BAR_COUNT; i++) {
-      const value = freq[i * step] / 255 || 0
+      const value = (freq[i * step] || 0) / 255
       const height = Math.max(value * 5, 0.05)
 
       const x = (i - BAR_COUNT / 2) * 0.25

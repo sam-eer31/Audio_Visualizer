@@ -66,15 +66,9 @@ export function AppLayout() {
       </AnimatePresence>
 
       {/* Header */}
-      <header className="shrink-0 z-20 px-6 sm:px-8 flex items-center justify-between glass-light" style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-        <div className="flex items-center" style={{ gap: '14px' }}>
-          <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-            <Music2 className="h-5 w-5 text-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-lg font-bold tracking-tight leading-none">SonicWave</span>
-            <span className="text-[11px] text-muted-foreground mt-1 leading-none">Audio Visualizer</span>
-          </div>
+      <header className="shrink-0 z-20 app-layout-padding flex items-center justify-between glass-light" style={{ paddingTop: 0, paddingBottom: 0 }}>
+        <div className="flex items-center">
+          <img src="/logo.png" alt="SonicWave Logo" style={{ height: '55px', width: 'auto', objectFit: 'contain', display: 'block', padding: '6px' }} />
         </div>
 
         <div className="flex items-center" style={{ gap: '12px' }}>
@@ -94,7 +88,7 @@ export function AppLayout() {
                   exit={{ rotate: 90, opacity: 0, scale: 0 }}
                   transition={{ duration: 0.25, ease: 'easeInOut' }}
                 >
-                  <Moon className="h-4 w-4 text-indigo-300" />
+                  <Moon className="h-4 w-4 text-rose-300" />
                 </motion.div>
               ) : (
                 <motion.div
@@ -121,13 +115,15 @@ export function AppLayout() {
       </header>
 
       {/* Main content - fills remaining height */}
-      <div className="flex-1 flex flex-col min-h-0 px-6 sm:px-8" style={{ paddingTop: '24px', paddingBottom: '20px' }}>
+      <div className="flex-1 flex flex-col min-h-0 app-layout-padding" style={{ paddingTop: '24px', paddingBottom: '20px' }}>
 
         {/* ===== MOBILE LAYOUT (below lg) ===== */}
-        <div className="flex-1 flex flex-col lg:hidden gap-5 overflow-y-auto min-h-0">
-          {/* Preview first */}
-          <div className="shrink-0 min-h-[260px]">
-            <PreviewBox />
+        <div className="flex-1 flex flex-col lg:hidden gap-5 overflow-y-auto min-h-0 relative">
+          {/* Preview first - Sticky on mobile */}
+          <div className="shrink-0 sticky top-0 z-30 bg-background pt-1 pb-4 -mt-1 -mb-4">
+            <div className="min-h-[280px] h-[40vh] max-h-[400px]">
+              <PreviewBox />
+            </div>
           </div>
           {/* Settings */}
           <div className="glass rounded-2xl shrink-0" style={{ padding: '20px' }}>
@@ -166,16 +162,10 @@ export function AppLayout() {
       </div>
 
       {/* Footer */}
-      <footer className={cn("shrink-0 border-t", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')} style={{ padding: '20px 24px' }}>
+      <footer className={cn("shrink-0 border-t app-layout-padding", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')} style={{ paddingTop: '20px', paddingBottom: '20px' }}>
         <div className="flex flex-col sm:flex-row items-center justify-between" style={{ gap: '12px' }}>
-          <div className="flex items-center" style={{ gap: '10px' }}>
-            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-md shadow-indigo-500/20">
-              <Music2 className="h-3.5 w-3.5 text-white" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-[12px] font-bold tracking-tight">SonicWave</span>
-              <span className="text-[10px] text-muted-foreground/50 leading-none">Audio Visualizer</span>
-            </div>
+          <div className="flex items-center">
+            <img src="/logo.png" alt="SonicWave Logo" className="h-8 sm:h-10 w-auto object-contain" />
           </div>
           <div className="flex items-center" style={{ gap: '16px' }}>
             <span className="text-[10px] text-muted-foreground/40">Built with React & Three.js</span>

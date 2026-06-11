@@ -5,7 +5,7 @@ import { useAudioAnalyzer } from '@/hooks/useAudioAnalyzer'
 import { useVisualizerStore } from '@/stores/visualizerStore'
 import { COLOR_PRESETS } from '@/lib/constants'
 
-const SEGMENT_COUNT = 72
+const SEGMENT_COUNT = 128
 
 export function CircularSpectrum() {
   const groupRef = useRef<THREE.Group>(null)
@@ -26,28 +26,42 @@ export function CircularSpectrum() {
     if (!meshRef.current || !groupRef.current) return
     const analysis = getAnalysis()
     const freq = analysis.frequencyData
-    const step = Math.floor(freq.length / SEGMENT_COUNT)
+    const halfSegments = Math.floor(SEGMENT_COUNT / 2)
+    const step = Math.max(1, Math.floor((freq.length * 0.6) / halfSegments))
 
     groupRef.current.rotation.z += delta * rotationSpeed * 0.3
 
     for (let i = 0; i < SEGMENT_COUNT; i++) {
-      const value = freq[i * step] / 255 || 0
+      // Mirror: first half goes forward through frequencies, second half mirrors back
+      const mirrorIndex = i < halfSegments ? i : SEGMENT_COUNT - 1 - i
+      const value = (freq[mirrorIndex * step] || 0) / 255
       const angle = (i / SEGMENT_COUNT) * Math.PI * 2
-      const radius = 2.5
-      const height = Math.max(value * 3, 0.1)
+      const baseRadius = 2.0
+      const barLength = Math.max(value * 2.5, 0.05)
+
+      // Position each bar at the edge of the circle, offset outward by half its length
+      const cx = Math.cos(angle)
+      const cy = Math.sin(angle)
 
       dummy.position.set(
-        Math.cos(angle) * radius,
-        Math.sin(angle) * radius,
+        cx * (baseRadius + barLength * 0.5),
+        cy * (baseRadius + barLength * 0.5),
         0
       )
-      dummy.lookAt(0, 0, 0)
-      dummy.scale.set(0.08, height, 0.08)
+
+      // Rotate the bar so its long axis points radially outward
+      dummy.rotation.set(0, 0, angle - Math.PI / 2)
+
+      // Scale: thin width, bar length for height, thin depth
+      dummy.scale.set(0.06, barLength, 0.06)
       dummy.updateMatrix()
       meshRef.current.setMatrixAt(i, dummy.matrix)
 
+      // Color gradient around the circle
       const t = i / SEGMENT_COUNT
       const color = colors[0].clone().lerp(colors[2], t)
+      // Brighten bars that have more energy
+      color.lerp(new THREE.Color(1, 1, 1), value * 0.3)
       meshRef.current.setColorAt(i, color)
     }
 
@@ -67,14 +81,29 @@ export function CircularSpectrum() {
           opacity={0.9}
         />
       </instancedMesh>
+
+      {/* Inner ring */}
       <mesh>
-        <ringGeometry args={[2.2, 2.4, 64]} />
+        <ringGeometry args={[1.85, 1.95, 64]} />
         <meshStandardMaterial
           color={colors[0]}
           emissive={colors[0]}
-          emissiveIntensity={glowIntensity}
+          emissiveIntensity={glowIntensity * 0.8}
           transparent
-          opacity={0.4}
+          opacity={0.3}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Outer glow ring */}
+      <mesh>
+        <ringGeometry args={[1.95, 2.0, 64]} />
+        <meshStandardMaterial
+          color={colors[2]}
+          emissive={colors[2]}
+          emissiveIntensity={glowIntensity * 1.2}
+          transparent
+          opacity={0.2}
           side={THREE.DoubleSide}
         />
       </mesh>

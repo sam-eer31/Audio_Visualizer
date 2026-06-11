@@ -93,9 +93,17 @@ export function PreviewBox() {
 
           {/* Player controls below preview */}
           {audioFile && (
-            <div className="mt-3 shrink-0">
-              <PlayerBar />
-            </div>
+            <>
+              <style>{`
+                .player-bar-gap { margin-top: 12px; }
+                @media (min-width: 1024px) {
+                  .player-bar-gap { margin-top: 24px; }
+                }
+              `}</style>
+              <div className="player-bar-gap shrink-0">
+                <PlayerBar />
+              </div>
+            </>
           )}
         </motion.div>
       )}
@@ -122,12 +130,12 @@ function EmptyUploadBox({ dark }: { dark: boolean }) {
           className={cn(
             "rounded-2xl flex items-center justify-center",
             dark
-              ? "bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/[0.08]"
-              : "bg-gradient-to-br from-indigo-500/10 to-purple-600/10 border border-indigo-500/20"
+              ? "bg-gradient-to-br from-rose-500/10 to-pink-600/10 border border-rose-500/[0.08]"
+              : "bg-gradient-to-br from-rose-500/10 to-pink-600/10 border border-rose-500/20"
           )}
           style={{ width: '64px', height: '64px', marginBottom: '20px' }}
         >
-          <Upload className={cn("h-7 w-7", dark ? "text-indigo-400/60" : "text-indigo-500/70")} />
+          <Upload className={cn("h-7 w-7", dark ? "text-rose-400/60" : "text-rose-500/70")} />
         </div>
 
         {/* Text */}
@@ -177,9 +185,8 @@ function EmptyUploadBox({ dark }: { dark: boolean }) {
 function PlayerBar() {
   const { audioFile, playbackState, currentTime, duration, volume, play, pause, stop, seek, setVolume } = useAudioControls()
   const expanded = useUIStore((s) => s.expanded)
-  const backgroundPreset = useVisualizerStore((s) => s.backgroundPreset)
-  const bg = BACKGROUND_PRESETS.find((b) => b.id === backgroundPreset) || BACKGROUND_PRESETS[0]
-  const darkBg = bg.textColor ? false : isColorDark(bg.color)
+  const theme = useUIStore((s) => s.theme)
+  const darkBg = theme === 'dark'
 
   if (!audioFile) return null
 
