@@ -8,7 +8,7 @@ import { formatTime } from '@/utils/audioUtils'
 import { VisualizerCanvas } from '@/components/visualizers/VisualizerCanvas'
 import { BACKGROUND_PRESETS } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useExportStore } from '@/stores/exportStore'
 
 function isColorDark(hex: string): boolean {
@@ -219,9 +219,46 @@ export function PlayerBar() {
   const theme = useUIStore((s) => s.theme)
   const darkBg = theme === 'dark'
 
+  const progressBarRef = useRef<HTMLDivElement>(null)
+  const isDraggingRef = useRef(false)
+  const [isScrubbing, setIsScrubbing] = useState(false)
+
   if (!audioFile) return null
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0
+
+  const updateSeek = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!progressBarRef.current || duration === 0) return
+    const rect = progressBarRef.current.getBoundingClientRect()
+    const clientX = Math.max(rect.left, Math.min(e.clientX, rect.right))
+    const pct = (clientX - rect.left) / rect.width
+    seek(pct * duration)
+  }
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!progressBarRef.current) return
+    isDraggingRef.current = true
+    setIsScrubbing(true)
+    e.currentTarget.setPointerCapture(e.pointerId)
+    updateSeek(e)
+  }
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current) return
+    updateSeek(e)
+  }
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false
+      setIsScrubbing(false)
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      } catch (err) {
+        // ignore
+      }
+    }
+  }
 
   return (
     <div
@@ -241,20 +278,28 @@ export function PlayerBar() {
 
       {/* Seek bar */}
       <div className="mb-2 sm:mb-3">
-        <div className={cn("relative w-full h-[4px] rounded-full overflow-hidden cursor-pointer group", darkBg ? "bg-white/[0.06]" : "bg-black/[0.08]")}
-          onClick={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect()
-            const pct = (e.clientX - rect.left) / rect.width
-            seek(pct * (duration || 0))
-          }}
+        <div 
+          ref={progressBarRef}
+          className="relative w-full py-2.5 cursor-pointer group touch-none"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
         >
+          {/* Visual Track */}
+          <div className={cn("relative w-full h-[4px] rounded-full overflow-hidden", darkBg ? "bg-white/[0.06]" : "bg-black/[0.08]")}>
+            <div
+              className="absolute inset-y-0 left-0 rounded-full bg-primary transition-all duration-100"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          {/* Handle indicator - visible on hover or actively scrubbing */}
           <div
-            className="absolute inset-y-0 left-0 rounded-full bg-primary transition-all duration-100"
-            style={{ width: `${progress}%` }}
-          />
-          <div
-            className="absolute top-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-primary shadow-lg shadow-primary/40 opacity-0 group-hover:opacity-100 transition-opacity"
-            style={{ left: `${progress}%`, marginLeft: '-6px' }}
+            className={cn(
+              "absolute top-1/2 -translate-y-1/2 h-3.5 w-3.5 rounded-full bg-primary shadow-lg shadow-primary/40 transition-all pointer-events-none",
+              isScrubbing ? "opacity-100 scale-110" : "opacity-0 group-hover:opacity-100"
+            )}
+            style={{ left: `${progress}%`, marginLeft: '-7px' }}
           />
         </div>
         <div className="flex justify-between mt-1 sm:mt-1.5">
