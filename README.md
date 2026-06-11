@@ -46,8 +46,8 @@
 
 ## 🎨 Features
 
-### 8 Visualization Modes
-Choose from 8 immersive, real-time 3D visualizations that react dynamically to your audio:
+### 12 Visualization Modes
+Choose from 12 immersive, real-time 3D visualizations that react dynamically to your audio:
 
 | Visualization | Description |
 |---|---|
@@ -59,6 +59,10 @@ Choose from 8 immersive, real-time 3D visualizations that react dynamically to y
 | **Neon Rings** | Concentric rings pulsing with audio intensity |
 | **Futuristic Orb** | Advanced sphere with multi-layer frequency analysis |
 | **Cyber Grid** | Grid-based visualization with cyberpunk aesthetics |
+| **DNA Helix** | Reactive double helix strand spinning to audio |
+| **Starfield** | Hyperspeed star particle movement reacting to audio intensity |
+| **Audio Terrain** | 3D landscape mesh distorted by frequency bands |
+| **Heartbeat Line** | Reactive heartbeat oscilloscope wave |
 
 ### Advanced Audio Analysis
 - **FFT Analysis** – Real-time Fast Fourier Transform with configurable resolution
@@ -69,16 +73,18 @@ Choose from 8 immersive, real-time 3D visualizations that react dynamically to y
 ### Customization & Control
 - **Color Presets** – Pre-designed palettes for quick styling
 - **Background Themes** – Multiple background options for visual variety
-- **Fine-tune Parameters** – Adjust sensitivity, glow, rotation, particle count
+- **Fine-tune Parameters** – Adjust sensitivity, rotation, and particle count
 - **Real-time Preview** – See changes instantly as you adjust settings
 - **Keyboard Shortcuts** – Full keyboard control for seamless workflow
+- **Mobile-first Responsive Design** – Visualizer preview stays sticky while setting panels scroll comfortably, adjusted with thinner controls for mobile viewports
 
 ### Professional Video Export
-- **Multiple Formats** – MP4 and WebM support
-- **Flexible Resolution** – 720p, 1080p, or 1440p output
+- **Multiple Resolutions** – 720p, 1080p, or 1440p output
 - **Frame Rate Options** – 30 FPS or 60 FPS rendering
-- **Hardware Acceleration** – Optimized encoding for fast exports
-- **Progress Tracking** – Real-time export progress visualization
+- **Hardware Acceleration** – WebCodecs hardware accelerated encoding for fast exports
+- **Silent rendering** – Automatically mutes physical speakers during export while preserving capture stream
+- **Interactive Cancellation Overlay** – A center glassmorphic progress modal overlay with a cancel option that halts tickers and safely disposes of encoder resources
+- **Frozen Preview** – Blurs main controls and freezes canvas output visually during export to look clean and professional while recording
 
 ### Supported Audio Formats
 **MP3 • WAV • M4A • OGG • AAC**
@@ -199,7 +205,8 @@ src/
 **Audio & Export:**
 - Web Audio API – Real-time audio analysis
 - FFT Analysis – Frequency domain analysis
-- MediaRecorder API – Video encoding
+- WebCodecs API – Hardware accelerated VideoEncoder/AudioEncoder
+- mp4-muxer – Low-overhead client-side container packaging
 
 **UI Components:**
 - Lucide React – Icon library
