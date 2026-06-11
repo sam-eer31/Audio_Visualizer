@@ -38,6 +38,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Clickable element pointer cursors */
+button,
+select,
+input[type="range"],
+a,
+label,
+[role="button"] {
+  cursor: pointer;
+}
+
 /* Glassmorphism */
 .glass {
   background: rgba(10, 10, 15, 0.80);

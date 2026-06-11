@@ -2,6 +2,23 @@ import { useCallback, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Music2, Upload, Sun, Moon, Loader2 } from 'lucide-react'
 import { useExportStore } from '@/stores/exportStore'
+
+function GithubIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+      <path d="M9 18c-4.51 2-5-2-7-2" />
+    </svg>
+  )
+}
 import { SettingsPanel } from '@/components/settings/SettingsPanel'
 import { PreviewBox, PlayerBar } from '@/components/preview/PreviewBox'
 import { ExportBar } from '@/components/export/ExportBar'
@@ -192,14 +209,37 @@ export function AppLayout() {
             )}
 
             {/* Mobile Footer (scrollable, hidden on desktop because parent is lg:hidden) */}
-            <footer className={cn("shrink-0 border-t mt-4 pt-5 pb-2", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')}>
-              <div className="flex flex-col items-center justify-between gap-3 text-center">
-                <div className="flex items-center justify-center">
+            <footer className={cn("shrink-0 border-t mt-6 pt-5 pb-3", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')}>
+              <div className="flex flex-col items-center gap-4 text-center">
+                <div className="flex flex-col items-center gap-1">
                   <img src="/logo.png" alt="Audrix Logo" className="h-8 w-auto object-contain" />
+                  <p className="text-[9px] text-muted-foreground/50 font-medium">Interactive 3D audio visualization in your browser.</p>
                 </div>
-                <div className="flex flex-col gap-1.5 items-center">
-                  <span className="text-[10px] text-muted-foreground/40 font-medium">Built with React & Three.js</span>
-                  <span className="text-[10px] text-muted-foreground/40 font-medium">&copy; {new Date().getFullYear()} Audrix</span>
+                
+                <div className="flex items-center gap-4">
+                  <a 
+                    href="https://github.com/sam-eer31" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60 hover:text-primary transition-colors cursor-pointer"
+                  >
+                    <GithubIcon className="h-3.5 w-3.5" />
+                    <span>GitHub</span>
+                  </a>
+                  <span className="text-muted-foreground/20 text-[9px]">•</span>
+                  <a 
+                    href="https://github.com/sam-eer31/Audio_Visualizer" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-[10px] text-muted-foreground/60 hover:text-primary transition-colors cursor-pointer"
+                  >
+                    Source Code
+                  </a>
+                </div>
+                
+                <div className={cn("w-full border-t pt-3 flex flex-col items-center gap-1 text-[9px]", theme === 'dark' ? 'border-white/[0.04]' : 'border-black/[0.04]')}>
+                  <span className="text-muted-foreground/40">&copy; {new Date().getFullYear()} Audrix. All rights reserved.</span>
+                  <span className="text-muted-foreground/30 font-medium">React • Three.js • Tailwind CSS</span>
                 </div>
               </div>
             </footer>
@@ -270,15 +310,45 @@ export function AppLayout() {
       </div>
 
       {/* Footer */}
-      <footer className={cn("hidden lg:block shrink-0 border-t app-layout-padding", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')} style={{ paddingTop: '20px', paddingBottom: '20px' }}>
-        <div className="flex flex-col sm:flex-row items-center justify-between" style={{ gap: '12px' }}>
-          <div className="flex items-center">
-            <img src="/logo.png" alt="Audrix Logo" className="h-8 sm:h-10 w-auto object-contain" />
+      <footer className={cn("hidden lg:block shrink-0 border-t app-layout-padding py-6 mt-auto", theme === 'dark' ? 'border-white/[0.06]' : 'border-black/[0.06]')}>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-col gap-0.5">
+              <img src="/logo.png" alt="Audrix Logo" className="h-8 w-auto object-contain block" />
+              <p className="text-[10px] text-muted-foreground/50 font-medium">Interactive 3D audio visualization in your browser.</p>
+            </div>
+            
+            <div className="flex items-center gap-5">
+              <a 
+                href="https://github.com/sam-eer31" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60 hover:text-primary transition-colors cursor-pointer"
+              >
+                <GithubIcon className="h-3.5 w-3.5" />
+                <span>GitHub Profile</span>
+              </a>
+              <span className="text-muted-foreground/20 text-[10px]">•</span>
+              <a 
+                href="https://github.com/sam-eer31/Audio_Visualizer" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-[11px] text-muted-foreground/60 hover:text-primary transition-colors cursor-pointer"
+              >
+                Project Source
+              </a>
+            </div>
           </div>
-          <div className="flex items-center" style={{ gap: '16px' }}>
-            <span className="text-[10px] text-muted-foreground/40">Built with React & Three.js</span>
-            <span className="text-[10px] text-muted-foreground/30">|</span>
-            <span className="text-[10px] text-muted-foreground/40">&copy; {new Date().getFullYear()} Audrix</span>
+          
+          <div className={cn("border-t pt-4 flex flex-row items-center justify-between text-[10px]", theme === 'dark' ? 'border-white/[0.04]' : 'border-black/[0.04]')}>
+            <span className="text-muted-foreground/40">&copy; {new Date().getFullYear()} Audrix. All rights reserved.</span>
+            <div className="flex items-center gap-1.5 text-muted-foreground/40 font-medium">
+              <span>Built with React</span>
+              <span className="text-muted-foreground/25">•</span>
+              <span>Three.js</span>
+              <span className="text-muted-foreground/25">•</span>
+              <span>Tailwind CSS</span>
+            </div>
           </div>
         </div>
       </footer>
