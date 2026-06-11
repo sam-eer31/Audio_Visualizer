@@ -5,7 +5,7 @@ import { useAudioAnalyzer } from '@/hooks/useAudioAnalyzer'
 import { useVisualizerStore } from '@/stores/visualizerStore'
 import { COLOR_PRESETS } from '@/lib/constants'
 
-const PARTICLE_COUNT = 1500
+const PARTICLE_COUNT = 3500
 const EVENT_HORIZON_RADIUS = 1.1
 
 interface ParticleState {
@@ -14,12 +14,14 @@ interface ParticleState {
   orbitSpeed: number
   colorIndex: number
   zOffset: number
+  lensedSign: number
 }
 
 export function AudioPortal() {
   const pointsRef = useRef<THREE.Points>(null)
   const coreRef = useRef<THREE.Mesh>(null)
-  const ringRef = useRef<THREE.Mesh>(null)
+  const horizontalRingRef = useRef<THREE.Mesh>(null)
+  const verticalRingRef = useRef<THREE.Mesh>(null)
   const { getAnalysis } = useAudioAnalyzer()
   const colorPreset = useVisualizerStore((s) => s.colorPreset)
   const glowIntensity = 0.2
@@ -43,6 +45,7 @@ export function AudioPortal() {
         orbitSpeed: speed,
         colorIndex: i % colors.length,
         zOffset: (Math.random() - 0.5) * 0.1,
+        lensedSign: Math.random() > 0.5 ? 1 : -1,
       })
     }
     return list
@@ -56,7 +59,7 @@ export function AudioPortal() {
   }, [])
 
   useFrame((state, delta) => {
-    if (!pointsRef.current || !coreRef.current || !ringRef.current) return
+    if (!pointsRef.current || !coreRef.current || !horizontalRingRef.current || !verticalRingRef.current) return
     const analysis = getAnalysis()
     const bass = analysis.bass
     const mid = analysis.mid
@@ -67,11 +70,16 @@ export function AudioPortal() {
     const coreScale = 1.0 + bass * 0.22
     coreRef.current.scale.setScalar(coreScale)
 
-    // Outer accretion boundary ring pulse
+    // Outer accretion boundary rings pulse
     const ringScale = 1.08 + bass * 0.28
-    ringRef.current.scale.setScalar(ringScale)
-    const ringMat = ringRef.current.material as THREE.MeshStandardMaterial
-    ringMat.emissiveIntensity = glowIntensity * 3 + bass * 2.5
+    horizontalRingRef.current.scale.setScalar(ringScale)
+    verticalRingRef.current.scale.setScalar(ringScale)
+
+    const hRingMat = horizontalRingRef.current.material as THREE.MeshStandardMaterial
+    const vRingMat = verticalRingRef.current.material as THREE.MeshStandardMaterial
+    const targetEmissive = glowIntensity * 3 + bass * 2.5
+    hRingMat.emissiveIntensity = targetEmissive
+    vRingMat.emissiveIntensity = targetEmissive
 
     // Swirl and pull particles
     const geom = pointsRef.current.geometry
@@ -100,9 +108,28 @@ export function AudioPortal() {
       // Add dynamic radial vibration on treble/highs
       const jitterRadius = p.radius + Math.sin(time * 15 + p.radius * 8) * treble * 0.15
       
-      const x = Math.cos(p.angle) * jitterRadius
-      const y = Math.sin(p.angle) * jitterRadius
-      const z = p.zOffset + Math.sin(p.angle * 3 + time * 2) * 0.08
+      // Normalize angle to [0, 2PI] for mapping
+      let angle = p.angle % (Math.PI * 2)
+      if (angle < 0) angle += Math.PI * 2
+
+      // Front vs Back mapping for gravitational lensing
+      const isFront = angle >= 0 && angle < Math.PI
+
+      let x = 0
+      let y = 0
+      let z = 0
+
+      if (isFront) {
+        // Front half: standard flat disk in horizontal X-Z plane, passing in front
+        x = Math.cos(angle) * jitterRadius
+        y = p.zOffset * 0.6 // minor vertical thickness
+        z = Math.sin(angle) * jitterRadius
+      } else {
+        // Back half: lensed vertical arches in X-Y plane (above/below event horizon)
+        x = Math.cos(angle) * jitterRadius
+        y = p.lensedSign * Math.sin(angle) * jitterRadius
+        z = Math.sin(angle) * jitterRadius * 0.08 + p.zOffset
+      }
 
       const i3 = i * 3
       posArr[i3] = x
@@ -126,7 +153,7 @@ export function AudioPortal() {
 
     // Adjust particle rendering points Material based on audio highs
     const pMat = pointsRef.current.material as THREE.PointsMaterial
-    pMat.size = 0.045 + treble * 0.04
+    pMat.size = 0.03 + treble * 0.03
   })
 
   return (
@@ -137,16 +164,29 @@ export function AudioPortal() {
         <meshBasicMaterial color="#020205" />
       </mesh>
 
-      {/* Accretion Boundary Glowing Ring */}
-      <mesh ref={ringRef} rotation={[0, 0, 0]}>
-        <torusGeometry args={[EVENT_HORIZON_RADIUS + 0.05, 0.04, 8, 64]} />
+      {/* Horizontal Accretion Boundary Glowing Ring (X-Z plane) */}
+      <mesh ref={horizontalRingRef} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[EVENT_HORIZON_RADIUS + 0.05, 0.03, 8, 64]} />
         <meshStandardMaterial
           color={colors[0]}
           emissive={colors[0]}
           emissiveIntensity={glowIntensity * 2.5}
           toneMapped={false}
           transparent
-          opacity={0.9}
+          opacity={0.8}
+        />
+      </mesh>
+
+      {/* Vertical Lensed Accretion Boundary Glowing Ring (X-Y plane) */}
+      <mesh ref={verticalRingRef} rotation={[0, 0, 0]}>
+        <torusGeometry args={[EVENT_HORIZON_RADIUS + 0.05, 0.03, 8, 64]} />
+        <meshStandardMaterial
+          color={colors[0]}
+          emissive={colors[0]}
+          emissiveIntensity={glowIntensity * 2.5}
+          toneMapped={false}
+          transparent
+          opacity={0.8}
         />
       </mesh>
 
@@ -157,7 +197,7 @@ export function AudioPortal() {
           <bufferAttribute attach="attributes-color" args={[initialColors, 3]} count={PARTICLE_COUNT} />
         </bufferGeometry>
         <pointsMaterial
-          size={0.05}
+          size={0.03}
           transparent
           opacity={0.8}
           sizeAttenuation
