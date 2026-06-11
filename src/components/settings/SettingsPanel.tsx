@@ -188,7 +188,6 @@ function SlidersSection() {
   const {
     sensitivity, setSensitivity,
     particleCount, setParticleCount,
-    glowIntensity, setGlowIntensity,
     rotationSpeed, setRotationSpeed,
   } = useVisualizerStore()
 
@@ -198,8 +197,6 @@ function SlidersSection() {
         display={`${sensitivity.toFixed(1)}x`} />
       <SliderRow label="Particles" value={particleCount} min={100} max={5000} step={100} onChange={setParticleCount}
         display={`${particleCount}`} />
-      <SliderRow label="Glow" value={glowIntensity} min={0} max={2} step={0.1} onChange={setGlowIntensity}
-        display={`${Math.round(glowIntensity * 50)}%`} />
       <SliderRow label="Rotation" value={rotationSpeed} min={0} max={2} step={0.1} onChange={setRotationSpeed}
         display={`${rotationSpeed.toFixed(1)}x`} />
     </div>
