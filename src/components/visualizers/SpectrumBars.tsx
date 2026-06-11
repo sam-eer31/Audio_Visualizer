@@ -33,7 +33,7 @@ export function SpectrumBars() {
 
       const x = (i - BAR_COUNT / 2) * 0.25
       dummy.position.set(x, height / 2, 0)
-      dummy.scale.set(0.18, height, 0.18)
+      dummy.scale.set(0.18, height, 0.01)
       dummy.updateMatrix()
       meshRef.current.setMatrixAt(i, dummy.matrix)
 
