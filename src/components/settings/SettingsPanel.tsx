@@ -153,7 +153,7 @@ function ColorSection() {
 function BackgroundSection() {
   const { backgroundPreset, setBackgroundPreset } = useVisualizerStore()
   return (
-    <div className="flex flex-col gap-2">
+    <div className="grid grid-cols-2 gap-2">
       {BACKGROUND_PRESETS.map((p) => {
         const active = backgroundPreset === p.id
         return (
@@ -161,18 +161,18 @@ function BackgroundSection() {
             key={p.id}
             onClick={() => setBackgroundPreset(p.id)}
             className={cn(
-              'flex items-center rounded-xl border transition-all duration-200 w-full text-left p-2 gap-2.5 sm:p-2.5 sm:gap-3',
+              'flex items-center rounded-xl border transition-all duration-200 w-full text-left p-2 gap-2 sm:p-2.5 sm:gap-2.5',
               active
                 ? 'border-primary/50 ring-1 ring-primary/20'
                 : 'border-white/[0.06] hover:border-white/[0.12]'
             )}
           >
             <div
-              className="h-6 w-9 sm:h-8 sm:w-12 rounded-lg shrink-0 ring-1 ring-inset ring-black/[0.1] border border-white/[0.08]"
+              className="h-6 w-8 sm:h-7 sm:w-10 rounded-lg shrink-0 ring-1 ring-inset ring-black/[0.1] border border-white/[0.08]"
               style={{ background: p.gradient || p.color }}
             />
             <span className={cn(
-              'text-[11px] sm:text-[12px] font-semibold',
+              'text-[10px] sm:text-[11px] font-semibold leading-tight truncate',
               active ? 'text-foreground' : 'text-muted-foreground'
             )}>
               {p.name}
