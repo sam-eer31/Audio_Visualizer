@@ -7,13 +7,13 @@
 </div>
 
 ---
-
+<div align="center">
 ## ⚡ Start Creating Now - No Installation Required!
 
 ### **👉 [OPEN AUDRIX](https://audio-visualizer-teal-two.vercel.app) 👈**
 
 **Transform your audio into stunning 3D visualizations. Upload audio, choose visualization, customize effects, and export professional videos—all in your browser!**
-
+</div>
 ---
 
 <div align="center">
