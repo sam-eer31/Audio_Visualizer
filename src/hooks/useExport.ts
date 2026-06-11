@@ -100,6 +100,9 @@ export function useExport() {
       setProgress(0)
       setError(null)
 
+      const originalLoop = audioElement.loop
+      audioElement.loop = false
+
       // Wait a tick for the DPR-inflation effect to kick in
       const targetRes = RESOLUTION_MAP[resolution]
       const encWidth = targetRes.width
@@ -241,6 +244,7 @@ export function useExport() {
         setCancelExport(null)
         setExportSnapshot(null)
         audioElement.pause()
+        audioElement.loop = originalLoop
         await audioReader.cancel().catch(() => {})
 
         unmuteSpeakers()
@@ -283,6 +287,7 @@ export function useExport() {
         setCancelExport(null)
         setExportSnapshot(null)
         audioElement.pause()
+        audioElement.loop = originalLoop
         await audioReader.cancel().catch(() => {})
 
         unmuteSpeakers()

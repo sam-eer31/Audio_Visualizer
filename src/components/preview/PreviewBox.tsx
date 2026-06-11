@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Expand, Shrink, Upload, Play, Pause, Square, Volume2, VolumeX, FileAudio, Loader2 } from 'lucide-react'
+import { Expand, Shrink, Upload, Play, Pause, Square, Volume2, VolumeX, FileAudio, Loader2, Repeat } from 'lucide-react'
 import { useUIStore } from '@/stores/uiStore'
 import { useAudioStore } from '@/stores/audioStore'
 import { useAudioControls } from '@/hooks/useAudioControls'
@@ -254,7 +254,7 @@ function EmptyUploadBox({ dark }: { dark: boolean }) {
 }
 
 export function PlayerBar() {
-  const { audioFile, playbackState, currentTime, duration, volume, play, pause, stop, seek, setVolume } = useAudioControls()
+  const { audioFile, playbackState, currentTime, duration, volume, loop, play, pause, stop, seek, setVolume, toggleLoop } = useAudioControls()
   const expanded = useUIStore((s) => s.expanded)
   const theme = useUIStore((s) => s.theme)
   const darkBg = theme === 'dark'
@@ -364,6 +364,20 @@ export function PlayerBar() {
         {/* Playback controls */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           <button
+            onClick={toggleLoop}
+            className={cn(
+              "h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center transition-all",
+              loop
+                ? "text-primary hover:bg-primary/10"
+                : (darkBg
+                    ? "text-white/30 hover:text-white/70 hover:bg-white/[0.06]"
+                    : "text-black/30 hover:text-black/60 hover:bg-black/[0.04]")
+            )}
+            title={loop ? "Disable Loop" : "Enable Loop"}
+          >
+            <Repeat className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+          </button>
+          <button
             onClick={stop}
             disabled={playbackState === 'idle' || playbackState === 'stopped'}
             className={cn(
@@ -372,6 +386,7 @@ export function PlayerBar() {
                 ? "text-white/30 hover:text-white/70 hover:bg-white/[0.06] disabled:hover:bg-transparent disabled:hover:text-white/30"
                 : "text-black/30 hover:text-black/60 hover:bg-black/[0.04] disabled:hover:bg-transparent disabled:hover:text-black/30"
             )}
+            title="Stop"
           >
             <Square className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
           </button>

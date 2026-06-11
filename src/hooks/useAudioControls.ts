@@ -10,6 +10,7 @@ export function useAudioControls() {
     audioFile,
     playbackState,
     volume,
+    loop,
     audioContext,
     analyserNode,
     gainNode,
@@ -20,6 +21,7 @@ export function useAudioControls() {
     setPlaybackState,
     setDuration,
     setCurrentTime,
+    setLoop,
     setAudioContext,
     setAnalyserNode,
     setGainNode,
@@ -103,6 +105,7 @@ export function useAudioControls() {
         const audio = new Audio(url)
         audio.crossOrigin = 'anonymous'
         audio.volume = 1
+        audio.loop = useAudioStore.getState().loop
 
         await new Promise<void>((resolve, reject) => {
           audio.addEventListener('canplaythrough', () => resolve(), { once: true })
@@ -202,17 +205,27 @@ export function useAudioControls() {
     }
   }, [])
 
+  const toggleLoop = useCallback(() => {
+    const nextLoop = !loop
+    setLoop(nextLoop)
+    if (audioElement) {
+      audioElement.loop = nextLoop
+    }
+  }, [loop, audioElement, setLoop])
+
   return {
     audioFile,
     playbackState,
     currentTime: useAudioStore((s) => s.currentTime),
     duration: useAudioStore((s) => s.duration),
     volume: useAudioStore((s) => s.volume),
+    loop,
     loadFile,
     play,
     pause,
     stop,
     seek,
     setVolume: setVolumeLevel,
+    toggleLoop,
   }
 }

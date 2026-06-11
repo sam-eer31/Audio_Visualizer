@@ -7,6 +7,7 @@ interface AudioStore {
   currentTime: number
   duration: number
   volume: number
+  loop: boolean
   audioContext: AudioContext | null
   analyserNode: AnalyserNode | null
   sourceNode: AudioBufferSourceNode | MediaElementAudioSourceNode | null
@@ -19,6 +20,7 @@ interface AudioStore {
   setCurrentTime: (time: number) => void
   setDuration: (duration: number) => void
   setVolume: (volume: number) => void
+  setLoop: (loop: boolean) => void
   setAudioContext: (ctx: AudioContext | null) => void
   setAnalyserNode: (node: AnalyserNode | null) => void
   setSourceNode: (node: AudioBufferSourceNode | MediaElementAudioSourceNode | null) => void
@@ -35,6 +37,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   currentTime: 0,
   duration: 0,
   volume: 0.75,
+  loop: true,
   audioContext: null,
   analyserNode: null,
   sourceNode: null,
@@ -47,6 +50,7 @@ export const useAudioStore = create<AudioStore>((set) => ({
   setCurrentTime: (time) => set({ currentTime: time }),
   setDuration: (duration) => set({ duration }),
   setVolume: (volume) => set({ volume }),
+  setLoop: (loop) => set({ loop }),
   setAudioContext: (ctx) => set({ audioContext: ctx }),
   setAnalyserNode: (node) => set({ analyserNode: node }),
   setSourceNode: (node) => set({ sourceNode: node }),
@@ -61,5 +65,6 @@ export const useAudioStore = create<AudioStore>((set) => ({
       currentTime: 0,
       duration: 0,
       isLoading: false,
+      loop: true,
     }),
 }))
