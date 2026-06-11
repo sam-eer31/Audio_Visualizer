@@ -3,8 +3,20 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { useVisualizerStore } from '@/stores/visualizerStore'
 import { useExportStore } from '@/stores/exportStore'
+import { useUIStore } from '@/stores/uiStore'
+import { BACKGROUND_PRESETS } from '@/lib/constants'
 import { RESOLUTION_MAP } from '@/types'
 import { RotateCcw } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+function isColorDark(hex: string): boolean {
+  const c = hex.replace('#', '')
+  const r = parseInt(c.substring(0, 2), 16)
+  const g = parseInt(c.substring(2, 4), 16)
+  const b = parseInt(c.substring(4, 6), 16)
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return luminance < 0.5
+}
 
 const SpectrumBars = lazy(() => import('./SpectrumBars').then((m) => ({ default: m.SpectrumBars })))
 const CircularSpectrum = lazy(() => import('./CircularSpectrum').then((m) => ({ default: m.CircularSpectrum })))
@@ -51,7 +63,12 @@ export function VisualizerCanvas() {
   const mode = useVisualizerStore((s) => s.mode)
   const isExporting = useExportStore((s) => s.isExporting)
   const resolution = useExportStore((s) => s.resolution)
+  const expanded = useUIStore((s) => s.expanded)
+  const backgroundPreset = useVisualizerStore((s) => s.backgroundPreset)
   
+  const bg = BACKGROUND_PRESETS.find((b) => b.id === backgroundPreset) || BACKGROUND_PRESETS[0]
+  const darkBg = bg.textColor ? false : isColorDark(bg.color)
+
   const VisualizerComponent = VISUALIZER_MAP[mode]
   const controlsRef = useRef<any>(null)
   const [dpr, setDpr] = useState<number | [number, number]>([1, 2])
@@ -108,13 +125,23 @@ export function VisualizerCanvas() {
       </Canvas>
 
       {/* Reset Rotation Button */}
-      <button
-        onClick={() => controlsRef.current?.reset()}
-        className="absolute top-3 left-3 z-20 h-8 w-8 rounded-lg bg-black/20 hover:bg-black/40 text-white/70 hover:text-white flex items-center justify-center backdrop-blur-md transition-all border border-white/10 shadow-lg"
-        title="Reset 3D Rotation"
-      >
-        <RotateCcw className="h-3.5 w-3.5" />
-      </button>
+      {!isExporting && (
+        <button
+          onClick={() => controlsRef.current?.reset()}
+          className={cn(
+            "absolute z-20 h-8 w-8 rounded-lg flex items-center justify-center backdrop-blur-md transition-all shadow-md",
+            expanded 
+              ? "bottom-20 sm:bottom-28 left-4 sm:left-6" 
+              : "bottom-3 left-3",
+            darkBg
+              ? "bg-black/20 hover:bg-black/40 text-white/70 hover:text-white border border-white/10"
+              : "bg-white/70 hover:bg-white/90 text-black/60 hover:text-black border border-black/10"
+          )}
+          title="Reset 3D Rotation"
+        >
+          <RotateCcw className="h-3.5 w-3.5" />
+        </button>
+      )}
     </div>
   )
 }

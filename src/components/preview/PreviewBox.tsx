@@ -62,10 +62,10 @@ export function PreviewBox() {
           <button
             onClick={() => setExpanded(false)}
             className={cn(
-              "absolute top-3 right-3 z-20 h-9 w-9 rounded-xl glass flex items-center justify-center transition-all",
+              "absolute top-3 right-3 z-20 h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-md transition-all shadow-md",
               darkBg
-                ? "text-white/70 hover:text-white hover:bg-white/10"
-                : "text-black/50 hover:text-black/80 hover:bg-black/10"
+                ? "bg-black/20 hover:bg-black/40 text-white/70 hover:text-white border border-white/10"
+                : "bg-white/70 hover:bg-white/90 text-black/60 hover:text-black border border-black/10"
             )}
           >
             <Shrink className="h-4 w-4" />
@@ -111,10 +111,10 @@ export function PreviewBox() {
                   <button
                     onClick={() => setExpanded(true)}
                     className={cn(
-                      "absolute top-2 right-2 z-10 h-8 w-8 rounded-lg glass flex items-center justify-center transition-all",
+                      "absolute bottom-3 right-3 z-10 h-8 w-8 rounded-lg flex items-center justify-center backdrop-blur-md transition-all shadow-md",
                       darkBg
-                        ? "text-white/60 hover:text-white hover:bg-white/10"
-                        : "text-black/40 hover:text-black/70 hover:bg-black/10"
+                        ? "bg-black/20 hover:bg-black/40 text-white/70 hover:text-white border border-white/10"
+                        : "bg-white/70 hover:bg-white/90 text-black/60 hover:text-black border border-black/10"
                     )}
                   >
                     <Expand className="h-3.5 w-3.5" />
