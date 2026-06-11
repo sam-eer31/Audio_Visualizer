@@ -1,5 +1,5 @@
 import { Suspense, lazy, useRef, useEffect, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { useVisualizerStore } from '@/stores/visualizerStore'
 import { useExportStore } from '@/stores/exportStore'
@@ -55,6 +55,33 @@ function ExportFrameCapturer() {
       onFrame(state.gl.domElement)
     }
   }, 1)
+
+  return null
+}
+
+function CameraController({ controlsRef }: { controlsRef: React.RefObject<any> }) {
+  const { camera, size } = useThree()
+
+  useEffect(() => {
+    const aspect = size.width / size.height
+    // Base camera distance is 8
+    // If screen is vertical or narrow (aspect < 1.25), scale distance to keep the model fully visible and centered
+    let targetDistance = 8
+    if (aspect < 1.25) {
+      targetDistance = 8 * (1.25 / aspect)
+    }
+
+    const currentDistance = camera.position.length()
+    if (currentDistance > 0) {
+      // Scale current position vector to match targetDistance while preserving orientation
+      camera.position.multiplyScalar(targetDistance / currentDistance)
+    }
+    camera.updateProjectionMatrix()
+
+    if (controlsRef.current) {
+      controlsRef.current.update()
+    }
+  }, [size.width, size.height, camera, controlsRef])
 
   return null
 }
@@ -121,6 +148,7 @@ export function VisualizerCanvas() {
           maxDistance={20}
           minDistance={3}
         />
+        <CameraController controlsRef={controlsRef} />
         {isExporting && <ExportFrameCapturer />}
       </Canvas>
 
