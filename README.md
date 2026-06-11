@@ -3,7 +3,7 @@
   
 ---
   
-  [![Live App](https://img.shields.io/badge/🚀_OPEN_APP-Start_Creating-FF6B6B?style=for-the-badge&labelColor=1a1a2e)](https://audio-visualizer-teal-two.vercel.app)
+  [![Live App](https://img.shields.io/badge/🚀_OPEN_APP-Start_Creating-FF6B6B?style=for-the-badge&labelColor=1a1a2e)](https://audrix.vercel.app)
 </div>
 
 ---
@@ -12,7 +12,7 @@
   
 ## Start Creating Now - No Installation Required!
 
-### **👉 [OPEN AUDRIX](https://audio-visualizer-teal-two.vercel.app) 👈**
+### **👉 [OPEN AUDRIX](https://audrix.vercel.app) 👈**
 
 **Transform your audio into stunning 3D visualizations. Upload audio, choose visualization, customize effects, and export professional videos—all in your browser!**
 </div>
@@ -100,7 +100,7 @@ Choose from 12 immersive, real-time 3D visualizations that react dynamically to 
 ## 🚀 Getting Started
 
 ### Option 1: Use Online (Instant - No Installation)
-👉 **[Open Audrix](https://audio-visualizer-teal-two.vercel.app)** ← Click to Start Creating!
+👉 **[Open Audrix](https://audrix.vercel.app)** ← Click to Start Creating!
 
 1. Upload your audio file
 2. Select a visualization mode
@@ -359,13 +359,13 @@ Simply include the license notice in any distribution.
 
 - **Report Issues** – [GitHub Issues](https://github.com/sam-eer31/Audio_Visualizer/issues)
 - **Discussions** – [GitHub Discussions](https://github.com/sam-eer31/Audio_Visualizer/discussions)
-- **Live Application** – [https://audio-visualizer-teal-two.vercel.app](https://audio-visualizer-teal-two.vercel.app)
+- **Live Application** – [https://audrix.vercel.app](https://audrix.vercel.app)
 
 ---
 
 <div align="center">
 
-### 👉 **[START CREATING NOW](https://audio-visualizer-teal-two.vercel.app)** 👈
+### 👉 **[START CREATING NOW](https://audrix.vercel.app)** 👈
 
 **Made with ❤️ by [sam-eer31](https://github.com/sam-eer31)**
 
