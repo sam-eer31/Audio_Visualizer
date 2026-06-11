@@ -27,12 +27,12 @@ export function FuturisticOrb() {
 
   // Orbital particles
   const particleData = useMemo(() => {
-    const count = 200
+    const count = 600
     const positions = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
-      const r = 3.2 + Math.random() * 0.8
+      const r = 2.8 + Math.random() * 1.2
       positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
       positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
       positions[i * 3 + 2] = r * Math.cos(phi)
@@ -62,69 +62,89 @@ export function FuturisticOrb() {
     // Slow group rotation
     groupRef.current.rotation.y += delta * rotationSpeed * 0.2
 
-    // Core sphere: pulse with bass
+    // Core sphere: warp along X, Y, Z axes independently for organic deformation
     if (coreRef.current) {
-      const coreScale = 1.0 + bass * 0.3 + Math.sin(t * 1.5) * 0.02
-      coreRef.current.scale.setScalar(coreScale)
+      const scaleX = 1.0 + bass * 0.45 + Math.sin(t * 4.5) * 0.12 * treble
+      const scaleY = 1.0 + mid * 0.45 + Math.cos(t * 3.8) * 0.12 * bass
+      const scaleZ = 1.0 + treble * 0.45 + Math.sin(t * 5.2) * 0.12 * mid
+      coreRef.current.scale.set(scaleX, scaleY, scaleZ)
+
       const mat = coreRef.current.material as THREE.MeshStandardMaterial
-      mat.emissiveIntensity = glowIntensity * 1.5 + bass * 2
+      mat.emissiveIntensity = glowIntensity * 1.5 + bass * 4.5
     }
 
-    // Glow shell: slightly larger, pulses opposite
+    // Glow shell: pulses and warps slightly outer, showing shell volume
     if (glowRef.current) {
-      const glowScale = 1.05 + bass * 0.35 + Math.sin(t * 1.2) * 0.03
-      glowRef.current.scale.setScalar(glowScale)
+      const scaleX = 1.06 + bass * 0.52 + Math.sin(t * 3.5) * 0.15
+      const scaleY = 1.06 + mid * 0.52 + Math.cos(t * 4.2) * 0.15
+      const scaleZ = 1.06 + treble * 0.52 + Math.sin(t * 2.8) * 0.15
+      glowRef.current.scale.set(scaleX, scaleY, scaleZ)
+
       const mat = glowRef.current.material as THREE.MeshStandardMaterial
-      mat.opacity = 0.08 + bass * 0.15 + mid * 0.05
-      mat.emissiveIntensity = glowIntensity * 2 + bass * 3
+      mat.opacity = 0.05 + bass * 0.28 + mid * 0.12
+      mat.emissiveIntensity = glowIntensity * 2.0 + bass * 5.0
     }
 
-    // Wireframe shell: rotates independently, reacts to mid
+    // Wireframe shell: complex spin, scales with mids
     if (wireRef.current) {
-      wireRef.current.rotation.x += delta * 0.15
-      wireRef.current.rotation.z += delta * 0.1
-      const wireScale = 1.15 + mid * 0.25
-      wireRef.current.scale.setScalar(wireScale)
+      wireRef.current.rotation.x += delta * (0.3 + mid * 1.2)
+      wireRef.current.rotation.y -= delta * (0.25 + bass * 0.8)
+      wireRef.current.rotation.z += delta * (0.15 + treble * 1.5)
+
+      const scaleX = 1.15 + mid * 0.45 + Math.sin(t * 6.0) * 0.05
+      const scaleY = 1.15 + treble * 0.45 + Math.cos(t * 5.0) * 0.05
+      const scaleZ = 1.15 + bass * 0.45 + Math.sin(t * 4.0) * 0.05
+      wireRef.current.scale.set(scaleX, scaleY, scaleZ)
+
       const mat = wireRef.current.material as THREE.MeshStandardMaterial
-      mat.opacity = 0.15 + mid * 0.3
-      mat.emissiveIntensity = glowIntensity + mid * 2
+      mat.opacity = 0.1 + mid * 0.45
+      mat.emissiveIntensity = glowIntensity + mid * 3.5
     }
 
-    // Ring 1: horizontal orbit, reacts to bass
+    // Ring 1: horizontal orbit base, precesses/wobbles on multiple axes
     if (ring1Ref.current) {
-      ring1Ref.current.rotation.z += delta * 0.6
-      const ringScale = 1.0 + bass * 0.2
+      ring1Ref.current.rotation.x += delta * (0.3 + bass * 1.8)
+      ring1Ref.current.rotation.y += delta * (0.2 + mid * 0.8)
+      const ringScale = 1.0 + bass * 0.35
       ring1Ref.current.scale.setScalar(ringScale)
       const mat = ring1Ref.current.material as THREE.MeshStandardMaterial
-      mat.opacity = 0.25 + bass * 0.4
-      mat.emissiveIntensity = glowIntensity * 1.5 + bass * 2
+      mat.opacity = 0.2 + bass * 0.5
+      mat.emissiveIntensity = glowIntensity * 1.5 + bass * 4.0
     }
 
-    // Ring 2: tilted orbit, reacts to mid
+    // Ring 2: tilted orbit base, spins dynamically
     if (ring2Ref.current) {
-      ring2Ref.current.rotation.z -= delta * 0.4
+      ring2Ref.current.rotation.y -= delta * (0.25 + mid * 1.6)
+      ring2Ref.current.rotation.z += delta * (0.15 + treble * 1.0)
+      const ringScale = 1.0 + mid * 0.3
+      ring2Ref.current.scale.setScalar(ringScale)
       const mat = ring2Ref.current.material as THREE.MeshStandardMaterial
-      mat.opacity = 0.2 + mid * 0.35
-      mat.emissiveIntensity = glowIntensity * 1.2 + mid * 2
+      mat.opacity = 0.15 + mid * 0.45
+      mat.emissiveIntensity = glowIntensity * 1.2 + mid * 3.5
     }
 
-    // Ring 3: vertical orbit, reacts to treble
+    // Ring 3: vertical orbit base, reacts to high-frequency sparks
     if (ring3Ref.current) {
-      ring3Ref.current.rotation.z += delta * 0.8
+      ring3Ref.current.rotation.x -= delta * (0.2 + treble * 2.2)
+      ring3Ref.current.rotation.z -= delta * (0.3 + bass * 1.0)
+      const ringScale = 1.0 + treble * 0.4
+      ring3Ref.current.scale.setScalar(ringScale)
       const mat = ring3Ref.current.material as THREE.MeshStandardMaterial
-      mat.opacity = 0.15 + treble * 0.4
-      mat.emissiveIntensity = glowIntensity + treble * 2.5
+      mat.opacity = 0.1 + treble * 0.5
+      mat.emissiveIntensity = glowIntensity + treble * 4.5
     }
 
-    // Particles: expand/contract with audio
+    // Particles: chaotic orbital swirl reacting strongly to all frequency bands
     if (particlesRef.current) {
-      particlesRef.current.rotation.y += delta * 0.08
-      particlesRef.current.rotation.x += delta * 0.03
-      const pScale = 1.0 + bass * 0.15 + mid * 0.1
+      particlesRef.current.rotation.y += delta * (0.15 + treble * 2.0)
+      particlesRef.current.rotation.x += delta * (0.08 + mid * 1.0)
+      particlesRef.current.rotation.z -= delta * (0.05 + bass * 0.5)
+
+      const pScale = 1.0 + bass * 0.3 + mid * 0.2
       particlesRef.current.scale.setScalar(pScale)
       const mat = particlesRef.current.material as THREE.PointsMaterial
-      mat.size = 0.04 + treble * 0.06
-      mat.opacity = 0.4 + mid * 0.4
+      mat.size = 0.035 + treble * 0.085
+      mat.opacity = 0.3 + mid * 0.55
     }
   })
 
