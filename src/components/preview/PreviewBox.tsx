@@ -150,44 +150,41 @@ function EmptyUploadBox({ dark }: { dark: boolean }) {
   const fileRef = useRef<HTMLInputElement>(null)
 
   return (
-    <div className="h-full flex flex-col items-center justify-center" style={{ padding: '40px 32px' }}>
+    <div className="h-full flex flex-col items-center justify-center p-3.5 sm:p-6 md:p-8">
       <div
         className={cn(
-          "w-full max-w-[320px] flex flex-col items-center rounded-2xl border-2 border-dashed transition-colors cursor-pointer",
+          "w-full max-w-[320px] flex flex-col items-center rounded-2xl border-2 border-dashed transition-colors cursor-pointer p-4 sm:p-6 md:p-8",
           dark ? "border-white/[0.08] hover:border-primary/30" : "border-black/[0.12] hover:border-primary/40"
         )}
-        style={{ padding: '36px 28px' }}
         onClick={() => fileRef.current?.click()}
       >
         {/* Icon */}
         <div
           className={cn(
-            "rounded-2xl flex items-center justify-center",
+            "rounded-2xl flex items-center justify-center shrink-0 mb-3 sm:mb-5 w-11 h-11 sm:w-16 sm:h-16",
             dark
               ? "bg-gradient-to-br from-rose-500/10 to-pink-600/10 border border-rose-500/[0.08]"
               : "bg-gradient-to-br from-rose-500/10 to-pink-600/10 border border-rose-500/20"
           )}
-          style={{ width: '64px', height: '64px', marginBottom: '20px' }}
         >
-          <Upload className={cn("h-7 w-7", dark ? "text-rose-400/60" : "text-rose-500/70")} />
+          <Upload className={cn("h-5 w-5 sm:h-7 sm:w-7", dark ? "text-rose-400/60" : "text-rose-500/70")} />
         </div>
 
         {/* Text */}
-        <p className="text-[14px] font-semibold text-center leading-tight" style={{ color: dark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)' }}>Drop your audio file here</p>
-        <p className="text-[11px] text-center mt-1.5" style={{ color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.45)' }}>or click anywhere in this box to browse</p>
+        <p className="text-[12px] sm:text-[14px] font-semibold text-center leading-tight" style={{ color: dark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)' }}>Drop your audio file here</p>
+        <p className="text-[10px] sm:text-[11px] text-center mt-1 sm:mt-1.5" style={{ color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.45)' }}>or click anywhere in this box to browse</p>
 
         {/* CTA Button */}
         <button
           onClick={(e) => { e.stopPropagation(); fileRef.current?.click() }}
-          className="rounded-xl bg-primary text-primary-foreground text-[12px] font-semibold flex items-center shadow-lg shadow-primary/20 hover:shadow-primary/35 hover:scale-[1.02] transition-all active:scale-[0.97]"
-          style={{ padding: '10px 22px', gap: '8px', marginTop: '20px' }}
+          className="rounded-xl bg-primary text-primary-foreground text-[10px] sm:text-[12px] font-semibold flex items-center shadow-lg shadow-primary/20 hover:shadow-primary/35 hover:scale-[1.02] transition-all active:scale-[0.97] mt-3 sm:mt-5 px-4 py-1.5 sm:px-5.5 sm:py-2.5 gap-1.5 sm:gap-2"
         >
-          <Upload className="h-4 w-4" />
+          <Upload className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
           Choose File
         </button>
 
         {/* Supported formats */}
-        <div className="flex items-center" style={{ gap: '6px', marginTop: '18px' }}>
+        <div className="hidden sm:flex items-center gap-1.5 mt-4">
           {['MP3', 'WAV', 'M4A', 'OGG', 'AAC'].map((f) => (
             <span
               key={f}
