@@ -2,7 +2,7 @@ import { useCallback, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Music2, Upload, Sun, Moon } from 'lucide-react'
 import { SettingsPanel } from '@/components/settings/SettingsPanel'
-import { PreviewBox } from '@/components/preview/PreviewBox'
+import { PreviewBox, PlayerBar } from '@/components/preview/PreviewBox'
 import { ExportBar } from '@/components/export/ExportBar'
 import { ToastContainer } from '@/components/ui/toast'
 import { useAudioStore } from '@/stores/audioStore'
@@ -114,16 +114,24 @@ export function AppLayout() {
       </header>
 
       {/* Main content - fills remaining height */}
-      <div className="flex-1 flex flex-col min-h-0 app-layout-padding" style={{ paddingTop: '24px', paddingBottom: '20px' }}>
+      <div className="flex-1 flex flex-col min-h-0 app-layout-padding pt-3 sm:pt-6 pb-5">
 
         {/* ===== MOBILE LAYOUT (below lg) ===== */}
-        <div className="flex-1 flex flex-col lg:hidden gap-5 overflow-y-auto min-h-0 relative">
+        <div className="flex-1 flex flex-col lg:hidden gap-3.5 overflow-y-auto min-h-0 relative">
           {/* Preview first - Sticky on mobile */}
-          <div className="shrink-0 sticky top-0 z-30 bg-background pt-1 pb-4 -mt-1 -mb-4">
-            <div className="min-h-[280px] h-[40vh] max-h-[400px]">
+          <div className="shrink-0 sticky top-0 z-30 bg-background pt-1 pb-3 -mt-1 -mb-3">
+            <div className="min-h-[200px] h-[30vh] max-h-[300px]">
               <PreviewBox />
             </div>
           </div>
+
+          {/* Audio Controller - Scrollable on mobile */}
+          {audioFile && (
+            <div className="shrink-0">
+              <PlayerBar />
+            </div>
+          )}
+
           {/* Settings */}
           <div className="glass rounded-2xl shrink-0 p-4 sm:p-5">
             <SettingsPanel />

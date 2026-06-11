@@ -91,19 +91,11 @@ export function PreviewBox() {
             )}
           </div>
 
-          {/* Player controls below preview */}
+          {/* Player controls below preview - desktop only */}
           {audioFile && (
-            <>
-              <style>{`
-                .player-bar-gap { margin-top: 12px; }
-                @media (min-width: 1024px) {
-                  .player-bar-gap { margin-top: 24px; }
-                }
-              `}</style>
-              <div className="player-bar-gap shrink-0">
-                <PlayerBar />
-              </div>
-            </>
+            <div className="hidden lg:block mt-4 sm:mt-5 shrink-0">
+              <PlayerBar />
+            </div>
           )}
         </motion.div>
       )}
@@ -182,7 +174,7 @@ function EmptyUploadBox({ dark }: { dark: boolean }) {
   )
 }
 
-function PlayerBar() {
+export function PlayerBar() {
   const { audioFile, playbackState, currentTime, duration, volume, play, pause, stop, seek, setVolume } = useAudioControls()
   const expanded = useUIStore((s) => s.expanded)
   const theme = useUIStore((s) => s.theme)
