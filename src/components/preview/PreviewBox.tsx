@@ -148,6 +148,24 @@ export function PreviewBox() {
 function EmptyUploadBox({ dark }: { dark: boolean }) {
   const { loadFile } = useAudioControls()
   const fileRef = useRef<HTMLInputElement>(null)
+  const [isLoadingSample, setIsLoadingSample] = useState(false)
+  const addToast = useUIStore((s) => s.addToast)
+
+  const handleLoadSample = async () => {
+    try {
+      setIsLoadingSample(true)
+      const response = await fetch('/sample.mp3')
+      if (!response.ok) throw new Error('Sample audio file not found on server')
+      const blob = await response.blob()
+      const file = new File([blob], 'sample.mp3', { type: 'audio/mpeg' })
+      await loadFile(file)
+    } catch (err) {
+      console.error(err)
+      addToast('Failed to load sample audio.', 'error')
+    } finally {
+      setIsLoadingSample(false)
+    }
+  }
 
   return (
     <div className="h-full flex flex-col items-center justify-center p-3.5 sm:p-6 md:p-8">
@@ -174,14 +192,37 @@ function EmptyUploadBox({ dark }: { dark: boolean }) {
         <p className="text-[12px] sm:text-[14px] font-semibold text-center leading-tight" style={{ color: dark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)' }}>Drop your audio file here</p>
         <p className="text-[10px] sm:text-[11px] text-center mt-1 sm:mt-1.5" style={{ color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.45)' }}>or click anywhere in this box to browse</p>
 
-        {/* CTA Button */}
-        <button
-          onClick={(e) => { e.stopPropagation(); fileRef.current?.click() }}
-          className="rounded-xl bg-primary text-primary-foreground text-[10px] sm:text-[12px] font-semibold flex items-center shadow-lg shadow-primary/20 hover:shadow-primary/35 hover:scale-[1.02] transition-all active:scale-[0.97] mt-3 sm:mt-5 px-4 py-1.5 sm:px-5.5 sm:py-2.5 gap-1.5 sm:gap-2"
-        >
-          <Upload className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-          Choose File
-        </button>
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center gap-2.5 mt-3 sm:mt-5 w-full justify-center">
+          <button
+            onClick={(e) => { e.stopPropagation(); fileRef.current?.click() }}
+            className="w-full sm:w-auto rounded-xl bg-primary text-primary-foreground text-[10px] sm:text-[12px] font-semibold flex items-center justify-center shadow-lg shadow-primary/20 hover:shadow-primary/35 hover:scale-[1.02] transition-all active:scale-[0.97] px-4 py-1.5 sm:px-5.5 sm:py-2.5 gap-1.5 sm:gap-2"
+          >
+            <Upload className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            Choose File
+          </button>
+          
+          <button
+            onClick={async (e) => {
+              e.stopPropagation()
+              await handleLoadSample()
+            }}
+            disabled={isLoadingSample}
+            className={cn(
+              "w-full sm:w-auto rounded-xl text-[10px] sm:text-[12px] font-semibold flex items-center justify-center border transition-all active:scale-[0.97] px-4 py-1.5 sm:px-5.5 sm:py-2.5 gap-1.5 sm:gap-2",
+              dark
+                ? "bg-white/5 hover:bg-white/10 text-white/90 border-white/10 hover:border-white/20"
+                : "bg-black/5 hover:bg-black/10 text-black/90 border-black/10 hover:border-black/20"
+            )}
+          >
+            {isLoadingSample ? (
+              <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin text-muted-foreground" />
+            ) : (
+              <FileAudio className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-rose-500/80" />
+            )}
+            Use Sample Audio
+          </button>
+        </div>
 
         {/* Supported formats */}
         <div className="hidden sm:flex items-center gap-1.5 mt-4">
