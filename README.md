@@ -8,6 +8,7 @@
 
 ---
 <div align="center">
+  
 ## ⚡ Start Creating Now - No Installation Required!
 
 ### **👉 [OPEN AUDRIX](https://audio-visualizer-teal-two.vercel.app) 👈**
