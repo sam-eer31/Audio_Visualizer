@@ -1,11 +1,13 @@
 <div align="center">
   <img src="public/logo.png" alt="Audrix Logo" width="160" />
+  
 ---
   
   [![Live App](https://img.shields.io/badge/🚀_OPEN_APP-Start_Creating-FF6B6B?style=for-the-badge&labelColor=1a1a2e)](https://audio-visualizer-teal-two.vercel.app)
 </div>
 
 ---
+
 <div align="center">
   
 ## ⚡ Start Creating Now - No Installation Required!
@@ -14,6 +16,7 @@
 
 **Transform your audio into stunning 3D visualizations. Upload audio, choose visualization, customize effects, and export professional videos—all in your browser!**
 </div>
+
 ---
 
 <div align="center">
