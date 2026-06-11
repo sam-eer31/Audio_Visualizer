@@ -126,7 +126,7 @@ export function useExport() {
         video: { codec: videoCfg.codec.startsWith('vp09') ? 'vp9' : 'avc', width: encWidth, height: encHeight },
         audio: { codec: 'aac', sampleRate: 48000, numberOfChannels: 2 },
         fastStart: false,
-        firstTimestampBehavior: 'offset',
+        firstTimestampBehavior: 'cross-track-offset',
       })
 
       // ─── Video encoder ───────────────────────────────────────
@@ -151,10 +151,17 @@ export function useExport() {
       const audioProcessor = new (window as any).MediaStreamTrackProcessor({ track: audioTrack })
       const audioReader = audioProcessor.readable.getReader()
 
+      let firstAudioTimestampUs: number | null = null
+      let firstAudioTimeMs = 0
       let stopped = false
+
       function pumpAudio() {
         audioReader.read().then(({ done, value }: any) => {
           if (value) {
+            if (firstAudioTimestampUs === null) {
+              firstAudioTimestampUs = value.timestamp
+              firstAudioTimeMs = performance.now()
+            }
             if (!stopped && audioEncoder.state === 'configured') audioEncoder.encode(value)
             value.close()
           }
@@ -170,6 +177,7 @@ export function useExport() {
       const onR3FFrame = (canvasElement: HTMLCanvasElement) => {
         if (stopped) return
         if (videoEncoder.state !== 'configured') return
+        if (firstAudioTimestampUs === null) return // Wait for audio stream to start
 
         const now = performance.now()
         if (now - lastTime < 1000 / frameRate) return
@@ -180,8 +188,11 @@ export function useExport() {
           drawBackground(ctx, bgPreset, encWidth, encHeight)
           // Draw the WebGL visualizer on top with contain fitting (no stretching, zooming, or blur)
           drawImageContain(ctx, canvasElement, encWidth, encHeight)
-          // Create VideoFrame with precise timestamp
-          const timestampUs = Math.round(frameCount * videoFrameDurationUs)
+          
+          // Create VideoFrame with precise timestamp aligned to the audio timeline
+          const elapsedMs = now - firstAudioTimeMs
+          const timestampUs = Math.round(firstAudioTimestampUs + (elapsedMs * 1000))
+          
           const frame = new (window as any).VideoFrame(comp, { timestamp: timestampUs })
           videoEncoder.encode(frame, { keyFrame: frameCount % (frameRate * 2) === 0 })
           frame.close()
