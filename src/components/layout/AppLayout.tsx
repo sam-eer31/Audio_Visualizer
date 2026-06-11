@@ -65,10 +65,9 @@ export function AppLayout() {
         )}
       </AnimatePresence>
 
-      {/* Header */}
-      <header className="shrink-0 z-20 app-layout-padding flex items-center justify-between glass-light" style={{ paddingTop: 0, paddingBottom: 0 }}>
-        <div className="flex items-center">
-          <img src="/logo.png" alt="SonicWave Logo" style={{ height: '55px', width: 'auto', objectFit: 'contain', display: 'block', padding: '6px' }} />
+      <header className="shrink-0 z-20 app-layout-padding flex items-center justify-between glass-light h-12 sm:h-14">
+        <div className="flex items-center h-full">
+          <img src="/logo.png" alt="Audrix Logo" className="h-7 sm:h-9 w-auto object-contain block" />
         </div>
 
         <div className="flex items-center" style={{ gap: '12px' }}>
@@ -126,7 +125,7 @@ export function AppLayout() {
             </div>
           </div>
           {/* Settings */}
-          <div className="glass rounded-2xl shrink-0" style={{ padding: '20px' }}>
+          <div className="glass rounded-2xl shrink-0 p-4 sm:p-5">
             <SettingsPanel />
           </div>
           {/* Export at the very bottom */}
@@ -155,7 +154,7 @@ export function AppLayout() {
           <div className="flex-1 flex flex-row gap-5 min-h-0">
             {/* Left: Settings */}
             <div className="w-[380px] xl:w-[420px] shrink-0 flex flex-col min-h-0">
-              <div className="glass rounded-2xl flex-1 flex flex-col min-h-0 overflow-hidden" style={{ padding: '20px' }}>
+              <div className="glass rounded-2xl flex-1 flex flex-col min-h-0 overflow-hidden p-5">
                 <SettingsPanel />
               </div>
             </div>

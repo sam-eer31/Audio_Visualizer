@@ -8,37 +8,37 @@ export function SettingsPanel() {
   return (
     <div className="h-full flex flex-col w-full">
       {/* Header */}
-      <div className="shrink-0" style={{ paddingLeft: '8px', paddingRight: '8px', paddingTop: '8px', paddingBottom: '10px' }}>
-        <h2 className="text-xl font-semibold">Customize</h2>
-        <p className="text-xs text-muted-foreground mt-1">Style your visualization</p>
+      <div className="shrink-0 px-2 pt-1 pb-2">
+        <h2 className="text-lg sm:text-xl font-semibold">Customize</h2>
+        <p className="text-[11px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">Style your visualization</p>
       </div>
 
       {/* Scrollable sections */}
-      <div className="flex-1 min-h-0 overflow-y-auto" style={{ paddingBottom: '8px' }}>
-        <div style={{ marginBottom: '10px', paddingLeft: '8px', paddingRight: '8px' }}>
-          <CollapsibleSection icon={<Layers className="h-4 w-4" />} title="Visual Style" defaultOpen>
+      <div className="flex-1 min-h-0 overflow-y-auto pb-2">
+        <div className="mb-2 sm:mb-3 px-2">
+          <CollapsibleSection icon={<Layers className="h-3.5 w-3.5 sm:h-4 sm:w-4" />} title="Visual Style" defaultOpen>
             <ModeGrid />
           </CollapsibleSection>
         </div>
 
-        <div style={{ marginBottom: '10px', paddingLeft: '8px', paddingRight: '8px' }}>
-          <CollapsibleSection icon={<Palette className="h-4 w-4" />} title="Colors" defaultOpen>
+        <div className="mb-2 sm:mb-3 px-2">
+          <CollapsibleSection icon={<Palette className="h-3.5 w-3.5 sm:h-4 sm:w-4" />} title="Colors" defaultOpen>
             <ColorSection />
-            <div style={{ marginTop: '10px' }}>
-              <p className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-medium" style={{ marginBottom: '10px' }}>Background</p>
+            <div className="mt-2.5">
+              <p className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-medium mb-2.5">Background</p>
               <BackgroundSection />
             </div>
           </CollapsibleSection>
         </div>
 
-        <div style={{ marginBottom: '10px', paddingLeft: '8px', paddingRight: '8px' }}>
-          <CollapsibleSection icon={<SlidersHorizontal className="h-4 w-4" />} title="Adjust" defaultOpen>
+        <div className="mb-2 sm:mb-3 px-2">
+          <CollapsibleSection icon={<SlidersHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4" />} title="Adjust" defaultOpen>
             <SlidersSection />
           </CollapsibleSection>
         </div>
 
-        <div style={{ paddingLeft: '8px', paddingRight: '8px' }}>
-          <CollapsibleSection icon={<Music className="h-4 w-4" />} title="Audio" defaultOpen={false}>
+        <div className="px-2">
+          <CollapsibleSection icon={<Music className="h-3.5 w-3.5 sm:h-4 sm:w-4" />} title="Audio" defaultOpen={false}>
             <AudioSection />
           </CollapsibleSection>
         </div>
@@ -52,20 +52,20 @@ function CollapsibleSection({ icon, title, defaultOpen, children }: {
 }) {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="border-b border-white/[0.08] last:border-0">
+    <div className="border-b border-white/[0.08] last:border-0 pb-1 sm:pb-1.5">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between group"
+        className="w-full flex items-center justify-between group py-2"
       >
-        <div className="flex items-center gap-3 text-sm font-semibold text-muted-foreground group-hover:text-foreground transition-colors">
+        <div className="flex items-center gap-2.5 text-xs sm:text-sm font-semibold text-muted-foreground group-hover:text-foreground transition-colors">
           {icon}
           {title}
         </div>
         <div className="text-muted-foreground/40">
-          {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          {open ? <ChevronUp className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : <ChevronDown className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
         </div>
       </button>
-      {open && <div style={{ marginTop: '10px' }}>{children}</div>}
+      {open && <div className="mt-2.5">{children}</div>}
     </div>
   )
 }
@@ -73,7 +73,7 @@ function CollapsibleSection({ icon, title, defaultOpen, children }: {
 function ModeGrid() {
   const { mode, setMode } = useVisualizerStore()
   return (
-    <div className="grid grid-cols-2 gap-2.5">
+    <div className="grid grid-cols-2 gap-2">
       {VISUALIZATION_MODES.map((m) => {
         const Icon = m.icon
         const active = mode === m.id
@@ -82,22 +82,21 @@ function ModeGrid() {
             key={m.id}
             onClick={() => setMode(m.id)}
             className={cn(
-              'flex items-center rounded-xl border text-left transition-all duration-200 w-full',
+              'flex items-center rounded-xl border text-left transition-all duration-200 w-full p-2.5 gap-2.5 sm:p-3 sm:gap-3',
               active
                 ? 'border-primary/50 bg-primary/[0.08] text-foreground ring-1 ring-primary/20'
                 : 'border-white/[0.06] hover:border-white/[0.12] bg-white/[0.02] text-muted-foreground hover:text-foreground hover:bg-white/[0.04]'
             )}
-            style={{ padding: '12px 14px', gap: '12px' }}
           >
             <div className={cn(
-              'h-8 w-8 rounded-lg flex items-center justify-center shrink-0 transition-colors',
+              'h-7 w-7 sm:h-8 sm:w-8 rounded-lg flex items-center justify-center shrink-0 transition-colors',
               active ? 'bg-primary/15 text-primary' : 'bg-white/[0.04] text-muted-foreground'
             )}>
-              <Icon className="h-4 w-4" />
+              <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-[12px] font-semibold leading-tight truncate">{m.name}</span>
-              <span className="text-[10px] text-muted-foreground/60 leading-tight mt-0.5 truncate">{m.description}</span>
+              <span className="text-[11px] sm:text-[12px] font-semibold leading-tight truncate">{m.name}</span>
+              <span className="text-[9px] sm:text-[10px] text-muted-foreground/60 leading-tight mt-0.5 truncate">{m.description}</span>
             </div>
           </button>
         )
@@ -110,8 +109,8 @@ function ColorSection() {
   const { colorPreset, setColorPreset } = useVisualizerStore()
   return (
     <div>
-      <p className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-medium" style={{ marginBottom: '10px' }}>Theme</p>
-      <div className="grid grid-cols-2 gap-2.5">
+      <p className="text-[10px] text-muted-foreground/80 uppercase tracking-wider font-medium mb-2.5">Theme</p>
+      <div className="grid grid-cols-2 gap-2">
         {COLOR_PRESETS.map((p) => {
           const active = colorPreset === p.id
           const gradient = `linear-gradient(135deg, ${p.colors[0]} 0%, ${p.colors[1]} 50%, ${p.colors[2]} 100%)`
@@ -120,20 +119,19 @@ function ColorSection() {
               key={p.id}
               onClick={() => setColorPreset(p.id)}
               className={cn(
-                'flex items-center rounded-xl border transition-all duration-200 w-full text-left',
+                'flex items-center rounded-xl border transition-all duration-200 w-full text-left p-2 gap-2 sm:p-2.5 sm:gap-2.5',
                 active
                   ? 'border-primary/50 ring-1 ring-primary/20'
                   : 'border-white/[0.06] hover:border-white/[0.12]'
               )}
-              style={{ padding: '10px 12px', gap: '10px' }}
             >
               <div
-                className="h-7 w-7 rounded-lg shrink-0 ring-1 ring-white/[0.08]"
+                className="h-6 w-6 sm:h-7 sm:w-7 rounded-lg shrink-0 ring-1 ring-white/[0.08]"
                 style={{ background: gradient }}
               />
               <div className="flex flex-col min-w-0">
                 <span className={cn(
-                  'text-[11px] font-semibold leading-tight truncate',
+                  'text-[10px] sm:text-[11px] font-semibold leading-tight truncate',
                   active ? 'text-foreground' : 'text-muted-foreground'
                 )}>
                   {p.name}
@@ -155,7 +153,7 @@ function ColorSection() {
 function BackgroundSection() {
   const { backgroundPreset, setBackgroundPreset } = useVisualizerStore()
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2">
       {BACKGROUND_PRESETS.map((p) => {
         const active = backgroundPreset === p.id
         return (
@@ -163,19 +161,18 @@ function BackgroundSection() {
             key={p.id}
             onClick={() => setBackgroundPreset(p.id)}
             className={cn(
-              'flex items-center rounded-xl border transition-all duration-200 w-full text-left',
+              'flex items-center rounded-xl border transition-all duration-200 w-full text-left p-2 gap-2.5 sm:p-2.5 sm:gap-3',
               active
                 ? 'border-primary/50 ring-1 ring-primary/20'
                 : 'border-white/[0.06] hover:border-white/[0.12]'
             )}
-            style={{ padding: '10px 12px', gap: '12px' }}
           >
             <div
-              className="h-8 w-12 rounded-lg shrink-0 ring-1 ring-inset ring-black/[0.1] border border-white/[0.08]"
+              className="h-6 w-9 sm:h-8 sm:w-12 rounded-lg shrink-0 ring-1 ring-inset ring-black/[0.1] border border-white/[0.08]"
               style={{ background: p.gradient || p.color }}
             />
             <span className={cn(
-              'text-[12px] font-semibold',
+              'text-[11px] sm:text-[12px] font-semibold',
               active ? 'text-foreground' : 'text-muted-foreground'
             )}>
               {p.name}
@@ -196,7 +193,7 @@ function SlidersSection() {
   } = useVisualizerStore()
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3 sm:space-y-5">
       <SliderRow label="Sensitivity" value={sensitivity} min={0.1} max={3} step={0.1} onChange={setSensitivity}
         display={`${sensitivity.toFixed(1)}x`} />
       <SliderRow label="Particles" value={particleCount} min={100} max={5000} step={100} onChange={setParticleCount}
@@ -234,9 +231,9 @@ function SliderRow({ label, value, min, max, step, onChange, display }: {
 }) {
   return (
     <div>
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-[12px] text-muted-foreground font-medium">{label}</span>
-        <span className="text-[11px] font-mono text-foreground/60 tabular-nums bg-white/[0.04] px-2 py-0.5 rounded-md">{display}</span>
+      <div className="flex justify-between items-center mb-1 sm:mb-2">
+        <span className="text-[11px] sm:text-[12px] text-muted-foreground font-medium">{label}</span>
+        <span className="text-[10px] sm:text-[11px] font-mono text-foreground/60 tabular-nums bg-white/[0.04] px-2 py-0.5 rounded-md">{display}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))} className="w-full" />
