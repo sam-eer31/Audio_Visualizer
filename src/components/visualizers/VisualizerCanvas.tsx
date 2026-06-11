@@ -8,6 +8,7 @@ import { BACKGROUND_PRESETS } from '@/lib/constants'
 import { RESOLUTION_MAP } from '@/types'
 import { RotateCcw } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { motion, AnimatePresence } from 'framer-motion'
 
 function isColorDark(hex: string): boolean {
   const c = hex.replace('#', '')
@@ -107,11 +108,13 @@ export function VisualizerCanvas() {
   const VisualizerComponent = VISUALIZER_MAP[mode]
   const controlsRef = useRef<any>(null)
   const [dpr, setDpr] = useState<number | [number, number]>([1, 2])
+  const [isRotated, setIsRotated] = useState(false)
 
   // Reset 3D rotation whenever the visualizer mode changes
   useEffect(() => {
     if (controlsRef.current) {
       controlsRef.current.reset()
+      setIsRotated(false)
     }
   }, [mode])
 
@@ -155,29 +158,53 @@ export function VisualizerCanvas() {
           enablePan={false}
           maxDistance={20}
           minDistance={3}
+          onChange={() => {
+            if (controlsRef.current) {
+              const controls = controlsRef.current
+              const theta = controls.getAzimuthalAngle()
+              const phi = controls.getPolarAngle()
+              // Default azimuthal (theta) is 0, default polar (phi) is PI/2
+              const isDefault = Math.abs(theta) < 0.005 && Math.abs(phi - Math.PI / 2) < 0.005
+              const nextRotated = !isDefault
+              setIsRotated((prev) => {
+                if (prev !== nextRotated) return nextRotated
+                return prev
+              })
+            }
+          }}
         />
         <CameraController controlsRef={controlsRef} />
         {isExporting && <ExportFrameCapturer />}
       </Canvas>
 
       {/* Reset Rotation Button */}
-      {!isExporting && (
-        <button
-          onClick={() => controlsRef.current?.reset()}
-          className={cn(
-            "absolute z-20 h-8 w-8 rounded-lg flex items-center justify-center backdrop-blur-md transition-all shadow-md",
-            expanded 
-              ? "bottom-20 sm:bottom-28 left-4 sm:left-6" 
-              : "bottom-3 left-3",
-            darkBg
-              ? "bg-black/20 hover:bg-black/40 text-white/70 hover:text-white border border-white/10"
-              : "bg-white/70 hover:bg-white/90 text-black/60 hover:text-black border border-black/10"
-          )}
-          title="Reset 3D Rotation"
-        >
-          <RotateCcw className="h-3.5 w-3.5" />
-        </button>
-      )}
+      <AnimatePresence>
+        {!isExporting && isRotated && (
+          <motion.button
+            key="reset-rotation"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.15 }}
+            onClick={() => {
+              controlsRef.current?.reset()
+              setIsRotated(false)
+            }}
+            className={cn(
+              "absolute z-20 h-8 w-8 rounded-lg flex items-center justify-center backdrop-blur-md transition-all shadow-md",
+              expanded 
+                ? "bottom-20 sm:bottom-28 left-4 sm:left-6" 
+                : "bottom-3 left-3",
+              darkBg
+                ? "bg-black/20 hover:bg-black/40 text-white/70 hover:text-white border border-white/10"
+                : "bg-white/70 hover:bg-white/90 text-black/60 hover:text-black border border-black/10"
+            )}
+            title="Reset 3D Rotation"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
