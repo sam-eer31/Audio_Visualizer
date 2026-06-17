@@ -18,7 +18,7 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'src/api.tsx'),
       name: 'AudrixVisualizer',
-      fileName: 'audrix-api',
+      fileName: (format) => `audrix-api.${format}.js`,
       formats: ['umd'],
     },
     rollupOptions: {
