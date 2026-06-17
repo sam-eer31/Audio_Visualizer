@@ -8,6 +8,13 @@ import type { VisualizationMode } from '@/types'
 
 import './index.css'
 
+// Suppress THREE.Clock deprecation warning triggered by @react-three/fiber internally
+const _origWarn = console.warn
+console.warn = (...args: unknown[]) => {
+  if (typeof args[0] === 'string' && args[0].includes('THREE.Clock') && args[0].includes('deprecated')) return
+  _origWarn.apply(console, args)
+}
+
 export interface AudrixOptions {
   container: HTMLElement
   audioElement: HTMLAudioElement
