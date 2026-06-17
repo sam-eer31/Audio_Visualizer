@@ -1,6 +1,6 @@
 import { useCallback, useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Music2, Upload, Sun, Moon, Loader2 } from 'lucide-react'
+import { Music2, Upload, Sun, Moon, Loader2, Code2 } from 'lucide-react'
 import { useExportStore } from '@/stores/exportStore'
 
 function GithubIcon({ className }: { className?: string }) {
@@ -22,6 +22,7 @@ function GithubIcon({ className }: { className?: string }) {
 import { SettingsPanel } from '@/components/settings/SettingsPanel'
 import { PreviewBox, PlayerBar } from '@/components/preview/PreviewBox'
 import { ExportBar } from '@/components/export/ExportBar'
+import { ApiModal } from '@/components/embed/ApiModal'
 import { ToastContainer } from '@/components/ui/toast'
 import { useAudioStore } from '@/stores/audioStore'
 import { useAudioControls } from '@/hooks/useAudioControls'
@@ -38,6 +39,7 @@ export function AppLayout() {
   const backgroundPreset = useVisualizerStore((s) => s.backgroundPreset)
   const { loadFile } = useAudioControls()
   const [isDragging, setIsDragging] = useState(false)
+  const [isApiModalOpen, setIsApiModalOpen] = useState(false)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const isExporting = useExportStore((s) => s.isExporting)
@@ -128,6 +130,17 @@ export function AppLayout() {
               <span className="hidden sm:inline">Change Song</span>
             </button>
           )}
+
+          {/* API / Embed Button */}
+          <button
+            onClick={() => setIsApiModalOpen(true)}
+            className="relative h-9 px-3 sm:px-3.5 rounded-xl border border-white/[0.08] flex items-center justify-center gap-1.5 overflow-hidden transition-all hover:scale-[1.03] active:scale-95 text-[11px] font-semibold"
+            style={{ background: theme === 'dark' ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)' }}
+            title="Developer API & Embed"
+          >
+            <Code2 className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground" />
+            <span className="hidden sm:inline">API</span>
+          </button>
 
           {/* Theme Toggle */}
           <button
@@ -353,6 +366,7 @@ export function AppLayout() {
         </div>
       </footer>
 
+      <ApiModal isOpen={isApiModalOpen} onClose={() => setIsApiModalOpen(false)} />
       <ToastContainer />
     </div>
   )

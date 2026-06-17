@@ -112,6 +112,47 @@ Choose from 16 immersive, real-time 3D visualizations that react dynamically to 
 
 ---
 
+## 💻 Embed API for Developers
+
+Want to add the Audrix 3D visualization to your own music player, portfolio, or web app? You can use the **Audrix Embed API**!
+
+The embed script allows you to easily render the Audrix canvas inside any `div` and hook it up to your existing `<audio>` element with just a few lines of code.
+
+### Installation
+
+Include the bundled script and CSS directly via CDN (or download them from `dist-api` after building):
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sam-eer31/Audio_Visualizer/dist-api/audrix-api.css">
+<script src="https://cdn.jsdelivr.net/gh/sam-eer31/Audio_Visualizer/dist-api/audrix-api.umd.cjs"></script>
+```
+
+### Usage Example
+
+```html
+<!-- The container where the visualizer will be rendered -->
+<div id="audrix-container" style="width: 100%; height: 500px;"></div>
+
+<!-- Your audio element -->
+<audio id="my-audio" src="path/to/song.mp3" controls crossorigin="anonymous"></audio>
+
+<script>
+  // Initialize the Audrix visualizer
+  const visualizer = new window.AudrixVisualizer({
+    container: document.getElementById('audrix-container'),
+    audioElement: document.getElementById('my-audio'),
+    mode: 'particle-galaxy', // Target a specific visualization
+    backgroundColor: '#0a0a2e', // Custom background color
+    colorPreset: '#00ffcc' // Custom theme color
+  });
+  
+  // You can change styles on the fly!
+  // visualizer.setMode('cyber-grid');
+</script>
+```
+
+---
+
 ## 🚀 Getting Started
 
 ### Option 1: Use Online (Instant - No Installation)
