@@ -1,4 +1,5 @@
-import { createRoot, Root } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
+import type { Root } from 'react-dom/client'
 import { EmbedViewer } from '@/components/embed/EmbedViewer'
 import { useAudioStore } from '@/stores/audioStore'
 import { useVisualizerStore } from '@/stores/visualizerStore'
