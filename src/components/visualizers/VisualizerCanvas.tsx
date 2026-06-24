@@ -35,6 +35,9 @@ const HeartbeatLine = lazy(() => import('./HeartbeatLine').then((m) => ({ defaul
 const MobiusRibbon = lazy(() => import('./MobiusRibbon').then((m) => ({ default: m.MobiusRibbon })))
 const LaserWeb = lazy(() => import('./LaserWeb').then((m) => ({ default: m.LaserWeb })))
 const AudioPortal = lazy(() => import('./AudioPortal').then((m) => ({ default: m.AudioPortal })))
+const QuantumSupernova = lazy(() => import('./QuantumSupernova').then((m) => ({ default: m.QuantumSupernova })))
+const CyberRibbon = lazy(() => import('./CyberRibbon').then((m) => ({ default: m.CyberRibbon })))
+const EqualizerMatrix = lazy(() => import('./EqualizerMatrix').then((m) => ({ default: m.EqualizerMatrix })))
 
 const VISUALIZER_MAP = {
   'line-spectrum': LineSpectrum,
@@ -53,6 +56,9 @@ const VISUALIZER_MAP = {
   'mobius-ribbon': MobiusRibbon,
   'laser-web': LaserWeb,
   'audio-portal': AudioPortal,
+  'quantum-supernova': QuantumSupernova,
+  'cyber-ribbon': CyberRibbon,
+  'equalizer-matrix': EqualizerMatrix,
 } as const
 
 function ExportFrameCapturer() {

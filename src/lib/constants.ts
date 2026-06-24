@@ -16,6 +16,9 @@ import {
   Infinity,
   Network,
   Orbit,
+  Flame,
+  Spline,
+  LayoutGrid,
 } from 'lucide-react'
 import type { ComponentType } from 'react'
 import type { LucideProps } from 'lucide-react'
@@ -42,6 +45,9 @@ export const VISUALIZATION_MODES: {
   { id: 'mobius-ribbon', name: 'Möbius Ribbon', description: 'Circular twisting wave', icon: Infinity },
   { id: 'laser-web', name: 'Laser Web', description: 'Dynamic proximity web', icon: Network },
   { id: 'audio-portal', name: 'Audio Portal', description: 'Swirling black hole', icon: Orbit },
+  { id: 'quantum-supernova', name: 'Quantum Supernova', description: 'Vortex of reactive cosmic plasma particles', icon: Flame },
+  { id: 'cyber-ribbon', name: 'Cyber Ribbon', description: 'Silky flowing holographic ribbons', icon: Spline },
+  { id: 'equalizer-matrix', name: 'Equalizer Matrix', description: 'Holographic grid of 3D audio pillars', icon: LayoutGrid },
 ]
 
 export const COLOR_PRESETS: ColorPreset[] = [

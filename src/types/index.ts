@@ -15,6 +15,9 @@ export type VisualizationMode =
   | 'mobius-ribbon'
   | 'laser-web'
   | 'audio-portal'
+  | 'quantum-supernova'
+  | 'cyber-ribbon'
+  | 'equalizer-matrix'
 
 export type PlaybackState = 'idle' | 'playing' | 'paused' | 'stopped'
 
