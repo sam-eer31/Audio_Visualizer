@@ -28,6 +28,9 @@ const pillarVertexShader = `
 
 const pillarFragmentShader = `
   uniform float uTime;
+  uniform vec3 uColor1;
+  uniform vec3 uColor2;
+  uniform vec3 uColor3;
   varying vec2 vUv;
   varying vec3 vPosition;
   varying vec3 vInstanceColor;
@@ -41,12 +44,28 @@ const pillarFragmentShader = `
     // Glowing scanlines running vertically
     float scanline = sin(vPosition.y * 12.0 - uTime * 6.0) * 0.5 + 0.5;
 
+    // Beautiful vertical gradient using theme colors
+    vec3 gradColor;
+    if (vUv.y < 0.5) {
+      gradColor = mix(uColor1, uColor2, vUv.y * 2.0);
+    } else {
+      gradColor = mix(uColor2, uColor3, (vUv.y - 0.5) * 2.0);
+    }
+    
+    // Apply audio reactivity intensity from instance color (grayscale)
+    gradColor *= vInstanceColor.r;
+    
     // Core holographic color blending
-    vec3 col = mix(vInstanceColor * 0.35, vInstanceColor * 2.0, border);
+    vec3 col = mix(gradColor * 0.25, gradColor * 2.0, border);
+    
+    // Extra brightness and intensity towards the top
+    float topGlow = smoothstep(0.6, 1.0, vUv.y);
+    col += gradColor * topGlow * 1.5;
+
     col += vec3(1.0) * (scanline * 0.15); // white scanline flash
 
     // High transparency inside, highly opaque on borders
-    float alpha = mix(0.1, 0.95, border) + scanline * 0.08;
+    float alpha = mix(0.12, 0.95, border) + scanline * 0.08 + topGlow * 0.3;
 
     gl_FragColor = vec4(col, alpha);
   }
@@ -104,6 +123,9 @@ export function EqualizerMatrix() {
 
   const uniforms = useMemo(() => ({
     uTime: { value: 0 },
+    uColor1: { value: new THREE.Color() },
+    uColor2: { value: new THREE.Color() },
+    uColor3: { value: new THREE.Color() },
   }), [])
 
 
@@ -127,6 +149,9 @@ export function EqualizerMatrix() {
     // Update uTime uniform
     const gridMat = gridRef.current.material as THREE.ShaderMaterial
     gridMat.uniforms.uTime.value = t
+    gridMat.uniforms.uColor1.value.copy(colors[0])
+    gridMat.uniforms.uColor2.value.copy(colors[1])
+    gridMat.uniforms.uColor3.value.copy(colors[2] || colors[1])
 
     // Update 3D grid pillars
     pillarData.forEach((p, idx) => {
@@ -143,16 +168,8 @@ export function EqualizerMatrix() {
       dummy.updateMatrix()
       gridRef.current!.setMatrixAt(idx, dummy.matrix)
 
-      // Color coding
-      const c = colors[0].clone()
-      if (p.freqFrac > 0.6) {
-        c.lerp(colors[2], (p.freqFrac - 0.6) / 0.4)
-      } else if (p.freqFrac > 0.25) {
-        c.lerp(colors[1], (p.freqFrac - 0.25) / 0.35)
-      }
-
-      // Brighten columns that are actively pulsed by audio
-      c.multiplyScalar(0.7 + rawVal * 1.5)
+      // Just pass brightness/pulse via color since shader handles the gradient
+      const c = new THREE.Color(1, 1, 1).multiplyScalar(0.7 + rawVal * 1.5)
       gridRef.current!.setColorAt(idx, c)
     })
 

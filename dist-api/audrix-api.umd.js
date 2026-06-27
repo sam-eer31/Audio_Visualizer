@@ -4519,7 +4519,7 @@ No matching component was found for:
 
     gl_FragColor = vec4(finalColor, alpha);
   }
-`,uF=800})),fF=l({EqualizerMatrix:()=>pF});function pF(){let e=(0,mF.useRef)(null),t=(0,mF.useRef)(null),n=(0,mF.useRef)(null),{getAnalysis:r}=qM(),i=Vy(e=>e.colorPreset),a=Vy(e=>e.rotationSpeed),o=(0,mF.useMemo)(()=>(vb.find(e=>e.id===i)||vb[0]).colors.map(e=>new U(e)),[i]),s=(0,mF.useMemo)(()=>new _a,[]),c=(0,mF.useMemo)(()=>{let e=[],t=(gF-1)/2,n=Math.sqrt(t*t*2);for(let r=0;r<gF;r++)for(let i=0;i<gF;i++){let a=(i-t)*vF,o=(r-t)*vF,s=i-t,c=r-t,l=Math.sqrt(s*s+c*c),u=Math.min(l/n,1);e.push({x:a,z:o,freqFrac:u})}return e},[]),l=(0,mF.useMemo)(()=>[{x:-3.5,z:-3.5},{x:3.5,z:-3.5},{x:-3.5,z:3.5},{x:3.5,z:3.5}],[]),u=(0,mF.useMemo)(()=>({uTime:{value:0}}),[]),d=(0,mF.useRef)(0),f=(0,mF.useMemo)(()=>new Float32Array(_F),[]);return T_(i=>{if(!e.current||!t.current||!n.current)return;let u=r(),p=u.frequencyData,m=i.clock.elapsedTime;d.current+=(u.bass-d.current)*.15;let h=d.current,g=Math.floor(p.length*.5),_=t.current.material;_.uniforms.uTime.value=m,c.forEach((e,n)=>{let r=(p[Math.floor(e.freqFrac*g)]||0)/255,i=.15+r*4.5+(e.freqFrac<.3?h*1:0);f[n]+=(i-f[n])*.2;let a=f[n];s.position.set(e.x,a/2-1.5,e.z),s.scale.set(.5,a,.5),s.updateMatrix(),t.current.setMatrixAt(n,s.matrix);let c=o[0].clone();e.freqFrac>.6?c.lerp(o[2],(e.freqFrac-.6)/.4):e.freqFrac>.25&&c.lerp(o[1],(e.freqFrac-.25)/.35),c.multiplyScalar(.7+r*1.5),t.current.setColorAt(n,c)}),t.current.instanceMatrix.needsUpdate=!0,t.current.instanceColor&&(t.current.instanceColor.needsUpdate=!0),l.forEach((e,t)=>{let r=.1+h*15,i=h>.55;s.position.set(e.x,r/2-1.5,e.z),s.scale.set(1,r,1),s.updateMatrix(),n.current.setMatrixAt(t,s.matrix);let a=o[t%o.length].clone();a.multiplyScalar(i?3:.2),n.current.setColorAt(t,a)}),n.current.instanceMatrix.needsUpdate=!0,n.current.instanceColor&&(n.current.instanceColor.needsUpdate=!0);let v=n.current.material;v.opacity=.05+h*.75,e.current.rotation.y=m*a*.2,e.current.rotation.x=.3+Math.sin(m*.1)*.08}),(0,hF.jsxs)(`group`,{ref:e,children:[(0,hF.jsxs)(`instancedMesh`,{ref:t,args:[void 0,void 0,_F],children:[(0,hF.jsx)(`boxGeometry`,{args:[1,1,1]}),(0,hF.jsx)(`shaderMaterial`,{vertexShader:yF,fragmentShader:bF,uniforms:u,transparent:!0,depthWrite:!1,blending:2})]}),(0,hF.jsxs)(`instancedMesh`,{ref:n,args:[void 0,void 0,l.length],children:[(0,hF.jsx)(`cylinderGeometry`,{args:[.015,.015,1,8]}),(0,hF.jsx)(`meshBasicMaterial`,{transparent:!0,blending:2,toneMapped:!1})]})]})}var mF,hF,gF,_F,vF,yF,bF,xF=s((()=>{mF=d(g(),1),yy(),_g(),XM(),Hy(),bb(),hF=Hg(),gF=14,_F=gF*gF,vF=.7,yF=`
+`,uF=800})),fF=l({EqualizerMatrix:()=>pF});function pF(){let e=(0,mF.useRef)(null),t=(0,mF.useRef)(null),n=(0,mF.useRef)(null),{getAnalysis:r}=qM(),i=Vy(e=>e.colorPreset),a=Vy(e=>e.rotationSpeed),o=(0,mF.useMemo)(()=>(vb.find(e=>e.id===i)||vb[0]).colors.map(e=>new U(e)),[i]),s=(0,mF.useMemo)(()=>new _a,[]),c=(0,mF.useMemo)(()=>{let e=[],t=(gF-1)/2,n=Math.sqrt(t*t*2);for(let r=0;r<gF;r++)for(let i=0;i<gF;i++){let a=(i-t)*vF,o=(r-t)*vF,s=i-t,c=r-t,l=Math.sqrt(s*s+c*c),u=Math.min(l/n,1);e.push({x:a,z:o,freqFrac:u})}return e},[]),l=(0,mF.useMemo)(()=>[{x:-3.5,z:-3.5},{x:3.5,z:-3.5},{x:-3.5,z:3.5},{x:3.5,z:3.5}],[]),u=(0,mF.useMemo)(()=>({uTime:{value:0},uColor1:{value:new U},uColor2:{value:new U},uColor3:{value:new U}}),[]),d=(0,mF.useRef)(0),f=(0,mF.useMemo)(()=>new Float32Array(_F),[]);return T_(i=>{if(!e.current||!t.current||!n.current)return;let u=r(),p=u.frequencyData,m=i.clock.elapsedTime;d.current+=(u.bass-d.current)*.15;let h=d.current,g=Math.floor(p.length*.5),_=t.current.material;_.uniforms.uTime.value=m,_.uniforms.uColor1.value.copy(o[0]),_.uniforms.uColor2.value.copy(o[1]),_.uniforms.uColor3.value.copy(o[2]||o[1]),c.forEach((e,n)=>{let r=(p[Math.floor(e.freqFrac*g)]||0)/255,i=.15+r*4.5+(e.freqFrac<.3?h*1:0);f[n]+=(i-f[n])*.2;let a=f[n];s.position.set(e.x,a/2-1.5,e.z),s.scale.set(.5,a,.5),s.updateMatrix(),t.current.setMatrixAt(n,s.matrix);let o=new U(1,1,1).multiplyScalar(.7+r*1.5);t.current.setColorAt(n,o)}),t.current.instanceMatrix.needsUpdate=!0,t.current.instanceColor&&(t.current.instanceColor.needsUpdate=!0),l.forEach((e,t)=>{let r=.1+h*15,i=h>.55;s.position.set(e.x,r/2-1.5,e.z),s.scale.set(1,r,1),s.updateMatrix(),n.current.setMatrixAt(t,s.matrix);let a=o[t%o.length].clone();a.multiplyScalar(i?3:.2),n.current.setColorAt(t,a)}),n.current.instanceMatrix.needsUpdate=!0,n.current.instanceColor&&(n.current.instanceColor.needsUpdate=!0);let v=n.current.material;v.opacity=.05+h*.75,e.current.rotation.y=m*a*.2,e.current.rotation.x=.3+Math.sin(m*.1)*.08}),(0,hF.jsxs)(`group`,{ref:e,children:[(0,hF.jsxs)(`instancedMesh`,{ref:t,args:[void 0,void 0,_F],children:[(0,hF.jsx)(`boxGeometry`,{args:[1,1,1]}),(0,hF.jsx)(`shaderMaterial`,{vertexShader:yF,fragmentShader:bF,uniforms:u,transparent:!0,depthWrite:!1,blending:2})]}),(0,hF.jsxs)(`instancedMesh`,{ref:n,args:[void 0,void 0,l.length],children:[(0,hF.jsx)(`cylinderGeometry`,{args:[.015,.015,1,8]}),(0,hF.jsx)(`meshBasicMaterial`,{transparent:!0,blending:2,toneMapped:!1})]})]})}var mF,hF,gF,_F,vF,yF,bF,xF=s((()=>{mF=d(g(),1),yy(),_g(),XM(),Hy(),bb(),hF=Hg(),gF=14,_F=gF*gF,vF=.7,yF=`
   varying vec2 vUv;
   varying vec3 vPosition;
   varying vec3 vInstanceColor;
@@ -4535,6 +4535,9 @@ No matching component was found for:
   }
 `,bF=`
   uniform float uTime;
+  uniform vec3 uColor1;
+  uniform vec3 uColor2;
+  uniform vec3 uColor3;
   varying vec2 vUv;
   varying vec3 vPosition;
   varying vec3 vInstanceColor;
@@ -4548,12 +4551,28 @@ No matching component was found for:
     // Glowing scanlines running vertically
     float scanline = sin(vPosition.y * 12.0 - uTime * 6.0) * 0.5 + 0.5;
 
+    // Beautiful vertical gradient using theme colors
+    vec3 gradColor;
+    if (vUv.y < 0.5) {
+      gradColor = mix(uColor1, uColor2, vUv.y * 2.0);
+    } else {
+      gradColor = mix(uColor2, uColor3, (vUv.y - 0.5) * 2.0);
+    }
+    
+    // Apply audio reactivity intensity from instance color (grayscale)
+    gradColor *= vInstanceColor.r;
+    
     // Core holographic color blending
-    vec3 col = mix(vInstanceColor * 0.35, vInstanceColor * 2.0, border);
+    vec3 col = mix(gradColor * 0.25, gradColor * 2.0, border);
+    
+    // Extra brightness and intensity towards the top
+    float topGlow = smoothstep(0.6, 1.0, vUv.y);
+    col += gradColor * topGlow * 1.5;
+
     col += vec3(1.0) * (scanline * 0.15); // white scanline flash
 
     // High transparency inside, highly opaque on borders
-    float alpha = mix(0.1, 0.95, border) + scanline * 0.08;
+    float alpha = mix(0.12, 0.95, border) + scanline * 0.08 + topGlow * 0.3;
 
     gl_FragColor = vec4(col, alpha);
   }
