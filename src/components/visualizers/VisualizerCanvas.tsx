@@ -38,6 +38,7 @@ const AudioPortal = lazy(() => import('./AudioPortal').then((m) => ({ default: m
 const QuantumSupernova = lazy(() => import('./QuantumSupernova').then((m) => ({ default: m.QuantumSupernova })))
 const CyberRibbon = lazy(() => import('./CyberRibbon').then((m) => ({ default: m.CyberRibbon })))
 const EqualizerMatrix = lazy(() => import('./EqualizerMatrix').then((m) => ({ default: m.EqualizerMatrix })))
+const BeatDice = lazy(() => import('./BeatDice').then((m) => ({ default: m.BeatDice })))
 
 const VISUALIZER_MAP = {
   'line-spectrum': LineSpectrum,
@@ -59,6 +60,7 @@ const VISUALIZER_MAP = {
   'quantum-supernova': QuantumSupernova,
   'cyber-ribbon': CyberRibbon,
   'equalizer-matrix': EqualizerMatrix,
+  'beat-dice': BeatDice,
 } as const
 
 function ExportFrameCapturer() {

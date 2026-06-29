@@ -18,6 +18,7 @@ export type VisualizationMode =
   | 'quantum-supernova'
   | 'cyber-ribbon'
   | 'equalizer-matrix'
+  | 'beat-dice'
 
 export type PlaybackState = 'idle' | 'playing' | 'paused' | 'stopped'
 

@@ -19,6 +19,7 @@ import {
   Flame,
   Spline,
   LayoutGrid,
+  Dices,
 } from 'lucide-react'
 import type { ComponentType } from 'react'
 import type { LucideProps } from 'lucide-react'
@@ -48,6 +49,7 @@ export const VISUALIZATION_MODES: {
   { id: 'quantum-supernova', name: 'Quantum Supernova', description: 'Vortex of reactive cosmic plasma particles', icon: Flame },
   { id: 'cyber-ribbon', name: 'Cyber Ribbon', description: 'Silky flowing holographic ribbons', icon: Spline },
   { id: 'equalizer-matrix', name: 'Equalizer Matrix', description: 'Holographic grid of 3D audio pillars', icon: LayoutGrid },
+  { id: 'beat-dice', name: 'Beat Dice', description: 'Interactive 3D speed-cube dancing to the beat', icon: Dices },
 ]
 
 export const COLOR_PRESETS: ColorPreset[] = [
