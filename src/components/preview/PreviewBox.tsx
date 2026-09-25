@@ -167,38 +167,38 @@ function EmptyUploadBox({ dark }: { dark: boolean }) {
   }
 
   return (
-    <div className="h-full flex flex-col items-center justify-center p-3.5 sm:p-6 md:p-8">
+    <div className="absolute inset-0 flex flex-col items-center justify-center p-2 sm:p-3 md:p-4">
       <div
         className={cn(
-          "w-full max-w-[320px] flex flex-col items-center rounded-2xl border-2 border-dashed transition-colors cursor-pointer p-4 sm:p-6 md:p-8",
-          dark ? "border-white/[0.08] hover:border-primary/30" : "border-black/[0.12] hover:border-primary/40"
+          "w-full max-w-[340px] sm:max-w-[440px] md:max-w-[500px] max-h-full overflow-hidden flex flex-col items-center justify-center rounded-[16px] sm:rounded-[20px] border-2 border-dashed transition-all cursor-pointer px-4 py-3 sm:px-6 sm:py-5",
+          dark ? "border-white/[0.08] hover:border-primary/40 hover:bg-white/[0.02]" : "border-black/[0.12] hover:border-primary/50 hover:bg-black/[0.02]"
         )}
         onClick={() => fileRef.current?.click()}
       >
         {/* Icon */}
         <div
           className={cn(
-            "rounded-2xl flex items-center justify-center shrink-0 mb-3 sm:mb-5 w-11 h-11 sm:w-16 sm:h-16",
+            "rounded-full flex items-center justify-center shrink-0 mb-1.5 sm:mb-2 md:mb-3 w-10 h-10 sm:w-12 sm:h-12 shadow-sm sm:shadow-md transition-transform group-hover:scale-105",
             dark
-              ? "bg-gradient-to-br from-rose-500/10 to-pink-600/10 border border-rose-500/[0.08]"
+              ? "bg-gradient-to-br from-rose-500/15 to-pink-600/15 border border-rose-500/[0.12]"
               : "bg-gradient-to-br from-rose-500/10 to-pink-600/10 border border-rose-500/20"
           )}
         >
-          <Upload className={cn("h-5 w-5 sm:h-7 sm:w-7", dark ? "text-rose-400/60" : "text-rose-500/70")} />
+          <Upload className={cn("h-4 w-4 sm:h-5 sm:w-5", dark ? "text-rose-400" : "text-rose-500")} />
         </div>
 
         {/* Text */}
-        <p className="text-[12px] sm:text-[14px] font-semibold text-center leading-tight" style={{ color: dark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)' }}>Drop your audio file here</p>
-        <p className="text-[10px] sm:text-[11px] text-center mt-1 sm:mt-1.5" style={{ color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.45)' }}>or click anywhere in this box to browse</p>
+        <h3 className="text-[14px] sm:text-[16px] md:text-[18px] font-bold text-center leading-tight mb-0.5 sm:mb-1" style={{ color: dark ? 'rgba(255,255,255,0.95)' : 'rgba(0,0,0,0.9)' }}>Drop your audio file here</h3>
+        <p className="text-[11px] sm:text-[12px] md:text-[13px] text-center mb-2.5 sm:mb-4" style={{ color: dark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)' }}>or click anywhere to browse</p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-2.5 mt-3 sm:mt-5 w-full justify-center">
+        <div className="flex flex-row items-center gap-2 sm:gap-3 w-full justify-center shrink-0">
           <button
             onClick={(e) => { e.stopPropagation(); fileRef.current?.click() }}
-            className="w-full sm:w-auto rounded-xl bg-primary text-primary-foreground text-[10px] sm:text-[12px] font-semibold flex items-center justify-center shadow-lg shadow-primary/20 hover:shadow-primary/35 hover:scale-[1.02] transition-all active:scale-[0.97] px-4 py-1.5 sm:px-5.5 sm:py-2.5 gap-1.5 sm:gap-2"
+            className="flex-1 sm:flex-none sm:w-[140px] md:w-[150px] min-w-0 rounded-xl bg-primary text-primary-foreground text-[12px] sm:text-[13px] font-semibold flex items-center justify-center shadow-md hover:-translate-y-0.5 transition-all active:scale-[0.98] active:translate-y-0 px-2 sm:px-4 py-2 sm:py-2.5 gap-1.5"
           >
-            <Upload className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            Choose File
+            <Upload className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0" />
+            <span className="truncate">Choose File</span>
           </button>
           
           <button
@@ -208,37 +208,19 @@ function EmptyUploadBox({ dark }: { dark: boolean }) {
             }}
             disabled={isLoadingSample}
             className={cn(
-              "w-full sm:w-auto rounded-xl text-[10px] sm:text-[12px] font-semibold flex items-center justify-center border transition-all active:scale-[0.97] px-4 py-1.5 sm:px-5.5 sm:py-2.5 gap-1.5 sm:gap-2",
+              "flex-1 sm:flex-none sm:w-[140px] md:w-[150px] min-w-0 rounded-xl text-[12px] sm:text-[13px] font-semibold flex items-center justify-center border transition-all hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 px-2 sm:px-4 py-2 sm:py-2.5 gap-1.5",
               dark
-                ? "bg-white/5 hover:bg-white/10 text-white/90 border-white/10 hover:border-white/20"
-                : "bg-black/5 hover:bg-black/10 text-black/90 border-black/10 hover:border-black/20"
+                ? "bg-white/5 hover:bg-white/10 text-white/95 border-white/10 hover:border-white/20"
+                : "bg-black/5 hover:bg-black/10 text-black/95 border-black/10 hover:border-black/20"
             )}
           >
             {isLoadingSample ? (
-              <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 animate-spin text-muted-foreground" />
+              <Loader2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 animate-spin text-muted-foreground" />
             ) : (
-              <FileAudio className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-rose-500/80" />
+              <FileAudio className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-rose-500/90" />
             )}
-            Use Sample Audio
+            <span className="truncate">Sample Audio</span>
           </button>
-        </div>
-
-        {/* Supported formats */}
-        <div className="hidden sm:flex items-center gap-1.5 mt-4">
-          {['MP3', 'WAV', 'M4A', 'OGG', 'AAC'].map((f) => (
-            <span
-              key={f}
-              className="text-[9px] font-medium uppercase tracking-wider rounded-md border"
-              style={{
-                padding: '3px 7px',
-                background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
-                borderColor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)',
-                color: dark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.45)',
-              }}
-            >
-              {f}
-            </span>
-          ))}
         </div>
       </div>
 
