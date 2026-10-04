@@ -80,7 +80,7 @@ export function AppLayout() {
 
   return (
     <div
-      className="h-full w-full flex flex-col bg-background"
+      className="min-h-screen w-full flex flex-col bg-background overflow-x-hidden"
       onDragOver={(e) => {
         if (isExporting) return
         e.preventDefault()
@@ -185,16 +185,16 @@ export function AppLayout() {
       </header>
 
       {/* Main content - fills remaining height */}
-      <div className="flex-1 flex flex-col min-h-0 relative">
+      <div className="flex-1 flex flex-col relative">
         {/* Main Content Area - blurred when exporting */}
         <div className={cn(
-          "flex-1 flex flex-col min-h-0 app-layout-padding pt-3 sm:pt-6 pb-5",
+          "flex-1 flex flex-col app-layout-padding pt-3 sm:pt-6 pb-5",
           isExporting && "blur-md pointer-events-none select-none overflow-hidden"
         )}>
           {/* ===== MOBILE LAYOUT (below lg) ===== */}
           <div className={cn(
-            "flex-1 flex flex-col lg:hidden gap-3.5 min-h-0 relative",
-            isExporting ? "overflow-hidden" : "overflow-y-auto"
+            "flex-1 flex flex-col lg:hidden gap-3.5 relative",
+            isExporting && "overflow-hidden"
           )}>
             {/* Preview first - Sticky on mobile */}
             <div className="shrink-0 sticky top-0 z-30 bg-background pt-1 pb-3 -mt-1 -mb-3">
@@ -259,22 +259,24 @@ export function AppLayout() {
           </div>
 
           {/* ===== DESKTOP LAYOUT (lg+) ===== */}
-          <div className="hidden lg:flex flex-1 flex-col gap-5 min-h-0">
-            <div className="flex-1 flex flex-row gap-5 min-h-0">
+          <div className="hidden lg:flex flex-col gap-8 w-full">
+            {/* Top Area: Viewport height minus header */}
+            <div className="flex flex-row gap-5 h-[calc(100vh-140px)] min-h-[500px]">
               {/* Left: Settings */}
-              <div className="w-[380px] xl:w-[420px] shrink-0 flex flex-col min-h-0">
-                <div className="glass rounded-2xl flex-1 flex flex-col min-h-0 overflow-hidden p-5">
+              <div className="w-[380px] xl:w-[420px] shrink-0 flex flex-col h-full">
+                <div className="glass rounded-2xl flex-1 flex flex-col overflow-hidden p-5">
                   <SettingsPanel />
                 </div>
               </div>
               {/* Right: Preview */}
-              <div className="flex-1 min-w-0 flex flex-col min-h-0">
+              <div className="flex-1 min-w-0 flex flex-col h-full">
                 <PreviewBox />
               </div>
             </div>
-            {/* Export below both columns */}
+            
+            {/* Bottom Area: Export (Scroll to view) */}
             {audioFile && (
-              <div className="shrink-0">
+              <div className="w-full max-w-5xl mx-auto">
                 <ExportBar />
               </div>
             )}
